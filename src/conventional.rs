@@ -1,5 +1,5 @@
 #[derive(Clone, PartialEq, Eq, Hash)]
-pub struct Conventional<'c> {
+pub struct Message<'c> {
     subject: &'c str,
     commit_type: unicase::UniCase<&'c str>,
     scope: Option<unicase::UniCase<&'c str>>,
@@ -10,7 +10,7 @@ pub struct Conventional<'c> {
     footer: Option<Vec<&'c str>>,
 }
 
-impl<'c> Conventional<'c> {
+impl<'c> Message<'c> {
     pub fn parse(commit: &'c str) -> Result<Self, failure::Error> {
         let commit = commit.trim();
 
@@ -26,7 +26,7 @@ impl<'c> Conventional<'c> {
         let body = sections.collect();
         let footer = None;
 
-        let c = Conventional {
+        let c = Message {
             subject,
             commit_type,
             scope,

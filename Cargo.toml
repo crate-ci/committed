@@ -1,0 +1,11 @@
+[package]
+name = "committed"
+version = "0.1.0"
+authors = ["Ed Page <eopage@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+regex = "1.0"
+once_cell = "0.2.4"
+unicase = "2.4.0"
+failure = "0.1"

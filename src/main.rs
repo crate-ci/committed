@@ -23,8 +23,8 @@ fn run() -> Result<i32, failure::Error> {
             let id = repo.refname_to_id("HEAD").unwrap();
             repo.find_commit(id).unwrap()
         });
-    let merged_from = repo.merge_base(from.id(), to.id())?;
-    if merged_from != from.id() {
+    let is_descendant = repo.graph_descendant_of(to.id(), from.id())?;
+    if !is_descendant {
         failure::bail!("revspec {} are on separate branches", options.commits)
     }
     if to.id() != from.id() {

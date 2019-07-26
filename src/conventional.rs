@@ -7,7 +7,7 @@ pub struct Conventional<'c> {
     description: &'c str,
 
     body: Vec<&'c str>,
-    footer: Option<Vec<(&'c str, &'c str)>>,
+    footer: Option<Vec<&'c str>>,
 }
 
 impl<'c> Conventional<'c> {

@@ -11,3 +11,5 @@ unicase = "2.4.0"
 failure = "0.1"
 git2 = "0.9"
 structopt = "0.2.18"
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.4"

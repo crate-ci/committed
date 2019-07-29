@@ -24,6 +24,26 @@ fn load_toml(path: &std::path::Path) -> Result<config::Config, failure::Error> {
     toml::from_str(&text).map_err(|e| e.into())
 }
 
+fn parse_revspec<'r>(
+    repo: &'r git2::Repository,
+    revspec: &str,
+) -> Result<(git2::Commit<'r>, git2::Commit<'r>), failure::Error> {
+    let commits = repo.revparse(revspec)?;
+    let from = commits.from().unwrap().as_commit().unwrap().clone();
+    let to = commits
+        .to()
+        .map(|o| o.as_commit().unwrap().clone())
+        .unwrap_or_else(|| {
+            let id = repo.refname_to_id("HEAD").unwrap();
+            repo.find_commit(id).unwrap()
+        });
+    let is_descendant = repo.graph_descendant_of(to.id(), from.id())?;
+    if !is_descendant {
+        failure::bail!("revspec {} are on separate branches", revspec)
+    }
+    Ok((from, to))
+}
+
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
 
@@ -44,19 +64,7 @@ fn run() -> Result<i32, failure::Error> {
         }
     };
 
-    let commits = repo.revparse(&options.commits)?;
-    let from = commits.from().unwrap().as_commit().unwrap();
-    let to = commits
-        .to()
-        .map(|o| o.as_commit().unwrap().clone())
-        .unwrap_or_else(|| {
-            let id = repo.refname_to_id("HEAD").unwrap();
-            repo.find_commit(id).unwrap()
-        });
-    let is_descendant = repo.graph_descendant_of(to.id(), from.id())?;
-    if !is_descendant {
-        failure::bail!("revspec {} are on separate branches", options.commits)
-    }
+    let (from, to) = parse_revspec(&repo, &options.commits)?;
     if to.id() != from.id() {
         if config.style() == config::Style::Conventional {
             committed::conventional::Message::parse(to.message().unwrap()).unwrap();

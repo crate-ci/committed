@@ -42,6 +42,21 @@ fn check_subject_length(message: &str, max_length: usize) -> Result<(), failure:
     Ok(())
 }
 
+fn check_line_length(message: &str, max_length: usize) -> Result<(), failure::Error> {
+    for line in message.split('\n') {
+        let line = line.trim_end();
+        let count = unicode_segmentation::UnicodeSegmentation::graphemes(line, true).count();
+        if max_length < count {
+            failure::bail!(
+                "Commit line is {}, exceeding the max length of {}",
+                count,
+                max_length
+            );
+        }
+    }
+    Ok(())
+}
+
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
 
@@ -65,6 +80,7 @@ fn run() -> Result<i32, failure::Error> {
     let revspec = git::RevSpec::parse(&repo, &options.commits)?;
     let style = config.style();
     let subject_length = config.subject_length();
+    let line_length = config.line_length();
     for commit in revspec.iter() {
         let message = commit.message().unwrap();
         if style == config::Style::Conventional {
@@ -72,6 +88,9 @@ fn run() -> Result<i32, failure::Error> {
         }
         if subject_length != 0 {
             check_subject_length(message, subject_length)?;
+        }
+        if line_length != 0 {
+            check_line_length(message, line_length)?;
         }
     }
 

@@ -83,8 +83,13 @@ fn run() -> Result<i32, failure::Error> {
     let line_length = config.line_length();
     for commit in revspec.iter() {
         let message = commit.message().unwrap();
-        if style == config::Style::Conventional {
-            committed::conventional::Message::parse(message).unwrap();
+        match style {
+            config::Style::Conventional => {
+                committed::conventional::Message::parse(message).unwrap();
+            }
+            config::Style::None => {
+                committed::no_style::Message::parse(message).unwrap();
+            }
         }
         if subject_length != 0 {
             check_subject_length(message, subject_length)?;

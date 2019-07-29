@@ -25,6 +25,23 @@ fn load_toml(path: &std::path::Path) -> Result<config::Config, failure::Error> {
     toml::from_str(&text).map_err(|e| e.into())
 }
 
+fn check_subject_length(message: &str, max_length: usize) -> Result<(), failure::Error> {
+    let subject = message
+        .split('\n')
+        .next()
+        .ok_or_else(|| failure::Context::new("Commit cannot be empty"))?;
+    let subject = subject.trim_end();
+    let count = unicode_segmentation::UnicodeSegmentation::graphemes(subject, true).count();
+    if max_length < count {
+        failure::bail!(
+            "Commit subject is {}, exceeding the max length of {}",
+            count,
+            max_length
+        );
+    }
+    Ok(())
+}
+
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
 
@@ -46,9 +63,15 @@ fn run() -> Result<i32, failure::Error> {
     };
 
     let revspec = git::RevSpec::parse(&repo, &options.commits)?;
+    let style = config.style();
+    let subject_length = config.subject_length();
     for commit in revspec.iter() {
-        if config.style() == config::Style::Conventional {
-            committed::conventional::Message::parse(commit.message().unwrap()).unwrap();
+        let message = commit.message().unwrap();
+        if style == config::Style::Conventional {
+            committed::conventional::Message::parse(message).unwrap();
+        }
+        if subject_length != 0 {
+            check_subject_length(message, subject_length)?;
         }
     }
 

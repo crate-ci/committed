@@ -46,6 +46,46 @@ impl<'r> RevSpec<'r> {
         }
         Ok(Self { from, to })
     }
+
+    fn iter(&self) -> RevSpecIterator {
+        RevSpecIterator {
+            revspec: &self,
+            needs_to: true,
+            needs_parents: true,
+            parents: self.to.parents(),
+        }
+    }
+}
+
+struct RevSpecIterator<'r> {
+    revspec: &'r RevSpec<'r>,
+    needs_to: bool,
+    needs_parents: bool,
+    parents: git2::Parents<'r, 'r>,
+}
+
+impl<'r> Iterator for RevSpecIterator<'r> {
+    type Item = git2::Commit<'r>;
+
+    fn next(&mut self) -> Option<git2::Commit<'r>> {
+        if self.needs_to {
+            if self.revspec.to.id() == self.revspec.from.id() {
+                return None;
+            } else {
+                self.needs_to = false;
+                return Some(self.revspec.to.clone());
+            }
+        } else if self.needs_parents {
+            if let Some(parent) = self.parents.next() {
+                if parent.id() == self.revspec.from.id() {
+                    self.needs_parents = false;
+                } else {
+                    return Some(parent);
+                }
+            }
+        }
+        None
+    }
 }
 
 fn run() -> Result<i32, failure::Error> {
@@ -69,16 +109,9 @@ fn run() -> Result<i32, failure::Error> {
     };
 
     let revspec = RevSpec::parse(&repo, &options.commits)?;
-    let from = revspec.from;
-    let to = revspec.to;
-    if to.id() != from.id() {
+    for commit in revspec.iter() {
         if config.style() == config::Style::Conventional {
-            committed::conventional::Message::parse(to.message().unwrap()).unwrap();
-        }
-        for commit in to.parents().take_while(|c| c.id() != from.id()) {
-            if config.style() == config::Style::Conventional {
-                committed::conventional::Message::parse(commit.message().unwrap()).unwrap();
-            }
+            committed::conventional::Message::parse(commit.message().unwrap()).unwrap();
         }
     }
 

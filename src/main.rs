@@ -68,6 +68,17 @@ fn check_capitalized_subject(subject: &str) -> Result<(), failure::Error> {
     Ok(())
 }
 
+fn check_subject_not_punctuated(subject: &str) -> Result<(), failure::Error> {
+    let last = subject
+        .chars()
+        .last()
+        .ok_or_else(|| failure::Context::new("Subject cannot be empty"))?;
+    if last.is_ascii_punctuation() {
+        failure::bail!("Subject must not be punctuated: `{}`", last);
+    }
+    Ok(())
+}
+
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
 
@@ -93,6 +104,7 @@ fn run() -> Result<i32, failure::Error> {
     let subject_length = config.subject_length();
     let line_length = config.line_length();
     let subject_capitalized = config.subject_capitalized();
+    let subject_not_punctuated = config.subject_not_punctuated();
     for commit in revspec.iter() {
         let message = commit.message().unwrap();
         match style {
@@ -101,11 +113,17 @@ fn run() -> Result<i32, failure::Error> {
                 if subject_capitalized {
                     check_capitalized_subject(parsed.description)?;
                 }
+                if subject_not_punctuated {
+                    check_subject_not_punctuated(parsed.description)?;
+                }
             }
             config::Style::None => {
                 let parsed = committed::no_style::Message::parse(message).unwrap();
                 if subject_capitalized {
                     check_capitalized_subject(parsed.subject)?;
+                }
+                if subject_not_punctuated {
+                    check_subject_not_punctuated(parsed.subject)?;
                 }
             }
         }

@@ -8,6 +8,7 @@ pub enum Style {
 pub struct Config {
     subject_length: Option<usize>,
     subject_capitalized: Option<bool>,
+    subject_not_punctuated: Option<bool>,
     line_length: Option<usize>,
     style: Option<Style>,
 }
@@ -19,6 +20,10 @@ impl Config {
 
     pub fn subject_capitalized(&self) -> bool {
         self.subject_capitalized.unwrap_or(true)
+    }
+
+    pub fn subject_not_punctuated(&self) -> bool {
+        self.subject_not_punctuated.unwrap_or(true)
     }
 
     pub fn line_length(&self) -> usize {

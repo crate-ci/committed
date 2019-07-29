@@ -57,6 +57,17 @@ fn check_line_length(message: &str, max_length: usize) -> Result<(), failure::Er
     Ok(())
 }
 
+fn check_capitalized_subject(subject: &str) -> Result<(), failure::Error> {
+    let first = subject
+        .chars()
+        .next()
+        .ok_or_else(|| failure::Context::new("Subject cannot be empty"))?;
+    if !first.is_uppercase() {
+        failure::bail!("Subject must be capitalized: `{}`", subject);
+    }
+    Ok(())
+}
+
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
 
@@ -81,14 +92,21 @@ fn run() -> Result<i32, failure::Error> {
     let style = config.style();
     let subject_length = config.subject_length();
     let line_length = config.line_length();
+    let subject_capitalized = config.subject_capitalized();
     for commit in revspec.iter() {
         let message = commit.message().unwrap();
         match style {
             config::Style::Conventional => {
-                committed::conventional::Message::parse(message).unwrap();
+                let parsed = committed::conventional::Message::parse(message).unwrap();
+                if subject_capitalized {
+                    check_capitalized_subject(parsed.description)?;
+                }
             }
             config::Style::None => {
-                committed::no_style::Message::parse(message).unwrap();
+                let parsed = committed::no_style::Message::parse(message).unwrap();
+                if subject_capitalized {
+                    check_capitalized_subject(parsed.subject)?;
+                }
             }
         }
         if subject_length != 0 {

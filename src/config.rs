@@ -7,6 +7,7 @@ pub enum Style {
 #[derive(Clone, Default, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub struct Config {
     subject_length: Option<usize>,
+    subject_capitalized: Option<bool>,
     line_length: Option<usize>,
     style: Option<Style>,
 }
@@ -14,6 +15,10 @@ pub struct Config {
 impl Config {
     pub fn subject_length(&self) -> usize {
         self.subject_length.unwrap_or(50)
+    }
+
+    pub fn subject_capitalized(&self) -> bool {
+        self.subject_capitalized.unwrap_or(true)
     }
 
     pub fn line_length(&self) -> usize {

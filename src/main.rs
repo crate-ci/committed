@@ -79,6 +79,26 @@ fn check_subject_not_punctuated(subject: &str) -> Result<(), failure::Error> {
     Ok(())
 }
 
+static WIP_RE: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| regex::Regex::new("^(wip|WIP)\\b").unwrap());
+
+fn check_wip(message: &str) -> Result<(), failure::Error> {
+    if WIP_RE.is_match(message) {
+        failure::bail!("Work-in-progress commits must be cleaned up");
+    }
+    Ok(())
+}
+
+static FIXUP_RE: once_cell::sync::Lazy<regex::Regex> =
+    once_cell::sync::Lazy::new(|| regex::Regex::new("^fixup! ").unwrap());
+
+fn check_fixup(message: &str) -> Result<(), failure::Error> {
+    if FIXUP_RE.is_match(message) {
+        failure::bail!("Fixup commits must be squashed");
+    }
+    Ok(())
+}
+
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
 
@@ -100,6 +120,8 @@ fn run() -> Result<i32, failure::Error> {
     };
 
     let revspec = git::RevSpec::parse(&repo, &options.commits)?;
+    let no_wip = config.no_wip();
+    let no_fixup = config.no_fixup();
     let style = config.style();
     let subject_length = config.subject_length();
     let line_length = config.line_length();
@@ -107,6 +129,12 @@ fn run() -> Result<i32, failure::Error> {
     let subject_not_punctuated = config.subject_not_punctuated();
     for commit in revspec.iter() {
         let message = commit.message().unwrap();
+        if !no_wip {
+            check_wip(message)?;
+        }
+        if !no_fixup {
+            check_fixup(message)?;
+        }
         match style {
             config::Style::Conventional => {
                 let parsed = committed::conventional::Message::parse(message).unwrap();

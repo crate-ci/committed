@@ -1,13 +1,15 @@
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Message<'c> {
-    subject: &'c str,
-    commit_type: unicase::UniCase<&'c str>,
-    scope: Option<unicase::UniCase<&'c str>>,
-    important: bool,
-    description: &'c str,
+    pub subject: &'c str,
+    pub commit_type: unicase::UniCase<&'c str>,
+    pub scope: Option<unicase::UniCase<&'c str>>,
+    pub important: bool,
+    pub description: &'c str,
 
-    body: Vec<&'c str>,
-    footer: Option<Vec<&'c str>>,
+    pub body: Vec<&'c str>,
+    pub footer: Option<Vec<&'c str>>,
+    #[doc(hidden)]
+    __do_not_match_exhaustively: (),
 }
 
 impl<'c> Message<'c> {
@@ -34,6 +36,7 @@ impl<'c> Message<'c> {
             description,
             body,
             footer,
+            __do_not_match_exhaustively: (),
         };
         Ok(c)
     }

@@ -1,13 +1,19 @@
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Message<'c> {
-    subject: &'c str,
-    body: Option<&'c str>,
+    pub subject: &'c str,
+    pub body: Option<&'c str>,
+    #[doc(hidden)]
+    __do_not_match_exhaustively: (),
 }
 
 impl<'c> Message<'c> {
     pub fn parse(commit: &'c str) -> Result<Self, failure::Error> {
         let (subject, body) = split_parts(commit);
-        let c = Message { subject, body };
+        let c = Message {
+            subject,
+            body,
+            __do_not_match_exhaustively: (),
+        };
 
         Ok(c)
     }

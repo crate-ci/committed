@@ -82,6 +82,10 @@ static META_RE: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new(r#"^(.*?)(\(.*?\))?(!)?$"#).unwrap());
 
 fn parse_subject(subject: &str) -> Result<(&str, Option<&str>, bool, &str), failure::Error> {
+    if subject.contains("\n") {
+        failure::bail!("Subject must be a single line");
+    }
+
     let mut parts = subject.splitn(2, ":");
     let meta = parts.next().unwrap();
     let description = parts

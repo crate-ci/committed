@@ -2,6 +2,13 @@
 name = "committed"
 version = "0.1.0"
 authors = ["Ed Page <eopage@gmail.com>"]
+description = "Check commit style"
+repository = "https://github.com/epage/committed"
+documentation = "https://docs.rs/committed"
+readme = "README.md"
+categories = ["development-tools", "text-processing"]
+keywords = ["development"]
+license = "MIT"
 edition = "2018"
 
 [dependencies]

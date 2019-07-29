@@ -20,12 +20,12 @@ impl<'c> Message<'c> {
 }
 
 static SECTION_RE: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new("\r?\n\r?\n").unwrap());
+    once_cell::sync::Lazy::new(|| regex::Regex::new("\r?\n").unwrap());
 
 fn split_parts(commit: &str) -> (&str, Option<&str>) {
     let mut sections = SECTION_RE.splitn(commit, 2);
     let subject = sections.next().expect("Regex should always match");
-    let body = sections.next().map(|s| s.trim_end()).unwrap_or("");
+    let body = sections.next().map(|s| s.trim()).unwrap_or("");
     if body.is_empty() {
         (subject, None)
     } else {

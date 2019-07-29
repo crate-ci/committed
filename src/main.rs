@@ -24,24 +24,28 @@ fn load_toml(path: &std::path::Path) -> Result<config::Config, failure::Error> {
     toml::from_str(&text).map_err(|e| e.into())
 }
 
-fn parse_revspec<'r>(
-    repo: &'r git2::Repository,
-    revspec: &str,
-) -> Result<(git2::Commit<'r>, git2::Commit<'r>), failure::Error> {
-    let commits = repo.revparse(revspec)?;
-    let from = commits.from().unwrap().as_commit().unwrap().clone();
-    let to = commits
-        .to()
-        .map(|o| o.as_commit().unwrap().clone())
-        .unwrap_or_else(|| {
-            let id = repo.refname_to_id("HEAD").unwrap();
-            repo.find_commit(id).unwrap()
-        });
-    let is_descendant = repo.graph_descendant_of(to.id(), from.id())?;
-    if !is_descendant {
-        failure::bail!("revspec {} are on separate branches", revspec)
+struct RevSpec<'r> {
+    from: git2::Commit<'r>,
+    to: git2::Commit<'r>,
+}
+
+impl<'r> RevSpec<'r> {
+    fn parse(repo: &'r git2::Repository, revspec: &str) -> Result<Self, failure::Error> {
+        let commits = repo.revparse(revspec)?;
+        let from = commits.from().unwrap().as_commit().unwrap().clone();
+        let to = commits
+            .to()
+            .map(|o| o.as_commit().unwrap().clone())
+            .unwrap_or_else(|| {
+                let id = repo.refname_to_id("HEAD").unwrap();
+                repo.find_commit(id).unwrap()
+            });
+        let is_descendant = repo.graph_descendant_of(to.id(), from.id())?;
+        if !is_descendant {
+            failure::bail!("revspec {} are on separate branches", revspec)
+        }
+        Ok(Self { from, to })
     }
-    Ok((from, to))
 }
 
 fn run() -> Result<i32, failure::Error> {
@@ -64,7 +68,9 @@ fn run() -> Result<i32, failure::Error> {
         }
     };
 
-    let (from, to) = parse_revspec(&repo, &options.commits)?;
+    let revspec = RevSpec::parse(&repo, &options.commits)?;
+    let from = revspec.from;
+    let to = revspec.to;
     if to.id() != from.id() {
         if config.style() == config::Style::Conventional {
             committed::conventional::Message::parse(to.message().unwrap()).unwrap();

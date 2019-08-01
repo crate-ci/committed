@@ -4,6 +4,7 @@ use std::io::Write;
 
 use structopt::StructOpt;
 
+mod checks;
 mod config;
 mod git;
 
@@ -30,140 +31,6 @@ fn load_toml(path: &std::path::Path) -> Result<config::Config, failure::Error> {
     let mut text = String::new();
     f.read_to_string(&mut text)?;
     toml::from_str(&text).map_err(|e| e.into())
-}
-
-fn check_subject_length(message: &str, max_length: usize) -> Result<(), failure::Error> {
-    let subject = message
-        .split('\n')
-        .next()
-        .ok_or_else(|| failure::Context::new("Commit cannot be empty"))?;
-    let subject = subject.trim_end();
-    let count = unicode_segmentation::UnicodeSegmentation::graphemes(subject, true).count();
-    if max_length < count {
-        failure::bail!(
-            "Commit subject is {}, exceeding the max length of {}",
-            count,
-            max_length
-        );
-    }
-    Ok(())
-}
-
-fn check_line_length(message: &str, max_length: usize) -> Result<(), failure::Error> {
-    for line in message.split('\n') {
-        let line = line.trim_end();
-        let count = unicode_segmentation::UnicodeSegmentation::graphemes(line, true).count();
-        if max_length < count {
-            failure::bail!(
-                "Commit line is {}, exceeding the max length of {}",
-                count,
-                max_length
-            );
-        }
-    }
-    Ok(())
-}
-
-fn check_capitalized_subject(subject: &str) -> Result<(), failure::Error> {
-    let first = subject
-        .chars()
-        .next()
-        .ok_or_else(|| failure::Context::new("Subject cannot be empty"))?;
-    if !first.is_uppercase() {
-        failure::bail!("Subject must be capitalized: `{}`", subject);
-    }
-    Ok(())
-}
-
-fn check_subject_not_punctuated(subject: &str) -> Result<(), failure::Error> {
-    let last = subject
-        .chars()
-        .last()
-        .ok_or_else(|| failure::Context::new("Subject cannot be empty"))?;
-    if last.is_ascii_punctuation() {
-        failure::bail!("Subject must not be punctuated: `{}`", last);
-    }
-    Ok(())
-}
-
-fn check_imperative_subject(subject: &str) -> Result<(), failure::Error> {
-    let first_word = subject
-        .split_whitespace()
-        .next()
-        .expect("Subject should have at least one word");
-    if !imperative::Mood::new()
-        .is_imperative(first_word)
-        .unwrap_or(true)
-    {
-        failure::bail!(
-            "Subject does not start with imperative verb: {}",
-            first_word
-        );
-    }
-    Ok(())
-}
-
-static WIP_RE: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new("^(wip|WIP)\\b").unwrap());
-
-fn check_wip(message: &str) -> Result<(), failure::Error> {
-    if WIP_RE.is_match(message) {
-        failure::bail!("Work-in-progress commits must be cleaned up");
-    }
-    Ok(())
-}
-
-static FIXUP_RE: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new("^fixup! ").unwrap());
-
-fn check_fixup(message: &str) -> Result<(), failure::Error> {
-    if FIXUP_RE.is_match(message) {
-        failure::bail!("Fixup commits must be squashed");
-    }
-    Ok(())
-}
-
-fn check_all(message: &str, config: &config::Config) -> Result<(), failure::Error> {
-    if !config.no_wip() {
-        check_wip(message)?;
-    }
-    if !config.no_fixup() {
-        check_fixup(message)?;
-    }
-    match config.style() {
-        config::Style::Conventional => {
-            let parsed = committed::conventional::Message::parse(message).unwrap();
-            if config.imperative_subject() {
-                check_imperative_subject(parsed.subject)?;
-            }
-            if config.subject_capitalized() {
-                check_capitalized_subject(parsed.subject)?;
-            }
-            if config.subject_not_punctuated() {
-                check_subject_not_punctuated(parsed.subject)?;
-            }
-        }
-        config::Style::None => {
-            let parsed = committed::no_style::Message::parse(message).unwrap();
-            if config.imperative_subject() {
-                check_imperative_subject(parsed.raw_subject)?;
-            }
-            if config.subject_capitalized() {
-                check_capitalized_subject(parsed.raw_subject)?;
-            }
-            if config.subject_not_punctuated() {
-                check_subject_not_punctuated(parsed.raw_subject)?;
-            }
-        }
-    }
-    if config.subject_length() != 0 {
-        check_subject_length(message, config.subject_length())?;
-    }
-    if config.line_length() != 0 {
-        check_line_length(message, config.line_length())?;
-    }
-
-    Ok(())
 }
 
 pub fn get_logging(level: log::Level) -> env_logger::Builder {
@@ -218,24 +85,24 @@ fn run() -> Result<i32, failure::Error> {
             let mut f = fs::File::open(path)?;
             f.read_to_string(&mut text)?;
         }
-        check_all(&text, &config)?;
+        checks::check_all(&text, &config)?;
     } else if let Some(commits) = options.commits.as_ref() {
         let revspec = git::RevSpec::parse(&repo, commits)?;
         for commit in revspec.iter() {
             let message = commit.message().unwrap();
-            check_all(message, &config)?;
+            checks::check_all(message, &config)?;
         }
     } else if grep_cli::is_readable_stdin() {
         let mut text = String::new();
         std::io::stdin().read_to_string(&mut text)?;
-        check_all(&text, &config)?;
+        checks::check_all(&text, &config)?;
     } else {
         debug_assert_eq!(options.commits, None);
         let commits = "HEAD";
         let revspec = git::RevSpec::parse(&repo, commits)?;
         for commit in revspec.iter() {
             let message = commit.message().unwrap();
-            check_all(message, &config)?;
+            checks::check_all(message, &config)?;
         }
     }
 

@@ -196,12 +196,19 @@ fn run() -> Result<i32, failure::Error> {
             f.read_to_string(&mut text)?;
         }
         check_all(&text, &config)?;
+    } else if let Some(commits) = options.commits.as_ref() {
+        let revspec = git::RevSpec::parse(&repo, commits)?;
+        for commit in revspec.iter() {
+            let message = commit.message().unwrap();
+            check_all(message, &config)?;
+        }
+    } else if grep_cli::is_readable_stdin() {
+        let mut text = String::new();
+        std::io::stdin().read_to_string(&mut text)?;
+        check_all(&text, &config)?;
     } else {
-        let commits = options
-            .commits
-            .as_ref()
-            .map(|s| s.as_str())
-            .unwrap_or("HEAD");
+        debug_assert_eq!(options.commits, None);
+        let commits = "HEAD";
         let revspec = git::RevSpec::parse(&repo, commits)?;
         for commit in revspec.iter() {
             let message = commit.message().unwrap();

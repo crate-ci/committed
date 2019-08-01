@@ -12,10 +12,10 @@ mod git;
 struct Options {
     commits: Option<String>,
 
-    #[structopt(parse(from_os_str), default_value = ".")]
+    #[structopt(long = "work-tree", parse(from_os_str), default_value = ".")]
     work_tree: std::path::PathBuf,
 
-    #[structopt(parse(from_os_str))]
+    #[structopt(long = "config", parse(from_os_str))]
     config: Option<std::path::PathBuf>,
 
     #[structopt(flatten)]

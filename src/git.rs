@@ -14,11 +14,19 @@ impl<'r> RevSpec<'r> {
                 let id = repo.refname_to_id("HEAD").unwrap();
                 repo.find_commit(id).unwrap()
             });
-        let is_descendant = to.id() == from.id() || repo.graph_descendant_of(to.id(), from.id())?;
-        if !is_descendant {
-            failure::bail!("revspec {} are on separate branches", revspec)
+        let merged_from_id = repo.merge_base(from.id(), to.id())?;
+        if merged_from_id != from.id() {
+            log::debug!(
+                "from/to for revspec {} are on different branches, relying on common parent {}",
+                revspec,
+                merged_from_id
+            );
         }
-        Ok(Self { from, to })
+        let merged_from = repo.find_commit(merged_from_id)?;
+        Ok(Self {
+            from: merged_from,
+            to,
+        })
     }
 
     pub fn iter(&self) -> RevSpecIterator {

@@ -86,6 +86,23 @@ fn check_subject_not_punctuated(subject: &str) -> Result<(), failure::Error> {
     Ok(())
 }
 
+fn check_imperative_subject(subject: &str) -> Result<(), failure::Error> {
+    let first_word = subject
+        .split_whitespace()
+        .next()
+        .expect("Subject should have at least one word");
+    if !imperative::Mood::new()
+        .is_imperative(first_word)
+        .unwrap_or(true)
+    {
+        failure::bail!(
+            "Subject does not start with imperative verb: {}",
+            first_word
+        );
+    }
+    Ok(())
+}
+
 static WIP_RE: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new("^(wip|WIP)\\b").unwrap());
 
@@ -116,6 +133,9 @@ fn check_all(message: &str, config: &config::Config) -> Result<(), failure::Erro
     match config.style() {
         config::Style::Conventional => {
             let parsed = committed::conventional::Message::parse(message).unwrap();
+            if config.imperative_subject() {
+                check_imperative_subject(parsed.description)?;
+            }
             if config.subject_capitalized() {
                 check_capitalized_subject(parsed.description)?;
             }
@@ -125,6 +145,9 @@ fn check_all(message: &str, config: &config::Config) -> Result<(), failure::Erro
         }
         config::Style::None => {
             let parsed = committed::no_style::Message::parse(message).unwrap();
+            if config.imperative_subject() {
+                check_imperative_subject(parsed.subject)?;
+            }
             if config.subject_capitalized() {
                 check_capitalized_subject(parsed.subject)?;
             }

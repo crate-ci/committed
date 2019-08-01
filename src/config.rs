@@ -9,6 +9,7 @@ pub struct Config {
     subject_length: Option<usize>,
     subject_capitalized: Option<bool>,
     subject_not_punctuated: Option<bool>,
+    imperative_subject: Option<bool>,
     no_fixup: Option<bool>,
     no_wip: Option<bool>,
     line_length: Option<usize>,
@@ -26,6 +27,10 @@ impl Config {
 
     pub fn subject_not_punctuated(&self) -> bool {
         self.subject_not_punctuated.unwrap_or(true)
+    }
+
+    pub fn imperative_subject(&self) -> bool {
+        self.imperative_subject.unwrap_or(true)
     }
 
     pub fn no_fixup(&self) -> bool {

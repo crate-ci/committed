@@ -12,6 +12,9 @@ mod git;
 struct Options {
     commits: Option<String>,
 
+    #[structopt(long = "commit-file", parse(from_os_str))]
+    commit_file: Option<std::path::PathBuf>,
+
     #[structopt(long = "work-tree", parse(from_os_str), default_value = ".")]
     work_tree: std::path::PathBuf,
 
@@ -184,15 +187,22 @@ fn run() -> Result<i32, failure::Error> {
         }
     };
 
-    let commits = options
-        .commits
-        .as_ref()
-        .map(|s| s.as_str())
-        .unwrap_or("HEAD");
-    let revspec = git::RevSpec::parse(&repo, commits)?;
-    for commit in revspec.iter() {
-        let message = commit.message().unwrap();
-        check_all(message, &config)?;
+    if let Some(path) = options.commit_file {
+        let mut f = fs::File::open(path)?;
+        let mut text = String::new();
+        f.read_to_string(&mut text)?;
+        check_all(&text, &config)?;
+    } else {
+        let commits = options
+            .commits
+            .as_ref()
+            .map(|s| s.as_str())
+            .unwrap_or("HEAD");
+        let revspec = git::RevSpec::parse(&repo, commits)?;
+        for commit in revspec.iter() {
+            let message = commit.message().unwrap();
+            check_all(message, &config)?;
+        }
     }
 
     Ok(0)

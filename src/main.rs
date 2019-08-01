@@ -1,5 +1,6 @@
 use std::fs;
 use std::io::Read;
+use std::io::Write;
 
 use structopt::StructOpt;
 
@@ -16,6 +17,9 @@ struct Options {
 
     #[structopt(parse(from_os_str))]
     config: Option<std::path::PathBuf>,
+
+    #[structopt(flatten)]
+    verbose: clap_verbosity_flag::Verbosity,
 }
 
 fn load_toml(path: &std::path::Path) -> Result<config::Config, failure::Error> {
@@ -99,8 +103,32 @@ fn check_fixup(message: &str) -> Result<(), failure::Error> {
     Ok(())
 }
 
+pub fn get_logging(level: log::Level) -> env_logger::Builder {
+    let mut builder = env_logger::Builder::new();
+
+    builder.filter(None, level.to_level_filter());
+
+    if level == log::LevelFilter::Trace {
+        builder.default_format_timestamp(false);
+    } else {
+        builder.format(|f, record| {
+            writeln!(
+                f,
+                "[{}] {}",
+                record.level().to_string().to_lowercase(),
+                record.args()
+            )
+        });
+    }
+
+    builder
+}
+
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
+
+    let mut builder = get_logging(options.verbose.log_level());
+    builder.init();
 
     let repo = options.work_tree.canonicalize()?;
 

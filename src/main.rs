@@ -103,6 +103,43 @@ fn check_fixup(message: &str) -> Result<(), failure::Error> {
     Ok(())
 }
 
+fn check_all(message: &str, config: &config::Config) -> Result<(), failure::Error> {
+    if !config.no_wip() {
+        check_wip(message)?;
+    }
+    if !config.no_fixup() {
+        check_fixup(message)?;
+    }
+    match config.style() {
+        config::Style::Conventional => {
+            let parsed = committed::conventional::Message::parse(message).unwrap();
+            if config.subject_capitalized() {
+                check_capitalized_subject(parsed.description)?;
+            }
+            if config.subject_not_punctuated() {
+                check_subject_not_punctuated(parsed.description)?;
+            }
+        }
+        config::Style::None => {
+            let parsed = committed::no_style::Message::parse(message).unwrap();
+            if config.subject_capitalized() {
+                check_capitalized_subject(parsed.subject)?;
+            }
+            if config.subject_not_punctuated() {
+                check_subject_not_punctuated(parsed.subject)?;
+            }
+        }
+    }
+    if config.subject_length() != 0 {
+        check_subject_length(message, config.subject_length())?;
+    }
+    if config.line_length() != 0 {
+        check_line_length(message, config.line_length())?;
+    }
+
+    Ok(())
+}
+
 pub fn get_logging(level: log::Level) -> env_logger::Builder {
     let mut builder = env_logger::Builder::new();
 
@@ -155,38 +192,7 @@ fn run() -> Result<i32, failure::Error> {
     let revspec = git::RevSpec::parse(&repo, commits)?;
     for commit in revspec.iter() {
         let message = commit.message().unwrap();
-        if !config.no_wip() {
-            check_wip(message)?;
-        }
-        if !config.no_fixup() {
-            check_fixup(message)?;
-        }
-        match config.style() {
-            config::Style::Conventional => {
-                let parsed = committed::conventional::Message::parse(message).unwrap();
-                if config.subject_capitalized() {
-                    check_capitalized_subject(parsed.description)?;
-                }
-                if config.subject_not_punctuated() {
-                    check_subject_not_punctuated(parsed.description)?;
-                }
-            }
-            config::Style::None => {
-                let parsed = committed::no_style::Message::parse(message).unwrap();
-                if config.subject_capitalized() {
-                    check_capitalized_subject(parsed.subject)?;
-                }
-                if config.subject_not_punctuated() {
-                    check_subject_not_punctuated(parsed.subject)?;
-                }
-            }
-        }
-        if config.subject_length() != 0 {
-            check_subject_length(message, config.subject_length())?;
-        }
-        if config.line_length() != 0 {
-            check_line_length(message, config.line_length())?;
-        }
+        check_all(message, &config)?;
     }
 
     Ok(0)

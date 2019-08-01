@@ -134,18 +134,6 @@ fn check_all(message: &str, config: &config::Config) -> Result<(), failure::Erro
         config::Style::Conventional => {
             let parsed = committed::conventional::Message::parse(message).unwrap();
             if config.imperative_subject() {
-                check_imperative_subject(parsed.description)?;
-            }
-            if config.subject_capitalized() {
-                check_capitalized_subject(parsed.description)?;
-            }
-            if config.subject_not_punctuated() {
-                check_subject_not_punctuated(parsed.description)?;
-            }
-        }
-        config::Style::None => {
-            let parsed = committed::no_style::Message::parse(message).unwrap();
-            if config.imperative_subject() {
                 check_imperative_subject(parsed.subject)?;
             }
             if config.subject_capitalized() {
@@ -153,6 +141,18 @@ fn check_all(message: &str, config: &config::Config) -> Result<(), failure::Erro
             }
             if config.subject_not_punctuated() {
                 check_subject_not_punctuated(parsed.subject)?;
+            }
+        }
+        config::Style::None => {
+            let parsed = committed::no_style::Message::parse(message).unwrap();
+            if config.imperative_subject() {
+                check_imperative_subject(parsed.raw_subject)?;
+            }
+            if config.subject_capitalized() {
+                check_capitalized_subject(parsed.raw_subject)?;
+            }
+            if config.subject_not_punctuated() {
+                check_subject_not_punctuated(parsed.raw_subject)?;
             }
         }
     }

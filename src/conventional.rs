@@ -1,10 +1,10 @@
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Message<'c> {
-    pub subject: &'c str,
+    pub raw_subject: &'c str,
     pub commit_type: unicase::UniCase<&'c str>,
     pub scope: Option<unicase::UniCase<&'c str>>,
     pub important: bool,
-    pub description: &'c str,
+    pub subject: &'c str,
 
     pub body: Vec<&'c str>,
     pub footer: Option<Vec<&'c str>>,
@@ -18,10 +18,10 @@ impl<'c> Message<'c> {
 
         let mut sections = split_sections(commit);
 
-        let subject = sections
+        let raw_subject = sections
             .next()
             .ok_or_else(|| failure::Context::new("Commit is empty"))?;
-        let (commit_type, scope, important, description) = parse_subject(subject)?;
+        let (commit_type, scope, important, subject) = parse_subject(raw_subject)?;
         let commit_type = unicase::UniCase::new(commit_type);
         let scope = scope.map(|s| unicase::UniCase::new(s));
 
@@ -29,11 +29,11 @@ impl<'c> Message<'c> {
         let footer = None;
 
         let c = Message {
-            subject,
+            raw_subject,
             commit_type,
             scope,
             important,
-            description,
+            subject,
             body,
             footer,
             __do_not_match_exhaustively: (),
@@ -84,14 +84,14 @@ Bar"#,
 static META_RE: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new(r#"^(.*?)(\(.*?\))?(!)?$"#).unwrap());
 
-fn parse_subject(subject: &str) -> Result<(&str, Option<&str>, bool, &str), failure::Error> {
-    if subject.contains("\n") {
+fn parse_subject(raw_subject: &str) -> Result<(&str, Option<&str>, bool, &str), failure::Error> {
+    if raw_subject.contains("\n") {
         failure::bail!("Subject must be a single line");
     }
 
-    let mut parts = subject.splitn(2, ":");
+    let mut parts = raw_subject.splitn(2, ":");
     let meta = parts.next().unwrap();
-    let description = parts
+    let subject = parts
         .next()
         .ok_or_else(|| failure::Context::new("No commit metadata provided"))?
         .trim();
@@ -116,7 +116,7 @@ fn parse_subject(subject: &str) -> Result<(&str, Option<&str>, bool, &str), fail
         }
     }
 
-    Ok((commit_type, scope, important, description))
+    Ok((commit_type, scope, important, subject))
 }
 
 #[cfg(test)]

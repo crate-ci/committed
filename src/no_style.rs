@@ -1,6 +1,6 @@
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub struct Message<'c> {
-    pub subject: &'c str,
+    pub raw_subject: &'c str,
     pub body: Option<&'c str>,
     #[doc(hidden)]
     __do_not_match_exhaustively: (),
@@ -8,9 +8,9 @@ pub struct Message<'c> {
 
 impl<'c> Message<'c> {
     pub fn parse(commit: &'c str) -> Result<Self, failure::Error> {
-        let (subject, body) = split_parts(commit);
+        let (raw_subject, body) = split_parts(commit);
         let c = Message {
-            subject,
+            raw_subject,
             body,
             __do_not_match_exhaustively: (),
         };
@@ -24,12 +24,12 @@ static SECTION_RE: once_cell::sync::Lazy<regex::Regex> =
 
 fn split_parts(commit: &str) -> (&str, Option<&str>) {
     let mut sections = SECTION_RE.splitn(commit, 2);
-    let subject = sections.next().expect("Regex should always match");
+    let raw_subject = sections.next().expect("Regex should always match");
     let body = sections.next().map(|s| s.trim()).unwrap_or("");
     if body.is_empty() {
-        (subject, None)
+        (raw_subject, None)
     } else {
-        (subject, Some(body))
+        (raw_subject, Some(body))
     }
 }
 

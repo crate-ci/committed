@@ -188,9 +188,13 @@ fn run() -> Result<i32, failure::Error> {
     };
 
     if let Some(path) = options.commit_file {
-        let mut f = fs::File::open(path)?;
         let mut text = String::new();
-        f.read_to_string(&mut text)?;
+        if path == std::path::Path::new("-") {
+            std::io::stdin().read_to_string(&mut text)?;
+        } else {
+            let mut f = fs::File::open(path)?;
+            f.read_to_string(&mut text)?;
+        }
         check_all(&text, &config)?;
     } else {
         let commits = options

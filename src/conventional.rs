@@ -6,8 +6,8 @@ pub struct Message<'c> {
     pub important: bool,
     pub subject: &'c str,
 
-    pub body: Vec<&'c str>,
-    pub footer: Option<Vec<&'c str>>,
+    pub body: Option<&'c str>,
+    pub trailer: Option<Vec<&'c str>>,
     #[doc(hidden)]
     __do_not_match_exhaustively: (),
 }
@@ -25,8 +25,11 @@ impl<'c> Message<'c> {
         let commit_type = unicase::UniCase::new(commit_type);
         let scope = scope.map(|s| unicase::UniCase::new(s));
 
-        let body = sections.collect();
-        let footer = None;
+        let body = sections.next();
+        let trailer = sections.next().map(|s| s.lines().collect());
+        if let Some(section) = sections.next() {
+            failure::bail!("Cannot have sections past body+trailer: ```{}```", section);
+        }
 
         let c = Message {
             raw_subject,
@@ -35,7 +38,7 @@ impl<'c> Message<'c> {
             important,
             subject,
             body,
-            footer,
+            trailer,
             __do_not_match_exhaustively: (),
         };
         Ok(c)

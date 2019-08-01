@@ -153,46 +153,39 @@ fn run() -> Result<i32, failure::Error> {
         .map(|s| s.as_str())
         .unwrap_or("HEAD");
     let revspec = git::RevSpec::parse(&repo, commits)?;
-    let no_wip = config.no_wip();
-    let no_fixup = config.no_fixup();
-    let style = config.style();
-    let subject_length = config.subject_length();
-    let line_length = config.line_length();
-    let subject_capitalized = config.subject_capitalized();
-    let subject_not_punctuated = config.subject_not_punctuated();
     for commit in revspec.iter() {
         let message = commit.message().unwrap();
-        if !no_wip {
+        if !config.no_wip() {
             check_wip(message)?;
         }
-        if !no_fixup {
+        if !config.no_fixup() {
             check_fixup(message)?;
         }
-        match style {
+        match config.style() {
             config::Style::Conventional => {
                 let parsed = committed::conventional::Message::parse(message).unwrap();
-                if subject_capitalized {
+                if config.subject_capitalized() {
                     check_capitalized_subject(parsed.description)?;
                 }
-                if subject_not_punctuated {
+                if config.subject_not_punctuated() {
                     check_subject_not_punctuated(parsed.description)?;
                 }
             }
             config::Style::None => {
                 let parsed = committed::no_style::Message::parse(message).unwrap();
-                if subject_capitalized {
+                if config.subject_capitalized() {
                     check_capitalized_subject(parsed.subject)?;
                 }
-                if subject_not_punctuated {
+                if config.subject_not_punctuated() {
                     check_subject_not_punctuated(parsed.subject)?;
                 }
             }
         }
-        if subject_length != 0 {
-            check_subject_length(message, subject_length)?;
+        if config.subject_length() != 0 {
+            check_subject_length(message, config.subject_length())?;
         }
-        if line_length != 0 {
-            check_line_length(message, line_length)?;
+        if config.line_length() != 0 {
+            check_line_length(message, config.line_length())?;
         }
     }
 

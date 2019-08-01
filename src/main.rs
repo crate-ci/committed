@@ -10,7 +10,7 @@ mod git;
 #[derive(Debug, StructOpt)]
 #[structopt(rename_all = "kebab-case")]
 struct Options {
-    commits: String,
+    commits: Option<String>,
 
     #[structopt(parse(from_os_str), default_value = ".")]
     work_tree: std::path::PathBuf,
@@ -147,7 +147,12 @@ fn run() -> Result<i32, failure::Error> {
         }
     };
 
-    let revspec = git::RevSpec::parse(&repo, &options.commits)?;
+    let commits = options
+        .commits
+        .as_ref()
+        .map(|s| s.as_str())
+        .unwrap_or("HEAD");
+    let revspec = git::RevSpec::parse(&repo, commits)?;
     let no_wip = config.no_wip();
     let no_fixup = config.no_fixup();
     let style = config.style();

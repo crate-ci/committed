@@ -3,7 +3,7 @@
 > **Annoying you about commits since 2019**
 
 [![Travis Status](https://travis-ci.org/crate-ci/committed.svg?branch=master)](https://travis-ci.org/crate-ci/committed)
-[![Appveyor Status](https://ci.appveyor.com/api/projects/status/5pr682c1d7tlwbhx/branch/master?svg=true)](https://ci.appveyor.com/project/epage/committed/branch/master)
+[![Appveyor Status](https://ci.appveyor.com/api/projects/status/nmndw68dl9f8s5k2/branch/master?svg=true)](https://ci.appveyor.com/project/epage/committed/branch/master)
 [![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/committed.svg)
 [![Crates Status](https://img.shields.io/crates/v/committed.svg)](https://crates.io/crates/committed)

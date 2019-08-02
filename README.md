@@ -8,6 +8,12 @@
 ![License](https://img.shields.io/crates/l/committed.svg)
 [![Crates Status](https://img.shields.io/crates/v/committed.svg)](https://crates.io/crates/committed)
 
+## [Install](docs/install.md)
+
+## [Reference](docs/reference.md)
+
+## [FAQ](docs/faq.md)
+
 ## [Contribute](CONTRIBUTING.md)
 
 ## License

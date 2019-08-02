@@ -27,6 +27,15 @@ struct Options {
     #[structopt(long = "config", parse(from_os_str))]
     config: Option<std::path::PathBuf>,
 
+    #[structopt(long, raw(overrides_with = r#""merge-commit""#))]
+    no_merge_commit: bool,
+    #[structopt(
+        long,
+        raw(overrides_with = r#""no-merge-commit""#),
+        raw(hidden = "true")
+    )]
+    merge_commit: bool,
+
     #[structopt(
         long = "format",
         raw(possible_values = "&Format::variants()", case_insensitive = "true"),
@@ -36,6 +45,17 @@ struct Options {
 
     #[structopt(flatten)]
     verbose: clap_verbosity_flag::Verbosity,
+}
+
+impl Options {
+    fn merge_commit(&self) -> Option<bool> {
+        match (self.no_merge_commit, self.merge_commit) {
+            (true, false) => Some(false),
+            (false, true) => Some(true),
+            (false, false) => None,
+            (true, true) => unreachable!("Structopt should make this impossible"),
+        }
+    }
 }
 
 arg_enum! {
@@ -100,7 +120,7 @@ fn run() -> Result<i32, failure::Error> {
     let repo = options.work_tree.canonicalize()?;
 
     let repo = git2::Repository::discover(repo)?;
-    let config = if let Some(config_path) = options.config.as_ref() {
+    let mut config = if let Some(config_path) = options.config.as_ref() {
         load_toml(config_path)?
     } else {
         let config_path = repo
@@ -113,6 +133,10 @@ fn run() -> Result<i32, failure::Error> {
             config::Config::default()
         }
     };
+    if options.merge_commit().is_some() {
+        config.merge_commit = options.merge_commit();
+    }
+    let config = config;
 
     let report = options.format.report();
 

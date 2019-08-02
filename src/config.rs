@@ -14,7 +14,7 @@ pub struct Config {
     no_wip: Option<bool>,
     line_length: Option<usize>,
     style: Option<Style>,
-    merge_commit: Option<bool>,
+    pub merge_commit: Option<bool>,
 }
 
 impl Config {

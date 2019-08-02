@@ -1,4 +1,5 @@
 pub struct RevSpec<'r> {
+    repo: &'r git2::Repository,
     from: git2::Commit<'r>,
     to: Option<git2::Commit<'r>>,
 }
@@ -21,59 +22,36 @@ impl<'r> RevSpec<'r> {
         } else {
             from
         };
-        Ok(Self { from, to })
+        Ok(Self { repo, from, to })
     }
 
-    pub fn iter(&self) -> RevSpecIterator {
+    pub fn iter(&self) -> impl Iterator<Item = git2::Commit<'r>> {
         if let Some(ref to) = self.to.as_ref() {
-            if self.from.id() == to.id() {
-                RevSpecIterator {
-                    revspec: self,
-                    start: None,
-                    parents: None,
-                }
-            } else {
-                RevSpecIterator {
-                    revspec: self,
-                    start: Some(to),
-                    parents: Some(to.parents()),
-                }
-            }
+            let range = format!("{}..{}", self.from.id(), to.id());
+            let mut revwalk = self.repo.revwalk().unwrap();
+            revwalk.push_range(&range).unwrap();
+            let revwalk = RevWalkIterator {
+                repo: self.repo,
+                revwalk,
+            };
+            itertools::Either::Left(revwalk)
         } else {
-            RevSpecIterator {
-                revspec: self,
-                start: Some(&self.from),
-                parents: None,
-            }
+            itertools::Either::Right(Some(self.from.clone()).into_iter())
         }
     }
 }
 
-pub struct RevSpecIterator<'r> {
-    revspec: &'r RevSpec<'r>,
-    start: Option<&'r git2::Commit<'r>>,
-    parents: Option<git2::Parents<'r, 'r>>,
+struct RevWalkIterator<'r> {
+    repo: &'r git2::Repository,
+    revwalk: git2::Revwalk<'r>,
 }
 
-impl<'r> Iterator for RevSpecIterator<'r> {
+impl<'r> Iterator for RevWalkIterator<'r> {
     type Item = git2::Commit<'r>;
 
     fn next(&mut self) -> Option<git2::Commit<'r>> {
-        if let Some(start) = self.start {
-            self.start = None;
-            Some(start.clone())
-        } else if let Some(parents) = self.parents.as_mut() {
-            if let Some(parent) = parents.next() {
-                if parent.id() != self.revspec.from.id() {
-                    Some(parent)
-                } else {
-                    self.parents = None;
-                    None
-                }
-            } else {
-                self.parents = None;
-                None
-            }
+        if let Some(next) = self.revwalk.next() {
+            next.ok().and_then(|o| self.repo.find_commit(o).ok())
         } else {
             None
         }

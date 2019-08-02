@@ -139,13 +139,10 @@ fn run() -> Result<i32, failure::Error> {
         failed = checks::check_all(std::path::Path::new("-").into(), &text, &config, report)?;
     } else {
         debug_assert_eq!(options.commits, None);
-        let commits = "HEAD";
-        let revspec = git::RevSpec::parse(&repo, commits)?;
-        for commit in revspec.iter() {
-            log::trace!("Processing {}", commit.id());
-            let message = commit.message().unwrap();
-            failed = failed || checks::check_all(commit.id().into(), message, &config, report)?;
-        }
+        let commit = repo.head()?.peel_to_commit()?;
+        log::trace!("Processing {}", commit.id());
+        let message = commit.message().unwrap();
+        failed = checks::check_all(commit.id().into(), message, &config, report)?;
     }
 
     Ok(if failed { 1 } else { 0 })

@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, serde::Serialize)]
+#[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Message<'s> {
     pub source: Source<'s>,
@@ -45,7 +45,7 @@ pub enum Severity {
     Error,
 }
 
-#[derive(Clone, Debug, serde::Serialize, derive_more::From, derive_more::Display)]
+#[derive(Debug, serde::Serialize, derive_more::From, derive_more::Display)]
 #[serde(rename_all = "snake_case")]
 #[serde(tag = "type")]
 pub enum Content<'s> {
@@ -56,6 +56,7 @@ pub enum Content<'s> {
     Imperative(Imperative<'s>),
     Wip(Wip),
     Fixup(Fixup),
+    InvalidCommitFormat(InvalidCommitFormat),
     MergeCommitDisallowed(MergeCommitDisallowed),
 }
 
@@ -123,6 +124,23 @@ pub struct Wip {}
 #[derive(derive_more::Display)]
 #[display(fmt = "Fixup commits must be squashed")]
 pub struct Fixup {}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+#[derive(derive_more::Display)]
+#[display(fmt = "Invalid commit format {}", error)]
+pub struct InvalidCommitFormat {
+    #[serde(serialize_with = "serialize_error")]
+    pub error: failure::Error,
+}
+
+fn serialize_error<S>(error: &failure::Error, s: S) -> Result<S::Ok, S::Error>
+where
+    S: serde::Serializer,
+{
+    let error = error.to_string();
+    s.serialize_str(&error)
+}
 
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]

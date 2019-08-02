@@ -20,24 +20,44 @@ pub fn check_message(
         return Ok(failed);
     }
 
-    let parsed: Box<Style> = match config.style() {
+    let parsed: Option<Box<Style>> = match config.style() {
         crate::config::Style::Conventional => {
-            let parsed = committed::conventional::Message::parse(message).unwrap();
-            Box::new(parsed)
+            let parsed = committed::conventional::Message::parse(message);
+            match parsed {
+                Ok(parsed) => Some(Box::new(parsed)),
+                Err(error) => {
+                    report(report::Message::error(
+                        source,
+                        report::InvalidCommitFormat { error },
+                    ));
+                    None
+                }
+            }
         }
         crate::config::Style::None => {
-            let parsed = committed::no_style::Message::parse(message).unwrap();
-            Box::new(parsed)
+            let parsed = committed::no_style::Message::parse(message);
+            match parsed {
+                Ok(parsed) => Some(Box::new(parsed)),
+                Err(error) => {
+                    report(report::Message::error(
+                        source,
+                        report::InvalidCommitFormat { error },
+                    ));
+                    None
+                }
+            }
         }
     };
-    if config.imperative_subject() {
-        failed = failed | check_imperative_subject(source, parsed.subject(), report)?;
-    }
-    if config.subject_capitalized() {
-        failed = failed | check_capitalized_subject(source, parsed.subject(), report)?;
-    }
-    if config.subject_not_punctuated() {
-        failed = failed | check_subject_not_punctuated(source, parsed.subject(), report)?;
+    if let Some(parsed) = parsed {
+        if config.imperative_subject() {
+            failed = failed | check_imperative_subject(source, parsed.subject(), report)?;
+        }
+        if config.subject_capitalized() {
+            failed = failed | check_capitalized_subject(source, parsed.subject(), report)?;
+        }
+        if config.subject_not_punctuated() {
+            failed = failed | check_subject_not_punctuated(source, parsed.subject(), report)?;
+        }
     }
 
     if config.subject_length() != 0 {

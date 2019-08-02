@@ -13,6 +13,12 @@ pub fn check_all(
     if !config.no_fixup() {
         failed = failed || check_fixup(source, message, report)?;
     }
+
+    // Bail out due to above checks
+    if failed {
+        return Ok(failed);
+    }
+
     match config.style() {
         crate::config::Style::Conventional => {
             let parsed = committed::conventional::Message::parse(message).unwrap();

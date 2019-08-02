@@ -47,7 +47,7 @@ impl Config {
     }
 
     pub fn style(&self) -> Style {
-        self.style.unwrap_or(Style::Conventional)
+        self.style.unwrap_or(Style::None)
     }
 
     pub fn merge_commit(&self) -> bool {

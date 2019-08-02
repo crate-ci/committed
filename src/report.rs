@@ -87,7 +87,7 @@ pub struct LineTooLong {
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Subject should be capitalized but found {}", first_word)]
+#[display(fmt = "Subject should be capitalized but found `{}`", first_word)]
 pub struct CapitalizeSubject<'s> {
     pub first_word: &'s str,
 }
@@ -95,7 +95,7 @@ pub struct CapitalizeSubject<'s> {
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Subject should not be punctuated but found {}", punctuation)]
+#[display(fmt = "Subject should not be punctuated but found `{}`", punctuation)]
 pub struct NoPunctuation {
     pub punctuation: char,
 }
@@ -104,7 +104,7 @@ pub struct NoPunctuation {
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
 #[display(
-    fmt = "Subject should be in the imperative mood but found {}",
+    fmt = "Subject should be in the imperative mood but found `{}`",
     first_word
 )]
 pub struct Imperative<'s> {

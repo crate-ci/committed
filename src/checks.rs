@@ -5,47 +5,49 @@ pub fn check_all(
     message: &str,
     config: &crate::config::Config,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
+    let mut failed = false;
     if !config.no_wip() {
-        check_wip(source, message, report)?;
+        failed = failed || check_wip(source, message, report)?;
     }
     if !config.no_fixup() {
-        check_fixup(source, message, report)?;
+        failed = failed || check_fixup(source, message, report)?;
     }
     match config.style() {
         crate::config::Style::Conventional => {
             let parsed = committed::conventional::Message::parse(message).unwrap();
             if config.imperative_subject() {
-                check_imperative_subject(source, parsed.subject, report)?;
+                failed = failed || check_imperative_subject(source, parsed.subject, report)?;
             }
             if config.subject_capitalized() {
-                check_capitalized_subject(source, parsed.subject, report)?;
+                failed = failed || check_capitalized_subject(source, parsed.subject, report)?;
             }
             if config.subject_not_punctuated() {
-                check_subject_not_punctuated(source, parsed.subject, report)?;
+                failed = failed || check_subject_not_punctuated(source, parsed.subject, report)?;
             }
         }
         crate::config::Style::None => {
             let parsed = committed::no_style::Message::parse(message).unwrap();
             if config.imperative_subject() {
-                check_imperative_subject(source, parsed.raw_subject, report)?;
+                failed = failed || check_imperative_subject(source, parsed.raw_subject, report)?;
             }
             if config.subject_capitalized() {
-                check_capitalized_subject(source, parsed.raw_subject, report)?;
+                failed = failed || check_capitalized_subject(source, parsed.raw_subject, report)?;
             }
             if config.subject_not_punctuated() {
-                check_subject_not_punctuated(source, parsed.raw_subject, report)?;
+                failed =
+                    failed || check_subject_not_punctuated(source, parsed.raw_subject, report)?;
             }
         }
     }
     if config.subject_length() != 0 {
-        check_subject_length(source, message, config.subject_length(), report)?;
+        failed = failed || check_subject_length(source, message, config.subject_length(), report)?;
     }
     if config.line_length() != 0 {
-        check_line_length(source, message, config.line_length(), report)?;
+        failed = failed || check_line_length(source, message, config.line_length(), report)?;
     }
 
-    Ok(())
+    Ok(failed)
 }
 
 pub fn check_subject_length(
@@ -53,7 +55,7 @@ pub fn check_subject_length(
     message: &str,
     max_length: usize,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
     let subject = message
         .split('\n')
         .next()
@@ -68,13 +70,10 @@ pub fn check_subject_length(
                 actual_length: count,
             },
         ));
-        failure::bail!(
-            "Commit subject is {}, exceeding the max length of {}",
-            count,
-            max_length
-        );
+        Ok(true)
+    } else {
+        Ok(false)
     }
-    Ok(())
 }
 
 pub fn check_line_length(
@@ -82,7 +81,8 @@ pub fn check_line_length(
     message: &str,
     max_length: usize,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
+    let mut failed = false;
     for line in message.split('\n') {
         let line = line.trim_end();
         let count = unicode_segmentation::UnicodeSegmentation::graphemes(line, true).count();
@@ -94,21 +94,17 @@ pub fn check_line_length(
                     actual_length: count,
                 },
             ));
-            failure::bail!(
-                "Commit line is {}, exceeding the max length of {}",
-                count,
-                max_length
-            );
+            failed = true;
         }
     }
-    Ok(())
+    Ok(failed)
 }
 
 pub fn check_capitalized_subject(
     source: report::Source,
     subject: &str,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
     let first_word = subject
         .split_whitespace()
         .next()
@@ -122,16 +118,17 @@ pub fn check_capitalized_subject(
             source,
             report::CapitalizeSubject { first_word },
         ));
-        failure::bail!("Subject must be capitalized: `{}`", subject);
+        Ok(true)
+    } else {
+        Ok(false)
     }
-    Ok(())
 }
 
 pub fn check_subject_not_punctuated(
     source: report::Source,
     subject: &str,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
     let last = subject
         .chars()
         .last()
@@ -141,16 +138,17 @@ pub fn check_subject_not_punctuated(
             source,
             report::NoPunctuation { punctuation: last },
         ));
-        failure::bail!("Subject must not be punctuated: `{}`", last);
+        Ok(true)
+    } else {
+        Ok(false)
     }
-    Ok(())
 }
 
 pub fn check_imperative_subject(
     source: report::Source,
     subject: &str,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
     let first_word = subject
         .split_whitespace()
         .next()
@@ -163,12 +161,10 @@ pub fn check_imperative_subject(
             source,
             report::Imperative { first_word },
         ));
-        failure::bail!(
-            "Subject does not start with imperative verb: {}",
-            first_word
-        );
+        Ok(true)
+    } else {
+        Ok(false)
     }
-    Ok(())
 }
 
 static WIP_RE: once_cell::sync::Lazy<regex::Regex> =
@@ -178,12 +174,13 @@ pub fn check_wip(
     source: report::Source,
     message: &str,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
     if WIP_RE.is_match(message) {
         report(report::Message::error(source, report::Wip {}));
-        failure::bail!("Work-in-progress commits must be cleaned up");
+        Ok(true)
+    } else {
+        Ok(false)
     }
-    Ok(())
 }
 
 static FIXUP_RE: once_cell::sync::Lazy<regex::Regex> =
@@ -193,10 +190,11 @@ pub fn check_fixup(
     source: report::Source,
     message: &str,
     report: report::Report,
-) -> Result<(), failure::Error> {
+) -> Result<bool, failure::Error> {
     if FIXUP_RE.is_match(message) {
         report(report::Message::error(source, report::Fixup {}));
-        failure::bail!("Fixup commits must be squashed");
+        Ok(true)
+    } else {
+        Ok(false)
     }
-    Ok(())
 }

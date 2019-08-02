@@ -1,6 +1,6 @@
 use crate::report;
 
-pub fn check_all(
+pub fn check_message(
     source: report::Source,
     message: &str,
     config: &crate::config::Config,
@@ -199,6 +199,22 @@ pub fn check_fixup(
 ) -> Result<bool, failure::Error> {
     if FIXUP_RE.is_match(message) {
         report(report::Message::error(source, report::Fixup {}));
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}
+
+pub fn check_merge_commit(
+    source: report::Source,
+    commit: &git2::Commit,
+    report: report::Report,
+) -> Result<bool, failure::Error> {
+    if 1 < commit.parent_count() {
+        report(report::Message::error(
+            source,
+            report::MergeCommitDisallowed {},
+        ));
         Ok(true)
     } else {
         Ok(false)

@@ -125,24 +125,30 @@ fn run() -> Result<i32, failure::Error> {
             let mut f = fs::File::open(path)?;
             f.read_to_string(&mut text)?;
         }
-        failed = checks::check_all(path.as_path().into(), &text, &config, report)?;
+        failed = checks::check_message(path.as_path().into(), &text, &config, report)?;
     } else if let Some(commits) = options.commits.as_ref() {
         let revspec = git::RevSpec::parse(&repo, commits)?;
         for commit in revspec.iter() {
             log::trace!("Processing {}", commit.id());
             let message = commit.message().unwrap();
-            failed = failed || checks::check_all(commit.id().into(), message, &config, report)?;
+            failed = failed || checks::check_message(commit.id().into(), message, &config, report)?;
+            if !config.merge_commit() {
+                failed = failed || checks::check_merge_commit(commit.id().into(), &commit, report)?;
+            }
         }
     } else if grep_cli::is_readable_stdin() {
         let mut text = String::new();
         std::io::stdin().read_to_string(&mut text)?;
-        failed = checks::check_all(std::path::Path::new("-").into(), &text, &config, report)?;
+        failed = checks::check_message(std::path::Path::new("-").into(), &text, &config, report)?;
     } else {
         debug_assert_eq!(options.commits, None);
         let commit = repo.head()?.peel_to_commit()?;
         log::trace!("Processing {}", commit.id());
         let message = commit.message().unwrap();
-        failed = checks::check_all(commit.id().into(), message, &config, report)?;
+        failed = checks::check_message(commit.id().into(), message, &config, report)?;
+        if !config.merge_commit() {
+            failed = failed || checks::check_merge_commit(commit.id().into(), &commit, report)?;
+        }
     }
 
     Ok(if failed { 1 } else { 0 })

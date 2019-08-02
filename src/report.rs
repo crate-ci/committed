@@ -56,6 +56,7 @@ pub enum Content<'s> {
     Imperative(Imperative<'s>),
     Wip(Wip),
     Fixup(Fixup),
+    MergeCommitDisallowed(MergeCommitDisallowed),
 }
 
 #[derive(Clone, Debug, serde::Serialize)]
@@ -122,6 +123,12 @@ pub struct Wip {}
 #[derive(derive_more::Display)]
 #[display(fmt = "Fixup commits must be squashed")]
 pub struct Fixup {}
+
+#[derive(Clone, Debug, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+#[derive(derive_more::Display)]
+#[display(fmt = "Merge commits are disallowed")]
+pub struct MergeCommitDisallowed {}
 
 pub type Report = fn(msg: Message);
 

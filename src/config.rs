@@ -14,6 +14,7 @@ pub struct Config {
     no_wip: Option<bool>,
     line_length: Option<usize>,
     style: Option<Style>,
+    merge_commit: Option<bool>,
 }
 
 impl Config {
@@ -47,5 +48,9 @@ impl Config {
 
     pub fn style(&self) -> Style {
         self.style.unwrap_or(Style::Conventional)
+    }
+
+    pub fn merge_commit(&self) -> bool {
+        self.merge_commit.unwrap_or(true)
     }
 }

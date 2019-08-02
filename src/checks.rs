@@ -8,10 +8,10 @@ pub fn check_message(
 ) -> Result<bool, failure::Error> {
     let mut failed = false;
     if !config.no_wip() {
-        failed = failed || check_wip(source, message, report)?;
+        failed = failed | check_wip(source, message, report)?;
     }
     if !config.no_fixup() {
-        failed = failed || check_fixup(source, message, report)?;
+        failed = failed | check_fixup(source, message, report)?;
     }
 
     // Bail out due to above checks
@@ -23,34 +23,33 @@ pub fn check_message(
         crate::config::Style::Conventional => {
             let parsed = committed::conventional::Message::parse(message).unwrap();
             if config.imperative_subject() {
-                failed = failed || check_imperative_subject(source, parsed.subject, report)?;
+                failed = failed | check_imperative_subject(source, parsed.subject, report)?;
             }
             if config.subject_capitalized() {
-                failed = failed || check_capitalized_subject(source, parsed.subject, report)?;
+                failed = failed | check_capitalized_subject(source, parsed.subject, report)?;
             }
             if config.subject_not_punctuated() {
-                failed = failed || check_subject_not_punctuated(source, parsed.subject, report)?;
+                failed = failed | check_subject_not_punctuated(source, parsed.subject, report)?;
             }
         }
         crate::config::Style::None => {
             let parsed = committed::no_style::Message::parse(message).unwrap();
             if config.imperative_subject() {
-                failed = failed || check_imperative_subject(source, parsed.raw_subject, report)?;
+                failed = failed | check_imperative_subject(source, parsed.raw_subject, report)?;
             }
             if config.subject_capitalized() {
-                failed = failed || check_capitalized_subject(source, parsed.raw_subject, report)?;
+                failed = failed | check_capitalized_subject(source, parsed.raw_subject, report)?;
             }
             if config.subject_not_punctuated() {
-                failed =
-                    failed || check_subject_not_punctuated(source, parsed.raw_subject, report)?;
+                failed = failed | check_subject_not_punctuated(source, parsed.raw_subject, report)?;
             }
         }
     }
     if config.subject_length() != 0 {
-        failed = failed || check_subject_length(source, message, config.subject_length(), report)?;
+        failed = failed | check_subject_length(source, message, config.subject_length(), report)?;
     }
     if config.line_length() != 0 {
-        failed = failed || check_line_length(source, message, config.line_length(), report)?;
+        failed = failed | check_line_length(source, message, config.line_length(), report)?;
     }
 
     Ok(failed)

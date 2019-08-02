@@ -155,9 +155,9 @@ fn run() -> Result<i32, failure::Error> {
         for commit in revspec.iter() {
             log::trace!("Processing {}", commit.id());
             let message = commit.message().unwrap();
-            failed = failed || checks::check_message(commit.id().into(), message, &config, report)?;
+            failed = failed | checks::check_message(commit.id().into(), message, &config, report)?;
             if !config.merge_commit() {
-                failed = failed || checks::check_merge_commit(commit.id().into(), &commit, report)?;
+                failed = failed | checks::check_merge_commit(commit.id().into(), &commit, report)?;
             }
         }
     } else if grep_cli::is_readable_stdin() {
@@ -171,7 +171,7 @@ fn run() -> Result<i32, failure::Error> {
         let message = commit.message().unwrap();
         failed = checks::check_message(commit.id().into(), message, &config, report)?;
         if !config.merge_commit() {
-            failed = failed || checks::check_merge_commit(commit.id().into(), &commit, report)?;
+            failed = failed | checks::check_merge_commit(commit.id().into(), &commit, report)?;
         }
     }
 

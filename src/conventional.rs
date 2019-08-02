@@ -45,6 +45,12 @@ impl<'c> Message<'c> {
     }
 }
 
+impl<'c> crate::style::Style for Message<'c> {
+    fn subject(&self) -> &str {
+        self.subject
+    }
+}
+
 static SECTION_RE: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new("\r?\n\r?\n").unwrap());
 

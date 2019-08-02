@@ -1,4 +1,5 @@
 use crate::report;
+use committed::Style;
 
 pub fn check_message(
     source: report::Source,
@@ -19,32 +20,26 @@ pub fn check_message(
         return Ok(failed);
     }
 
-    match config.style() {
+    let parsed: Box<Style> = match config.style() {
         crate::config::Style::Conventional => {
             let parsed = committed::conventional::Message::parse(message).unwrap();
-            if config.imperative_subject() {
-                failed = failed | check_imperative_subject(source, parsed.subject, report)?;
-            }
-            if config.subject_capitalized() {
-                failed = failed | check_capitalized_subject(source, parsed.subject, report)?;
-            }
-            if config.subject_not_punctuated() {
-                failed = failed | check_subject_not_punctuated(source, parsed.subject, report)?;
-            }
+            Box::new(parsed)
         }
         crate::config::Style::None => {
             let parsed = committed::no_style::Message::parse(message).unwrap();
-            if config.imperative_subject() {
-                failed = failed | check_imperative_subject(source, parsed.raw_subject, report)?;
-            }
-            if config.subject_capitalized() {
-                failed = failed | check_capitalized_subject(source, parsed.raw_subject, report)?;
-            }
-            if config.subject_not_punctuated() {
-                failed = failed | check_subject_not_punctuated(source, parsed.raw_subject, report)?;
-            }
+            Box::new(parsed)
         }
+    };
+    if config.imperative_subject() {
+        failed = failed | check_imperative_subject(source, parsed.subject(), report)?;
     }
+    if config.subject_capitalized() {
+        failed = failed | check_capitalized_subject(source, parsed.subject(), report)?;
+    }
+    if config.subject_not_punctuated() {
+        failed = failed | check_subject_not_punctuated(source, parsed.subject(), report)?;
+    }
+
     if config.subject_length() != 0 {
         failed = failed | check_subject_length(source, message, config.subject_length(), report)?;
     }

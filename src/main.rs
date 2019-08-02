@@ -129,6 +129,7 @@ fn run() -> Result<i32, failure::Error> {
     } else if let Some(commits) = options.commits.as_ref() {
         let revspec = git::RevSpec::parse(&repo, commits)?;
         for commit in revspec.iter() {
+            log::trace!("Processing {}", commit.id());
             let message = commit.message().unwrap();
             failed = failed || checks::check_all(commit.id().into(), message, &config, report)?;
         }
@@ -141,6 +142,7 @@ fn run() -> Result<i32, failure::Error> {
         let commits = "HEAD";
         let revspec = git::RevSpec::parse(&repo, commits)?;
         for commit in revspec.iter() {
+            log::trace!("Processing {}", commit.id());
             let message = commit.message().unwrap();
             failed = failed || checks::check_all(commit.id().into(), message, &config, report)?;
         }

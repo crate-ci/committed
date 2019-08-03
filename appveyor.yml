@@ -28,6 +28,12 @@ install:
 test_script:
 - cargo check --verbose
 - cargo test  --verbose
+- git log --graph --oneline
+- echo "APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH=%APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH%"
+- echo "APPVEYOR_PULL_REQUEST_HEAD_COMMIT=%APPVEYOR_PULL_REQUEST_HEAD_COMMIT%"
+- echo "APPVEYOR_REPO_COMMIT =%APPVEYOR_REPO_COMMIT %"
+# The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
+- IF not "%APPVEYOR_PULL_REQUEST_HEAD_COMMIT%"=="" (cargo run -- HEAD~..HEAD^^2 --no-merge-commit -vvvv)
 
 branches:
   only:

@@ -2,7 +2,7 @@
 name = "committed"
 version = "0.1.0"
 authors = ["Ed Page <eopage@gmail.com>"]
-description = "Check commit style"
+description = "Nitpicking commit history since beabf39"
 repository = "https://github.com/crate-ci/committed"
 documentation = "https://docs.rs/committed"
 readme = "README.md"

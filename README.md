@@ -1,6 +1,6 @@
 # committed
 
-> **Nitpicking commit history since `beabf39`***
+> **Nitpicking commit history since `beabf39`**
 
 [![Travis Status](https://travis-ci.org/crate-ci/committed.svg?branch=master)](https://travis-ci.org/crate-ci/committed)
 [![Appveyor Status](https://ci.appveyor.com/api/projects/status/nmndw68dl9f8s5k2/branch/master?svg=true)](https://ci.appveyor.com/project/epage/committed/branch/master)

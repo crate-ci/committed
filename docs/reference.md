@@ -57,6 +57,6 @@ Configuration is read from the following (in precedence order)
 | no_fixup               | \-                | bool   | Disallow fixup commits |
 | no_wip                 | \-                | bool   | Disallow WIP commits |
 | style                  | \-                | none, [conventional] | Commit style convention |
-| merge_commit           | --no-merge-commit | \-     | Disallow merge commits. Argument is preferred over config file since there are times when merge-commits are wanted. |
+| merge_commit           | --no-merge-commit | \-     | Disallow merge commits. Argument is recommended over config file since there are times when merge-commits are wanted. |
 
 [conventional]: https://www.conventionalcommits.org/

@@ -1,5 +1,6 @@
 environment:
   global:
+    CRATE_NAME: committed
     RUST_VERSION: stable
     #APPVEYOR_CACHE_SKIP_RESTORE: true
 
@@ -34,6 +35,19 @@ test_script:
 - echo "APPVEYOR_REPO_COMMIT =%APPVEYOR_REPO_COMMIT %"
 # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
 - IF not "%APPVEYOR_PULL_REQUEST_HEAD_COMMIT%"=="" (cargo run -- HEAD~..HEAD^^2 --no-merge-commit -vvvv)
+
+before_deploy:
+- cargo rustc --target %TARGET% --release --bin cobalt -- -C lto
+- ps: ci\tarball.ps1
+deploy:
+  artifact: /.*\.zip/
+  auth_token:
+    secure: 83A89D1PTXLWrdrJz9L7Jyh0eXJPR6rusob9UqnYdXftn+b3OqN3dx1hBuABJL4z
+  description: ''
+  on:
+    CHANNEL: stable
+    appveyor_repo_tag: true
+  provider: GitHub
 
 branches:
   only:

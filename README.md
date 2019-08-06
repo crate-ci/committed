@@ -16,6 +16,24 @@ For now, `rust` is required for install:
 cargo install committed
 ```
 
+## Basic Usage
+
+Verify your latest commit
+```bash
+committed HEAD
+```
+
+Verify your branch
+```bash
+committed master..HEAD --no-merge-commit
+```
+
+Have your CI verify your PR (assuming it does a no-ff merge into your `master`)
+```bash
+committed HEAD~..HEAD^^2 --no-merge-commit
+```
+See also our [`.travis.yml`](.travis.yml) and [`appveyor.yml`](appveyor.yml).
+
 ## [Reference](docs/reference.md)
 
 ## [Contribute](CONTRIBUTING.md)

@@ -4,14 +4,19 @@ rust:
 - stable
 - beta
 - nightly
+env:
+  global:
+  - CRATE_NAME=committed
+  matrix:
+  - TARGET=x86_64-unknown-linux-gnu
 matrix:
   include:
   - env: RUSTFMT
     rust: 1.35.0  # `stable`: Locking down for consistent behavior
     install:
-      - rustup component add rustfmt
+    - rustup component add rustfmt
     script:
-      - cargo fmt -- --check
+    - cargo fmt -- --check
   - env: RUSTFLAGS="-D warnings"
     rust: 1.35.0  # `stable`: Locking down for consistent behavior
     install:
@@ -20,13 +25,13 @@ matrix:
   - env: CLIPPY
     rust: 1.35.0  # `stable`: Locking down for consistent behavior
     install:
-      - rustup component add clippy
+    - rustup component add clippy
     script:
-      - cargo clippy --all-features
+    - cargo clippy --all-features
   - env: BENCH
     rust: nightly
     script:
-      - cargo bench
+    - cargo bench
 
 install:
 - rustc -Vv
@@ -43,18 +48,32 @@ script:
 # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
 - if [ -n "$TRAVIS_PULL_REQUEST_SHA" ]; then cargo run -- $TRAVIS_COMMIT_RANGE --no-merge-commit -vvvv; fi
 
+before_deploy:
+- cargo rustc --target $TARGET --release --bin cobalt -- -C lto
+- sh ci/tarball.sh
+deploy:
+  provider: releases
+  file_glob: true
+  file: "$CRATE_NAME-$TRAVIS_TAG-$TARGET.*"
+  on:
+    condition: "$TRAVIS_RUST_VERSION = stable"
+    tags: true
+  skip_cleanup: true
+  token:
+    secure: URo35plW6aBIzlkFJ6afSll0utJ7ZvoRyYWEYIleb25sdBl+GOf9wPrwV38IuXl5TaZngxTxVs6pje/0d9kXUDc6CwquqzGxXcYMdW9DxqfwpSFkxCeW6eeiHl6j/8KpjaCewRFzoIVkMlNofjDkvx6+Akij96RHpNSmMfyn7HErG+k3jrfwb4ztULPaCGawEsyy5DlvAHBz4ghCU7XqZj7gAXh+P9Y1QtIv9IhwSz6ex8XM7+yA52MoS/fcP4nbn9qC0xXh6NOB6ZUIrReCL0uvbOlu0cdjw6aZwyq7+Pth78WgxhT6aMcrpPqW3zNCqQQtkLUzDg8lNSG0ONERbnOH9WVQkHEVPFY7fZ4nZCuYH3Y3d92VNBtv3yilOE990ofVyo2kAAf0n17nqOxBn6ppEIJOziB0yZDxLeQ/iMcutTKXiySqZoI9yYFq/c76B6bOBDdy6H5OU2hWcGe873TAyMWlm9lnFuMoVKR6g7EnQqiFxJCppR0vnqMbGTUHkaAPnkxur5f3itgJnKVGK6AOLbP5baAk7SlyyhA6dIWaHej1ZFYcjV/un78sfA1i4IKdF3+WllCGYh/YeBGa+YphHXJefqooNJVSKOQUEe/O8b+AQwnKsY+E6+e2XPo77uBXASUflf5Ej/C+vo1ZxtWdX8JukTUdQzjiS23pGhE=
+
 branches:
   only:
   # Release tags
-  - /^v\d+\.\d+\.\d+.*$/
+  - "/^v\\d+\\.\\d+\\.\\d+.*$/"
   - master
 
 # Need to cache the whole `.cargo` directory to keep .crates.toml for
 # cargo-update to work
 cache:
   directories:
-    - /home/travis/.cargo
 # But don't cache the cargo registry
+  - "/home/travis/.cargo"
 before_cache:
 - rm -rf $HOME/.cargo/registry
 # Travis can't cache files that are not readable by "others"

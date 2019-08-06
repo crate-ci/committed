@@ -49,7 +49,7 @@ script:
 - if [ -n "$TRAVIS_PULL_REQUEST_SHA" ]; then cargo run -- $TRAVIS_COMMIT_RANGE --no-merge-commit -vvvv; fi
 
 before_deploy:
-- cargo rustc --target $TARGET --release --bin cobalt -- -C lto
+- cargo rustc --target $TARGET --release --bin $CRATE_NAME -- -C lto
 - sh ci/tarball.sh
 deploy:
   provider: releases

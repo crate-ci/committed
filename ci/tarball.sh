@@ -11,7 +11,7 @@ main() {
             ;;
     esac
 
-    cp target/$TARGET/release/cobalt $stage/
+    cp target/$TARGET/release/$CRATE_NAME $stage/
 
     cd $stage
     tar czf $src/$CRATE_NAME-$TRAVIS_TAG-$TARGET.tar.gz *

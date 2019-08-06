@@ -37,7 +37,7 @@ test_script:
 - IF not "%APPVEYOR_PULL_REQUEST_HEAD_COMMIT%"=="" (cargo run -- HEAD~..HEAD^^2 --no-merge-commit -vvvv)
 
 before_deploy:
-- cargo rustc --target %TARGET% --release --bin cobalt -- -C lto
+- cargo rustc --target %TARGET% --release --bin %CRATE_NAME% -- -C lto
 - ps: ci\tarball.ps1
 deploy:
   artifact: /.*\.zip/

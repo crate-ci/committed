@@ -1,0 +1,21 @@
+stages:
+ - template: azure/stages.yml@templates
+   parameters:
+     minrust: 1.34.0
+     codecov_token: $(CODECOV_TOKEN_SECRET)
+  - stage: Committed
+    dependsOn: check
+    jobs:
+      - job: "Committed"
+        steps:
+        - template: azure/install-rust.yml.yml@templates
+        - script: cargo run -- HEAD~..HEAD^^2 --no-merge-commit -vvvv
+          # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
+        condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: crate-ci/azure-pipelines
+      endpoint: crate-ci

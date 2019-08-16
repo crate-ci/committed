@@ -4,34 +4,6 @@ rust:
 - stable
 - beta
 - nightly
-env:
-  global:
-  - CRATE_NAME=committed
-  matrix:
-  - TARGET=x86_64-unknown-linux-gnu
-matrix:
-  include:
-  - env: RUSTFMT
-    rust: 1.35.0  # `stable`: Locking down for consistent behavior
-    install:
-    - rustup component add rustfmt
-    script:
-    - cargo fmt -- --check
-  - env: RUSTFLAGS="-D warnings"
-    rust: 1.35.0  # `stable`: Locking down for consistent behavior
-    install:
-    script:
-    - cargo check --tests
-  - env: CLIPPY
-    rust: 1.35.0  # `stable`: Locking down for consistent behavior
-    install:
-    - rustup component add clippy
-    script:
-    - cargo clippy --all-features
-  - env: BENCH
-    rust: nightly
-    script:
-    - cargo bench
 
 install:
 - rustc -Vv
@@ -39,28 +11,8 @@ install:
 - export PATH=$HOME/.cargo/bin:$PATH
 
 script:
-- cargo check --verbose
-- cargo test  --verbose
-- git log --graph --oneline
-- echo "TRAVIS_PULL_REQUEST_SHA=$TRAVIS_PULL_REQUEST_SHA"
-- echo "TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE"
-- echo "TRAVIS_PULL_REQUEST_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH"
 # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
 - if [ -n "$TRAVIS_PULL_REQUEST_SHA" ]; then cargo run -- $TRAVIS_COMMIT_RANGE --no-merge-commit -vvvv; fi
-
-before_deploy:
-- cargo rustc --target $TARGET --release --bin $CRATE_NAME -- -C lto
-- sh ci/tarball.sh
-deploy:
-  provider: releases
-  file_glob: true
-  file: "$CRATE_NAME-$TRAVIS_TAG-$TARGET.*"
-  on:
-    condition: "$TRAVIS_RUST_VERSION = stable"
-    tags: true
-  skip_cleanup: true
-  api_key:
-    secure: hN/A1h0gziXyymcyootSljqUxX7X3vBbK9IxOGVXn9eC3a/Ms5L88hwf307B1UQMLwhPv0tqLfsgyreMMcoksGWK7FqHTOtJ3mR2PHbfoSOZJ5meyYvHWRfYvyyz0p1XtxRWBsT9ShiiqN9qCg+6TWvX7UPNiyaPwaW1X/QbckJ1HSf6Lpmp4mmgtAIBkJ1LD8kiR9fZ3rzd9JHoKQhtSkjc1LUy65Pc2ytuoBpKGMvQxmTL6M4YToSf34uQGZgSDMVq4DYrlHq/OIE1S1puSAYgQCDHYtd0JkYIt6nq200kFkx6t8g40xYUVlklRIj8N+/PUvePG264w8kKL6P8bzyb7NtexdWWvmkWyFxyD/dMIf8D2hZc0+fbPytcXd92s78IQu3t9tM3ahWk5CWbSRiuvEKmmGUxqdHoMCHiVlEhYrWxreSaoLLGIyVCKOBgswWX3CCWZQQEsVZ68hi1yLpRoSua6arElQBntxz6y93yBCYGsecC0qM70hhsVNqHjHjS4FiBr9kJQGKG7Qvj6Sz7rSsU07OrBU+JkY21n9j+5+xOYjmDgEjV3FNR8jaNsW2djfwkV4/U+j4avZEZMt1q1jDpxGSPfBSMujAsE9DvvxwU0t6Ztwpz9K+QTkRFNzjW+9FMGIC1oT5YdQeP/1P1Lg/lUGGV/nLhY5e6ZKA=
 
 branches:
   only:

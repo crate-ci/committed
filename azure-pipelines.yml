@@ -31,6 +31,7 @@ stages:
      pool:
        vmImage: 'ubuntu-16.04'
      steps:
+     - checkout: self
      - template: azure/install-rust.yml@templates
      - script: git log --graph --oneline
        displayName: Check history

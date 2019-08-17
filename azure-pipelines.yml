@@ -28,6 +28,8 @@ stages:
    dependsOn: check
    jobs:
    - job: "Committed"
+     pool:
+       vmImage: 'ubuntu-16.04'
      steps:
      - template: azure/install-rust.yml@templates
      - script: git log --graph --oneline

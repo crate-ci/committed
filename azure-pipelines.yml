@@ -3,6 +3,17 @@ trigger:
     include: ['master']
   tags:
     include: ['v*']
+pr:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - *
+    exclude:
+    - "*.md"
+    - "docs/*"
+    - "LICENSE-*"
 
 stages:
  - template: azure/stages.yml@templates

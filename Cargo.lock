@@ -115,7 +115,7 @@ dependencies = [
 
 [[package]]
 name = "committed"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap-verbosity-flag 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",

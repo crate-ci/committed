@@ -63,7 +63,7 @@ stages:
      - task: GithubRelease@0
        condition: ne( variables['Agent.OS'], 'Windows_NT' )
        inputs:
-         gitHubConnection: 'crate-ci'
+         gitHubConnection: 'crate-ci-token'
          repositoryName: 'crate-ci/committed'
          action: 'edit'
          target: '$(build.sourceVersion)'

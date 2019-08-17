@@ -1,3 +1,9 @@
+trigger:
+  branches:
+    include: ['master']
+  tags:
+    include: ['v*']
+
 stages:
  - template: azure/stages.yml@templates
    parameters:

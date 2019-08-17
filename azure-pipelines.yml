@@ -30,6 +30,7 @@ stages:
    - job: "Committed"
      steps:
      - template: azure/install-rust.yml@templates
+     - script: git log --graph --oneline
      # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
      - script: cargo run -- HEAD~..HEAD^^2 --no-merge-commit -vvvv
      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))

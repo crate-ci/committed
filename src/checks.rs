@@ -8,10 +8,10 @@ pub fn check_message(
     report: report::Report,
 ) -> Result<bool, failure::Error> {
     let mut failed = false;
-    if !config.no_wip() {
+    if config.no_wip() {
         failed = check_wip(source, message, report)? | failed;
     }
-    if !config.no_fixup() {
+    if config.no_fixup() {
         failed = check_fixup(source, message, report)? | failed;
     }
 

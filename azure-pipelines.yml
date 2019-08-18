@@ -28,10 +28,16 @@ stages:
    dependsOn: check
    jobs:
    - job: "Committed"
+     pool:
+       vmImage: 'ubuntu-16.04'
      steps:
+     - checkout: self
      - template: azure/install-rust.yml@templates
+     - script: git log --graph --oneline
+       displayName: Check history
      # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
-     - script: cargo run -- HEAD~..HEAD^^2 --no-merge-commit -vvvv
+     - script: cargo run -- HEAD~..HEAD^2 --no-merge-commit -vvvv
+       displayName: Committed
      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
  - stage: Release
    dependsOn: test

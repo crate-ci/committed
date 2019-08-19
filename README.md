@@ -30,7 +30,7 @@ committed master..HEAD --no-merge-commit
 
 Have your CI verify your PR (assuming it does a no-ff merge into your `master`)
 ```bash
-committed HEAD~..HEAD^^2 --no-merge-commit
+committed HEAD~..HEAD^2 --no-merge-commit
 ```
 See also our [`azure-pipelines.yml`](azure-pipelnes.yml), [`.travis.yml`](.travis.yml), and [`appveyor.yml`](appveyor.yml).
 

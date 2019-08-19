@@ -1,3 +1,14 @@
+<a name="0.1.9"></a>
+## 0.1.9 (2019-08-19)
+
+
+#### Bug Fixes
+
+* **docs:**  Link to correct pipeline ([b5c1512f](https://github.com/crate-ci/committed/commit/b5c1512f0739c980559eb2eceed06c8b511ab99a))
+* **files:**  Avoid short-circuiting ([f5c190ff](https://github.com/crate-ci/committed/commit/f5c190ff0fdd7adddc882f4b04a41cb6334cc26f))
+
+
+
 <a name="0.1.8"></a>
 ## 0.1.8 (2019-08-18)
 

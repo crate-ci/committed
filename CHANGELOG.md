@@ -1,3 +1,13 @@
+<a name="0.1.10"></a>
+## 0.1.10 (2019-08-29)
+
+
+#### Bug Fixes
+
+* **checks:**  Fail on style errors ([3d7c8e51](https://github.com/crate-ci/committed/commit/3d7c8e5119e16f9af71f9b643b131d1f644398a4))
+
+
+
 <a name="0.1.9"></a>
 ## 0.1.9 (2019-08-19)
 

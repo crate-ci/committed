@@ -30,6 +30,7 @@ pub fn check_message(
                         source,
                         report::InvalidCommitFormat { error },
                     ));
+                    failed = true;
                     None
                 }
             }
@@ -43,6 +44,7 @@ pub fn check_message(
                         source,
                         report::InvalidCommitFormat { error },
                     ));
+                    failed = true;
                     None
                 }
             }

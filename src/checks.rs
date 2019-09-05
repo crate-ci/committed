@@ -68,6 +68,9 @@ pub fn check_message(
     if config.line_length() != 0 {
         failed = check_line_length(source, message, config.line_length(), report)? | failed;
     }
+    if config.hard_line_length() != 0 {
+        failed = check_hard_line_length(source, message, config.line_length(), report)? | failed;
+    }
 
     Ok(failed)
 }
@@ -99,6 +102,33 @@ pub fn check_subject_length(
 }
 
 pub fn check_line_length(
+    source: report::Source,
+    message: &str,
+    max_length: usize,
+    report: report::Report,
+) -> Result<bool, failure::Error> {
+    let mut failed = false;
+    for line in message.split('\n') {
+        let line = line.trim_end();
+        if !line.contains(' ') {
+            continue;
+        }
+        let count = unicode_segmentation::UnicodeSegmentation::graphemes(line, true).count();
+        if max_length < count {
+            report(report::Message::error(
+                source,
+                report::LineTooLong {
+                    max_length,
+                    actual_length: count,
+                },
+            ));
+            failed = true;
+        }
+    }
+    Ok(failed)
+}
+
+pub fn check_hard_line_length(
     source: report::Source,
     message: &str,
     max_length: usize,

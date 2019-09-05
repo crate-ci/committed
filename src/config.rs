@@ -12,6 +12,7 @@ pub struct Config {
     imperative_subject: Option<bool>,
     no_fixup: Option<bool>,
     no_wip: Option<bool>,
+    hard_line_length: Option<usize>,
     line_length: Option<usize>,
     style: Option<Style>,
     pub merge_commit: Option<bool>,
@@ -44,6 +45,10 @@ impl Config {
 
     pub fn line_length(&self) -> usize {
         self.line_length.unwrap_or(72)
+    }
+
+    pub fn hard_line_length(&self) -> usize {
+        self.hard_line_length.unwrap_or(0)
     }
 
     pub fn style(&self) -> Style {

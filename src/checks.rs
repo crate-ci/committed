@@ -20,7 +20,7 @@ pub fn check_message(
         return Ok(failed);
     }
 
-    let parsed: Option<Box<Style>> = match config.style() {
+    let parsed: Option<Box<dyn Style>> = match config.style() {
         crate::config::Style::Conventional => {
             let parsed = committed::conventional::Message::parse(message);
             match parsed {
@@ -59,6 +59,13 @@ pub fn check_message(
         }
         if config.subject_not_punctuated() {
             failed = check_subject_not_punctuated(source, parsed.subject(), report)? | failed;
+        }
+
+        let allowed_types: Vec<_> = config.allowed_types().collect();
+        if !allowed_types.is_empty() {
+            if let Some(used_type) = parsed.type_() {
+                failed = check_allowed_types(source, used_type, allowed_types, report)? | failed;
+            }
         }
     }
 
@@ -217,6 +224,29 @@ pub fn check_imperative_subject(
     } else {
         Ok(false)
     }
+}
+
+fn check_allowed_types(
+    source: report::Source,
+    parsed: unicase::UniCase<&str>,
+    allowed_types: Vec<&str>,
+    report: report::Report,
+) -> Result<bool, failure::Error> {
+    for allowed_type in allowed_types.iter() {
+        let allowed_type = unicase::UniCase::new(allowed_type);
+        if allowed_type == parsed {
+            return Ok(false);
+        }
+    }
+
+    report(report::Message::error(
+        source,
+        report::DisallowedCommitType {
+            used: parsed.as_ref().to_owned(),
+            allowed: allowed_types.iter().map(|s| (*s).to_owned()).collect(),
+        },
+    ));
+    Ok(true)
 }
 
 static WIP_RE: once_cell::sync::Lazy<regex::Regex> =

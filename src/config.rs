@@ -1,3 +1,7 @@
+static DEFAULT_TYPES: &'static [&'static str] = &[
+    "fix", "feat", "chore", "docs", "style", "refactor", "perf", "test",
+];
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum Style {
     Conventional,
@@ -15,6 +19,7 @@ pub struct Config {
     hard_line_length: Option<usize>,
     line_length: Option<usize>,
     style: Option<Style>,
+    allowed_types: Option<Vec<String>>,
     pub merge_commit: Option<bool>,
 }
 
@@ -53,6 +58,16 @@ impl Config {
 
     pub fn style(&self) -> Style {
         self.style.unwrap_or(Style::None)
+    }
+
+    pub fn allowed_types<'s>(&'s self) -> Box<dyn Iterator<Item = &str> + 's> {
+        self.allowed_types
+            .as_ref()
+            .map(|v| {
+                let b: Box<dyn Iterator<Item = &str>> = Box::new(v.iter().map(|s| s.as_str()));
+                b
+            })
+            .unwrap_or_else(|| Box::new(DEFAULT_TYPES.iter().map(|s| *s)))
     }
 
     pub fn merge_commit(&self) -> bool {

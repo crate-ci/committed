@@ -57,6 +57,7 @@ pub enum Content<'s> {
     Wip(Wip),
     Fixup(Fixup),
     InvalidCommitFormat(InvalidCommitFormat),
+    DisallowedCommitType(DisallowedCommitType),
     MergeCommitDisallowed(MergeCommitDisallowed),
 }
 
@@ -140,6 +141,19 @@ where
 {
     let error = error.to_string();
     s.serialize_str(&error)
+}
+
+#[derive(Clone, Debug, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+#[derive(derive_more::Display)]
+#[display(
+    fmt = "Disallowed type `{}` used, please use one of {:?}",
+    used,
+    allowed
+)]
+pub struct DisallowedCommitType {
+    pub used: String,
+    pub allowed: Vec<String>,
 }
 
 #[derive(Clone, Debug, serde::Serialize)]

@@ -1,3 +1,15 @@
+<a name="0.1.11"></a>
+## 0.1.11 (2019-09-10)
+
+
+#### Features
+
+* **checks:**
+  *  Limit allowed types ([965985f3](https://github.com/crate-ci/committed/commit/965985f3dcd616a36f65e981ee3973b6ca1524fc), closes [#8](https://github.com/crate-ci/committed/issues/8))
+  *  Distinguish hard / soft line lengths ([1dcc9681](https://github.com/crate-ci/committed/commit/1dcc96813e0301928431cc164c464262117464bb), closes [#29](https://github.com/crate-ci/committed/issues/29))
+
+
+
 <a name="0.1.10"></a>
 ## 0.1.10 (2019-08-29)
 

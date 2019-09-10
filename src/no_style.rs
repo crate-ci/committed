@@ -23,6 +23,18 @@ impl<'c> crate::style::Style for Message<'c> {
     fn subject(&self) -> &str {
         self.raw_subject
     }
+
+    fn body(&self) -> Option<&str> {
+        self.body
+    }
+
+    fn type_(&self) -> Option<unicase::UniCase<&str>> {
+        None
+    }
+
+    fn scope(&self) -> Option<unicase::UniCase<&str>> {
+        None
+    }
 }
 
 static SECTION_RE: once_cell::sync::Lazy<regex::Regex> =

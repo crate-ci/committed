@@ -50,13 +50,15 @@ Configuration is read from the following (in precedence order)
 | Field                  | Argument          | Format | Description |
 |------------------------|-------------------|--------|-------------|
 | subject_length         | \-                | number | Number of columns the subject can occupy |
-| line_length            | \-                | number | Number of columns any line can occupy, including subject |
+| line_length            | \-                | number | Number of columns any line with a break can occupy, including subject |
+| hard_line_length       | \-                | number | Max number of columns any line can occupy. |
 | subject_capitalized    | \-                | bool   | Whether the subject is required to be capitalized |
 | subject_not_punctuated | \-                | bool   | Prevent the subject from ending in punctuation |
 | imperative_subject     | \-                | bool   | Require the subject to start with an imperative verb |
 | no_fixup               | \-                | bool   | Disallow fixup commits |
 | no_wip                 | \-                | bool   | Disallow WIP commits |
 | style                  | \-                | none, [conventional] | Commit style convention |
+| allowed_types          | \-                | list of strings | _(Conventional)_ Accepted commit types |
 | merge_commit           | --no-merge-commit | \-     | Disallow merge commits. Argument is recommended over config file since there are times when merge-commits are wanted. |
 
 [conventional]: https://www.conventionalcommits.org/

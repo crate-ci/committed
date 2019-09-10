@@ -10,8 +10,10 @@
 
 ## Install
 
-For now, `rust` is required for install:
+[Download](https://github.com/crate-ci/committed/releases) a pre-built binary
+(installable via [gh-install](https://github.com/crate-ci/gh-install).
 
+Or use rust to install:
 ```bash
 cargo install committed
 ```
@@ -32,7 +34,10 @@ Have your CI verify your PR (assuming it does a no-ff merge into your `master`)
 ```bash
 committed HEAD~..HEAD^2 --no-merge-commit
 ```
-See also our [`azure-pipelines.yml`](azure-pipelnes.yml), [`.travis.yml`](.travis.yml), and [`appveyor.yml`](appveyor.yml).
+See [`imperative` for an Azure Pipeline
+example](https://github.com/crate-ci/imperative/blob/master/azure-pipelines.yml)
+or look at `committed`s own [`azure-pipelines.yml`](azure-pipelnes.yml),
+[`.travis.yml`](.travis.yml), or [`appveyor.yml`](appveyor.yml).
 
 ## [Reference](docs/reference.md)
 

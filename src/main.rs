@@ -14,32 +14,28 @@ mod git;
 mod report;
 
 #[derive(Debug, StructOpt)]
-#[structopt(rename_all = "kebab-case")]
 struct Options {
     commits: Option<String>,
 
-    #[structopt(long = "commit-file", parse(from_os_str))]
+    #[structopt(long, parse(from_os_str))]
     commit_file: Option<std::path::PathBuf>,
 
-    #[structopt(long = "work-tree", parse(from_os_str), default_value = ".")]
+    #[structopt(long, parse(from_os_str), default_value = ".")]
     work_tree: std::path::PathBuf,
 
-    #[structopt(long = "config", parse(from_os_str))]
+    #[structopt(long, parse(from_os_str))]
     config: Option<std::path::PathBuf>,
 
-    #[structopt(long, raw(overrides_with = r#""merge-commit""#))]
+    #[structopt(long, overrides_with("merge-commit"))]
     no_merge_commit: bool,
-    #[structopt(
-        long,
-        raw(overrides_with = r#""no-merge-commit""#),
-        raw(hidden = "true")
-    )]
+    #[structopt(long, overrides_with("no-merge-commit"), hidden(true))]
     merge_commit: bool,
 
     #[structopt(
         long = "format",
-        raw(possible_values = "&Format::variants()", case_insensitive = "true"),
-        default_value = "brief"
+        possible_values(&Format::variants()),
+        case_insensitive(true),
+        default_value("brief")
     )]
     format: Format,
 
@@ -90,32 +86,33 @@ fn load_toml(path: &std::path::Path) -> Result<config::Config, failure::Error> {
     toml::from_str(&text).map_err(|e| e.into())
 }
 
-pub fn get_logging(level: log::Level) -> env_logger::Builder {
-    let mut builder = env_logger::Builder::new();
+pub fn init_logging(level: Option<log::Level>) {
+    if let Some(level) = level {
+        let mut builder = env_logger::Builder::new();
 
-    builder.filter(None, level.to_level_filter());
+        builder.filter(None, level.to_level_filter());
 
-    if level == log::LevelFilter::Trace {
-        builder.default_format_timestamp(false);
-    } else {
-        builder.format(|f, record| {
-            writeln!(
-                f,
-                "[{}] {}",
-                record.level().to_string().to_lowercase(),
-                record.args()
-            )
-        });
+        if level == log::LevelFilter::Trace {
+            builder.default_format_timestamp(false);
+        } else {
+            builder.format(|f, record| {
+                writeln!(
+                    f,
+                    "[{}] {}",
+                    record.level().to_string().to_lowercase(),
+                    record.args()
+                )
+            });
+        }
+
+        builder.init();
     }
-
-    builder
 }
 
 fn run() -> Result<i32, failure::Error> {
     let options = Options::from_args();
 
-    let mut builder = get_logging(options.verbose.log_level());
-    builder.init();
+    init_logging(options.verbose.log_level());
 
     let repo = options.work_tree.canonicalize()?;
 
@@ -138,7 +135,11 @@ fn run() -> Result<i32, failure::Error> {
     }
     let config = config;
 
-    let report = options.format.report();
+    let report = if options.verbose.is_silent() {
+        report::print_silent
+    } else {
+        options.format.report()
+    };
 
     let mut failed = false;
     if let Some(path) = options.commit_file.as_ref() {

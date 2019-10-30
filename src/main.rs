@@ -15,10 +15,9 @@ mod report;
 
 #[derive(Debug, StructOpt)]
 #[structopt(
-        name = "tree",
-        setting = structopt::clap::AppSettings::UnifiedHelpMessage,
-        setting = structopt::clap::AppSettings::DeriveDisplayOrder,
-        setting = structopt::clap::AppSettings::DontCollapseArgsInUsage
+    setting = structopt::clap::AppSettings::UnifiedHelpMessage,
+    setting = structopt::clap::AppSettings::DeriveDisplayOrder,
+    setting = structopt::clap::AppSettings::DontCollapseArgsInUsage
 )]
 struct Options {
     commits: Option<String>,

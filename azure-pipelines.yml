@@ -21,11 +21,14 @@ schedules:
 
 stages:
 - stage: test
+  dependsOn: []
+  jobs:
   - template: default.yml@templates
     parameters:
       minrust: 1.36.0
       codecov_token: $(CODECOV_TOKEN_SECRET)
 - stage: style
+  dependsOn: []
   jobs:
   - job: "Committed"
     pool:

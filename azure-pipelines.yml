@@ -35,7 +35,7 @@ stages:
       vmImage: 'ubuntu-16.04'
     steps:
     - checkout: self
-    - template: azure/install-rust.yml@templates
+    - template: install-rust.yml@templates
     - script: git log --graph --oneline
       displayName: Check history
     # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied

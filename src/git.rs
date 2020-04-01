@@ -5,7 +5,7 @@ pub struct RevSpec<'r> {
 }
 
 impl<'r> RevSpec<'r> {
-    pub fn parse(repo: &'r git2::Repository, revspec: &str) -> Result<Self, failure::Error> {
+    pub fn parse(repo: &'r git2::Repository, revspec: &str) -> Result<Self, anyhow::Error> {
         let commits = repo.revparse(revspec)?;
         let from = commits.from().unwrap().as_commit().unwrap().clone();
         let to = commits.to().map(|o| o.as_commit().unwrap().clone());

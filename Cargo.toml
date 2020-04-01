@@ -19,7 +19,7 @@ codecov = { repository = "crate-ci/committed" }
 regex = "1.3"
 once_cell = "1.2.0"
 unicase = "2.4.0"
-failure = "0.1"
+anyhow = "1.0"
 git2 = { version = "0.13", default-features = false }
 clap = "2"
 structopt = "0.3"

@@ -6,7 +6,7 @@ pub fn check_message(
     message: &str,
     config: &crate::config::Config,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     let mut failed = false;
     if config.no_wip() {
         failed = check_wip(source, message, report)? | failed;
@@ -87,11 +87,11 @@ pub fn check_subject_length(
     message: &str,
     max_length: usize,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     let subject = message
         .split('\n')
         .next()
-        .ok_or_else(|| failure::Context::new("Commit cannot be empty"))?;
+        .ok_or_else(|| anyhow::anyhow!("Commit cannot be empty"))?;
     let subject = subject.trim_end();
     let count = unicode_segmentation::UnicodeSegmentation::graphemes(subject, true).count();
     if max_length < count {
@@ -113,7 +113,7 @@ pub fn check_line_length(
     message: &str,
     max_length: usize,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     let mut failed = false;
     for line in message.split('\n') {
         let line = line.trim_end();
@@ -140,7 +140,7 @@ pub fn check_hard_line_length(
     message: &str,
     max_length: usize,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     let mut failed = false;
     for line in message.split('\n') {
         let line = line.trim_end();
@@ -163,15 +163,15 @@ pub fn check_capitalized_subject(
     source: report::Source,
     subject: &str,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     let first_word = subject
         .split_whitespace()
         .next()
-        .ok_or_else(|| failure::Context::new("Subject cannot be empty"))?;
+        .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
     let first = first_word
         .chars()
         .next()
-        .ok_or_else(|| failure::Context::new("Subject cannot be empty"))?;
+        .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
     if !first.is_uppercase() {
         report(report::Message::error(
             source,
@@ -187,11 +187,11 @@ pub fn check_subject_not_punctuated(
     source: report::Source,
     subject: &str,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     let last = subject
         .chars()
         .last()
-        .ok_or_else(|| failure::Context::new("Subject cannot be empty"))?;
+        .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
     if last.is_ascii_punctuation() {
         report(report::Message::error(
             source,
@@ -207,7 +207,7 @@ pub fn check_imperative_subject(
     source: report::Source,
     subject: &str,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     let first_word = subject
         .split_whitespace()
         .next()
@@ -231,7 +231,7 @@ fn check_allowed_types(
     parsed: unicase::UniCase<&str>,
     allowed_types: Vec<&str>,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     for allowed_type in allowed_types.iter() {
         let allowed_type = unicase::UniCase::new(allowed_type);
         if allowed_type == parsed {
@@ -256,7 +256,7 @@ pub fn check_wip(
     source: report::Source,
     message: &str,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     if WIP_RE.is_match(message) {
         report(report::Message::error(source, report::Wip {}));
         Ok(true)
@@ -272,7 +272,7 @@ pub fn check_fixup(
     source: report::Source,
     message: &str,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     if FIXUP_RE.is_match(message) {
         report(report::Message::error(source, report::Fixup {}));
         Ok(true)
@@ -285,7 +285,7 @@ pub fn check_merge_commit(
     source: report::Source,
     commit: &git2::Commit,
     report: report::Report,
-) -> Result<bool, failure::Error> {
+) -> Result<bool, anyhow::Error> {
     if 1 < commit.parent_count() {
         report(report::Message::error(
             source,

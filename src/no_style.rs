@@ -7,7 +7,7 @@ pub struct Message<'c> {
 }
 
 impl<'c> Message<'c> {
-    pub fn parse(commit: &'c str) -> Result<Self, failure::Error> {
+    pub fn parse(commit: &'c str) -> Result<Self, anyhow::Error> {
         let (raw_subject, body) = split_parts(commit);
         let c = Message {
             raw_subject,

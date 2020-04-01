@@ -13,14 +13,14 @@ pub struct Message<'c> {
 }
 
 impl<'c> Message<'c> {
-    pub fn parse(commit: &'c str) -> Result<Self, failure::Error> {
+    pub fn parse(commit: &'c str) -> Result<Self, anyhow::Error> {
         let commit = commit.trim();
 
         let mut sections = split_sections(commit);
 
         let raw_subject = sections
             .next()
-            .ok_or_else(|| failure::Context::new("Commit is empty"))?;
+            .ok_or_else(|| anyhow::anyhow!("Commit is empty"))?;
         let (commit_type, scope, important, subject) = parse_subject(raw_subject)?;
         let commit_type = unicase::UniCase::new(commit_type);
         let scope = scope.map(|s| unicase::UniCase::new(s));
@@ -28,7 +28,7 @@ impl<'c> Message<'c> {
         let body = sections.next();
         let trailer = sections.next().map(|s| s.lines().collect());
         if let Some(section) = sections.next() {
-            failure::bail!("Cannot have sections past body+trailer: ```{}```", section);
+            anyhow::bail!("Cannot have sections past body+trailer: ```{}```", section);
         }
 
         let c = Message {
@@ -105,16 +105,16 @@ Bar"#,
 static META_RE: once_cell::sync::Lazy<regex::Regex> =
     once_cell::sync::Lazy::new(|| regex::Regex::new(r#"^(.*?)(\(.*?\))?(!)?$"#).unwrap());
 
-fn parse_subject(raw_subject: &str) -> Result<(&str, Option<&str>, bool, &str), failure::Error> {
+fn parse_subject(raw_subject: &str) -> Result<(&str, Option<&str>, bool, &str), anyhow::Error> {
     if raw_subject.contains("\n") {
-        failure::bail!("Subject must be a single line");
+        anyhow::bail!("Subject must be a single line");
     }
 
     let mut parts = raw_subject.splitn(2, ":");
     let meta = parts.next().unwrap();
     let subject = parts
         .next()
-        .ok_or_else(|| failure::Context::new("No commit metadata provided"))?
+        .ok_or_else(|| anyhow::anyhow!("No commit metadata provided"))?
         .trim();
 
     let captures = META_RE
@@ -131,9 +131,9 @@ fn parse_subject(raw_subject: &str) -> Result<(&str, Option<&str>, bool, &str), 
 
     if scope.is_none() {
         if commit_type.contains('(') {
-            failure::bail!("Scope has unclosed '('");
+            anyhow::bail!("Scope has unclosed '('");
         } else if commit_type.contains(')') {
-            failure::bail!("Scope is closed but never opened");
+            anyhow::bail!("Scope is closed but never opened");
         }
     }
 

@@ -132,10 +132,10 @@ pub struct Fixup {}
 #[display(fmt = "Invalid commit format {}", error)]
 pub struct InvalidCommitFormat {
     #[serde(serialize_with = "serialize_error")]
-    pub error: failure::Error,
+    pub error: anyhow::Error,
 }
 
-fn serialize_error<S>(error: &failure::Error, s: S) -> Result<S::Ok, S::Error>
+fn serialize_error<S>(error: &anyhow::Error, s: S) -> Result<S::Ok, S::Error>
 where
     S: serde::Serializer,
 {

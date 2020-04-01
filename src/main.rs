@@ -84,7 +84,7 @@ impl Default for Format {
     }
 }
 
-fn load_toml(path: &std::path::Path) -> Result<config::Config, failure::Error> {
+fn load_toml(path: &std::path::Path) -> Result<config::Config, anyhow::Error> {
     let mut f = fs::File::open(path)?;
     let mut text = String::new();
     f.read_to_string(&mut text)?;
@@ -114,7 +114,7 @@ pub fn init_logging(level: Option<log::Level>) {
     }
 }
 
-fn run() -> Result<i32, failure::Error> {
+fn run() -> Result<i32, anyhow::Error> {
     let options = Options::from_args();
 
     init_logging(options.verbose.log_level());
@@ -127,7 +127,7 @@ fn run() -> Result<i32, failure::Error> {
     } else {
         let config_path = repo
             .workdir()
-            .ok_or_else(|| failure::Context::new("Cannot work on bare repo"))?
+            .ok_or_else(|| anyhow::anyhow!("Cannot work on bare repo"))?
             .join("committed.toml");
         if config_path.is_file() {
             load_toml(&config_path)?

@@ -194,7 +194,7 @@ pub fn check_subject_not_punctuated(
         .chars()
         .last()
         .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
-    if last.is_ascii_punctuation() {
+    if last.is_ascii_punctuation() && last != '`' {
         report(report::Message::error(
             source,
             report::NoPunctuation { punctuation: last },

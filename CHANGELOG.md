@@ -1,6 +1,17 @@
-<a name="0.1.11"></a>
-## 0.1.11 (2019-09-10)
+# Change Log
+All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+<!-- next-header -->
+## [Unreleased] - ReleaseDate
+
+
+* Update to latest conventional spec.
+
+
+## 0.1.11 (2019-09-10)
 
 #### Features
 
@@ -9,20 +20,14 @@
   *  Distinguish hard / soft line lengths ([1dcc9681](https://github.com/crate-ci/committed/commit/1dcc96813e0301928431cc164c464262117464bb), closes [#29](https://github.com/crate-ci/committed/issues/29))
 
 
-
-<a name="0.1.10"></a>
 ## 0.1.10 (2019-08-29)
-
 
 #### Bug Fixes
 
 * **checks:**  Fail on style errors ([3d7c8e51](https://github.com/crate-ci/committed/commit/3d7c8e5119e16f9af71f9b643b131d1f644398a4))
 
 
-
-<a name="0.1.9"></a>
 ## 0.1.9 (2019-08-19)
-
 
 #### Bug Fixes
 
@@ -30,10 +35,7 @@
 * **files:**  Avoid short-circuiting ([f5c190ff](https://github.com/crate-ci/committed/commit/f5c190ff0fdd7adddc882f4b04a41cb6334cc26f))
 
 
-
-<a name="0.1.8"></a>
 ## 0.1.8 (2019-08-18)
-
 
 #### Bug Fixes
 
@@ -42,14 +44,12 @@
   *  Avoid short-circuiting ([40ed26a4](https://github.com/crate-ci/committed/commit/40ed26a453893e1b4555f2dceb7f56fcdb774762))
 
 
-
-<a name="0.1.1"></a>
 ## 0.1.1 (2019-08-06)
-
 
 #### Features
 
 *   Create pre-built binaries ([86264b85](https://github.com/crate-ci/committed/commit/86264b8557fea00435aa92f1345f61dcf923650b), closes [#12](https://github.com/crate-ci/committed/issues/12))
 
 
-
+<!-- next-url -->
+[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.11...HEAD

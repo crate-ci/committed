@@ -1,15 +1,15 @@
 #[derive(Clone, PartialEq, Eq, Hash)]
-pub struct Message<'c> {
+pub struct Commit<'c> {
     pub raw_subject: &'c str,
     pub body: Option<&'c str>,
     #[doc(hidden)]
     __do_not_match_exhaustively: (),
 }
 
-impl<'c> Message<'c> {
+impl<'c> Commit<'c> {
     pub fn parse(commit: &'c str) -> Result<Self, anyhow::Error> {
         let (raw_subject, body) = split_parts(commit);
-        let c = Message {
+        let c = Commit {
             raw_subject,
             body,
             __do_not_match_exhaustively: (),
@@ -19,7 +19,7 @@ impl<'c> Message<'c> {
     }
 }
 
-impl<'c> crate::style::Style for Message<'c> {
+impl<'c> crate::style::Style for Commit<'c> {
     fn subject(&self) -> &str {
         self.raw_subject
     }

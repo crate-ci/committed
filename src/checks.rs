@@ -22,13 +22,15 @@ pub fn check_message(
 
     let parsed: Option<Box<dyn Style>> = match config.style() {
         crate::config::Style::Conventional => {
-            let parsed = committed::conventional::Message::parse(message);
+            let parsed = committed::conventional::Commit::parse(message);
             match parsed {
                 Ok(parsed) => Some(Box::new(parsed)),
                 Err(error) => {
                     report(report::Message::error(
                         source,
-                        report::InvalidCommitFormat { error },
+                        report::InvalidCommitFormat {
+                            error: anyhow::Error::new(error),
+                        },
                     ));
                     failed = true;
                     None
@@ -36,7 +38,7 @@ pub fn check_message(
             }
         }
         crate::config::Style::None => {
-            let parsed = committed::no_style::Message::parse(message);
+            let parsed = committed::no_style::Commit::parse(message);
             match parsed {
                 Ok(parsed) => Some(Box::new(parsed)),
                 Err(error) => {

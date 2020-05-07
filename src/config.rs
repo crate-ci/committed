@@ -3,12 +3,16 @@ static DEFAULT_TYPES: &'static [&'static str] = &[
 ];
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum Style {
+    #[serde(alias = "Conventional")]
     Conventional,
+    #[serde(alias = "None")]
     None,
 }
 
 #[derive(Clone, Default, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct Config {
     subject_length: Option<usize>,
     subject_capitalized: Option<bool>,

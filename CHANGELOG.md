@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Bug Fixes
 
+* Fixed case of config values ("Conventional", instead of "conventional" is deprecated and will eventually be removed)
 * Update to latest conventional spec.
 
 

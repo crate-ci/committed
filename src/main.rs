@@ -144,6 +144,20 @@ fn run() -> Result<i32, anyhow::Error> {
         options.format.report()
     };
 
+    let ignore_author_re = config
+        .ignore_author_re()
+        .map(|re| regex::Regex::new(re))
+        .transpose()?;
+    let ignore_commit = |commit: &git2::Commit| {
+        let author = commit.author().to_string();
+        if let Some(re) = ignore_author_re.as_ref() {
+            if re.is_match(&author) {
+                return true;
+            }
+        }
+        false
+    };
+
     let mut failed = false;
     if let Some(path) = options.commit_file.as_ref() {
         let mut text = String::new();
@@ -157,11 +171,17 @@ fn run() -> Result<i32, anyhow::Error> {
     } else if let Some(commits) = options.commits.as_ref() {
         let revspec = git::RevSpec::parse(&repo, commits)?;
         for commit in revspec.iter() {
-            log::trace!("Processing {}", commit.id());
-            let message = commit.message().unwrap();
-            failed = checks::check_message(commit.id().into(), message, &config, report)? | failed;
-            if !config.merge_commit() {
-                failed = checks::check_merge_commit(commit.id().into(), &commit, report)? | failed;
+            if ignore_commit(&commit) {
+                log::trace!("Ignoring {}", commit.id());
+            } else {
+                log::trace!("Processing {}", commit.id());
+                let message = commit.message().unwrap();
+                failed =
+                    checks::check_message(commit.id().into(), message, &config, report)? | failed;
+                if !config.merge_commit() {
+                    failed =
+                        checks::check_merge_commit(commit.id().into(), &commit, report)? | failed;
+                }
             }
         }
     } else if grep_cli::is_readable_stdin() {
@@ -171,11 +191,15 @@ fn run() -> Result<i32, anyhow::Error> {
     } else {
         debug_assert_eq!(options.commits, None);
         let commit = repo.head()?.peel_to_commit()?;
-        log::trace!("Processing {}", commit.id());
-        let message = commit.message().unwrap();
-        failed = checks::check_message(commit.id().into(), message, &config, report)?;
-        if !config.merge_commit() {
-            failed = checks::check_merge_commit(commit.id().into(), &commit, report)? | failed;
+        if ignore_commit(&commit) {
+            log::trace!("Ignoring {}", commit.id());
+        } else {
+            log::trace!("Processing {}", commit.id());
+            let message = commit.message().unwrap();
+            failed = checks::check_message(commit.id().into(), message, &config, report)?;
+            if !config.merge_commit() {
+                failed = checks::check_merge_commit(commit.id().into(), &commit, report)? | failed;
+            }
         }
     }
 

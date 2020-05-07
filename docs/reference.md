@@ -49,6 +49,7 @@ Configuration is read from the following (in precedence order)
 
 | Field                  | Argument          | Format | Description |
 |------------------------|-------------------|--------|-------------|
+| ignore_author_re       | \-                | regx   | Authors to ignore the commits for. Generally used with bots out of your control. |
 | subject_length         | \-                | number | Number of columns the subject can occupy |
 | line_length            | \-                | number | Number of columns any line with a break can occupy, including subject |
 | hard_line_length       | \-                | number | Max number of columns any line can occupy. |

@@ -14,6 +14,7 @@ pub enum Style {
 #[derive(Clone, Default, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Config {
+    ignore_author_re: Option<String>,
     subject_length: Option<usize>,
     subject_capitalized: Option<bool>,
     subject_not_punctuated: Option<bool>,
@@ -32,6 +33,10 @@ impl Config {
         if merge_commit.is_some() {
             self.merge_commit = merge_commit;
         }
+    }
+
+    pub fn ignore_author_re(&self) -> Option<&str> {
+        self.ignore_author_re.as_ref().map(|s| s.as_str())
     }
 
     pub fn subject_length(&self) -> usize {

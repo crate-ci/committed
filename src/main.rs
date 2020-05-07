@@ -135,9 +135,7 @@ fn run() -> Result<i32, anyhow::Error> {
             config::Config::default()
         }
     };
-    if options.merge_commit().is_some() {
-        config.merge_commit = options.merge_commit();
-    }
+    config.update_merge_commit(options.merge_commit());
     let config = config;
 
     let report = if options.verbose.is_silent() {

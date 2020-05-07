@@ -24,10 +24,16 @@ pub struct Config {
     line_length: Option<usize>,
     style: Option<Style>,
     allowed_types: Option<Vec<String>>,
-    pub merge_commit: Option<bool>,
+    merge_commit: Option<bool>,
 }
 
 impl Config {
+    pub fn update_merge_commit(&mut self, merge_commit: Option<bool>) {
+        if merge_commit.is_some() {
+            self.merge_commit = merge_commit;
+        }
+    }
+
     pub fn subject_length(&self) -> usize {
         self.subject_length.unwrap_or(50)
     }

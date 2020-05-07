@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
+## [0.1.12] - 2020-05-07
 
 #### Features
 
@@ -58,4 +59,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.11...HEAD
+[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.12...HEAD
+[0.1.12]: https://github.com/assert-rs/predicates-rs/compare/v0.1.11...v0.1.12

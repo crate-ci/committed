@@ -204,9 +204,9 @@ dependencies = [
 
 [[package]]
 name = "grep-cli"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed5e5eb2190c17996aabc6d35abfc3a0c16659a92488261d13ede46748d9ab38"
+checksum = "3592784f7791f5f0bfc2e4b5595dc2d4e34a79099d7228d121b954bae73db182"
 dependencies = [
  "atty",
  "bstr",

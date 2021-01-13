@@ -36,7 +36,7 @@ committed HEAD~..HEAD^2 --no-merge-commit
 ```
 See [`imperative` for an Azure Pipeline
 example](https://github.com/crate-ci/imperative/blob/master/azure-pipelines.yml)
-or look at `committed`s own [`azure-pipelines.yml`](azure-pipelnes.yml),
+or look at `committed`s own [`azure-pipelines.yml`](azure-pipelines.yml),
 [`.travis.yml`](.travis.yml), or [`appveyor.yml`](appveyor.yml).
 
 ## [Reference](docs/reference.md)

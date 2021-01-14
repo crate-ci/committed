@@ -90,16 +90,16 @@ pub fn check_subject_length(
     max_length: usize,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
-    let subject = message
+    let line = message
         .split('\n')
         .next()
         .ok_or_else(|| anyhow::anyhow!("Commit cannot be empty"))?;
-    let subject = subject.trim_end();
-    if line.rfind(' ').unwrap_or(0) < max_length {
-        return Ok(true);
-    }
-    let count = unicode_segmentation::UnicodeSegmentation::graphemes(subject, true).count();
+    let line = line.trim_end();
+    let last_space_index = line.rfind(' ').unwrap_or(0);
+    let soft_line = &line[0..last_space_index];
+    let count = unicode_segmentation::UnicodeSegmentation::graphemes(soft_line, true).count();
     if max_length < count {
+        let count = unicode_segmentation::UnicodeSegmentation::graphemes(line, true).count();
         report(report::Message::error(
             source,
             report::SubjectTooLong {

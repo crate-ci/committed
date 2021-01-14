@@ -19,10 +19,13 @@ mod report;
     setting = structopt::clap::AppSettings::DeriveDisplayOrder,
     setting = structopt::clap::AppSettings::DontCollapseArgsInUsage
 )]
+#[structopt(group = structopt::clap::ArgGroup::with_name("mode").multiple(false))]
 struct Options {
+    #[structopt(group = "mode")]
     commits: Option<String>,
 
-    #[structopt(long, parse(from_os_str))]
+    #[structopt(long, parse(from_os_str), group = "mode")]
+    /// Check a message in a file with `-` for stdin
     commit_file: Option<std::path::PathBuf>,
 
     #[structopt(long, parse(from_os_str), default_value = ".")]
@@ -30,6 +33,10 @@ struct Options {
 
     #[structopt(long, parse(from_os_str))]
     config: Option<std::path::PathBuf>,
+
+    #[structopt(long, group = "mode")]
+    /// Write the current configuration to file with `-` for stdout
+    dump_config: Option<std::path::PathBuf>,
 
     #[structopt(long, overrides_with("merge-commit"))]
     no_merge_commit: bool,
@@ -159,7 +166,17 @@ fn run() -> Result<i32, anyhow::Error> {
     };
 
     let mut failed = false;
-    if let Some(path) = options.commit_file.as_ref() {
+    if let Some(output_path) = options.dump_config.as_ref() {
+        let mut defaulted_config = config::Config::from_defaults();
+        defaulted_config.update(config);
+
+        let output = toml::to_string_pretty(&defaulted_config)?;
+        if output_path == std::path::Path::new("-") {
+            std::io::stdout().write_all(output.as_bytes())?;
+        } else {
+            std::fs::write(output_path, &output)?;
+        }
+    } else if let Some(path) = options.commit_file.as_ref() {
         let mut text = String::new();
         if path == std::path::Path::new("-") {
             std::io::stdin().read_to_string(&mut text)?;

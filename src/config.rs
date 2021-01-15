@@ -1,4 +1,4 @@
-static DEFAULT_TYPES: &'static [&'static str] = &[
+static DEFAULT_TYPES: &[&'static str] = &[
     "fix", "feat", "chore", "docs", "style", "refactor", "perf", "test",
 ];
 

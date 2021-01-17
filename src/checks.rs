@@ -9,10 +9,10 @@ pub fn check_message(
 ) -> Result<bool, anyhow::Error> {
     let mut failed = false;
     if config.no_wip() {
-        failed = check_wip(source, message, report)? | failed;
+        failed |= check_wip(source, message, report)?;
     }
     if config.no_fixup() {
-        failed = check_fixup(source, message, report)? | failed;
+        failed |= check_fixup(source, message, report)?;
     }
 
     // Bail out due to above checks
@@ -54,31 +54,31 @@ pub fn check_message(
     };
     if let Some(parsed) = parsed {
         if config.imperative_subject() {
-            failed = check_imperative_subject(source, parsed.subject(), report)? | failed;
+            failed |= check_imperative_subject(source, parsed.subject(), report)?;
         }
         if config.subject_capitalized() {
-            failed = check_capitalized_subject(source, parsed.subject(), report)? | failed;
+            failed |= check_capitalized_subject(source, parsed.subject(), report)?;
         }
         if config.subject_not_punctuated() {
-            failed = check_subject_not_punctuated(source, parsed.subject(), report)? | failed;
+            failed |= check_subject_not_punctuated(source, parsed.subject(), report)?;
         }
 
         let allowed_types: Vec<_> = config.allowed_types().collect();
         if !allowed_types.is_empty() {
             if let Some(used_type) = parsed.type_() {
-                failed = check_allowed_types(source, used_type, allowed_types, report)? | failed;
+                failed |= check_allowed_types(source, used_type, allowed_types, report)?;
             }
         }
     }
 
     if config.subject_length() != 0 {
-        failed = check_subject_length(source, message, config.subject_length(), report)? | failed;
+        failed |= check_subject_length(source, message, config.subject_length(), report)?;
     }
     if config.line_length() != 0 {
-        failed = check_line_length(source, message, config.line_length(), report)? | failed;
+        failed |= check_line_length(source, message, config.line_length(), report)?;
     }
     if config.hard_line_length() != 0 {
-        failed = check_hard_line_length(source, message, config.line_length(), report)? | failed;
+        failed |= check_hard_line_length(source, message, config.line_length(), report)?;
     }
 
     Ok(failed)
@@ -272,15 +272,12 @@ pub fn check_wip(
     }
 }
 
-static FIXUP_RE: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new("^fixup! ").unwrap());
-
 pub fn check_fixup(
     source: report::Source,
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
-    if FIXUP_RE.is_match(message) {
+    if message.starts_with("fixup! ") {
         report(report::Message::error(source, report::Fixup {}));
         Ok(true)
     } else {

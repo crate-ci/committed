@@ -116,7 +116,7 @@ stages:
         echo "Linting commits:"
         git log --graph --oneline HEAD~..HEAD
         echo "Against"
-        cargo run -- HEAD~..HEAD^2 --dump-config -
+        cargo run -- --dump-config -
         echo "If this fails, don't sweat it. We're trying to encourage clear communication and not hinder contributions. If it is a reasonable issue and you lack time or feel uncomfortable fixing it yourself, let us know and we can mentor or fix it."
         cargo run -- HEAD~..HEAD^2 --no-merge-commit -vvvv
       displayName: Committed

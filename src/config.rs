@@ -1,4 +1,4 @@
-static DEFAULT_TYPES: &[&'static str] = &[
+static DEFAULT_TYPES: &[&str] = &[
     "fix", "feat", "chore", "docs", "style", "refactor", "perf", "test",
 ];
 
@@ -139,7 +139,7 @@ impl Config {
                 let b: Box<dyn Iterator<Item = &str>> = Box::new(v.iter().map(|s| s.as_str()));
                 b
             })
-            .unwrap_or_else(|| Box::new(DEFAULT_TYPES.iter().map(|s| *s)))
+            .unwrap_or_else(|| Box::new(DEFAULT_TYPES.iter().copied()))
     }
 
     pub fn merge_commit(&self) -> bool {

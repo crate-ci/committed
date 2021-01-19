@@ -8,6 +8,11 @@
 ![License](https://img.shields.io/crates/l/committed.svg)
 [![Crates Status](https://img.shields.io/crates/v/committed.svg)](https://crates.io/crates/committed)
 
+Enforce commit standards, whether for:
+- Readability, especially in logs
+- Consistent styling
+- Compatibility with programmatic processing
+
 ## Install
 
 [Download](https://github.com/crate-ci/committed/releases) a pre-built binary

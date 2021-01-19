@@ -141,7 +141,7 @@ stages:
           channel: ${{ variables.minrust }}
         next:
           channel: stable
-    continueOnError: $[eq(variables.rust, 'stable')]
+    continueOnError: $[eq(variables.channel, 'stable')]
     pool:
       vmImage: ${{ variables.linux_vm }}
     steps:

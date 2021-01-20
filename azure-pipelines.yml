@@ -106,6 +106,7 @@ stages:
   dependsOn: []
   jobs:
   - job: "Committed"
+    displayName: Linting commit history
     pool:
       vmImage: ${{ variables.linux_vm }}
     steps:
@@ -113,6 +114,7 @@ stages:
     - template: install-rust.yml@templates
     # Pre-compile to reduce the output for regular contributors
     - script: cargo run -- --dump-config -
+      displayName: Prep
     # The extra verbosity is to help verify the example we're giving works and doesn't need to be copied
     - script: |
         echo "Linting commits:"
@@ -124,7 +126,7 @@ stages:
         echo "If it is a reasonable issue and you lack time or feel uncomfortable fixing it yourself,"
         echo "let us know and we can mentor or fix it."
         cargo run -- HEAD~..HEAD^2 --no-merge-commit -vvvv
-      displayName: Committed
+      displayName: Lint commit history
     condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
   - job: style
     displayName: Style checking

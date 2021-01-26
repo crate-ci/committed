@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
+
+#### Features
+
+* New `--dump-config` flag to make behavior clearer
+* Soften the Subject's line limit
+* Cover more WIP prefixes
+
+#### Bug Fixes
+
+* Include defaults in documentation (thanks jmaguire!)
+* Fix soft line limits to allow a word to go past.  This was to match the soft
+  limit for Subject.  Before, the assumption was that you could just break the
+  line at the previous space but you can't with the subject.
+* Loosen the punctuation check
+
 ## [0.1.12] - 2020-05-07
 
 #### Features

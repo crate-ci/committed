@@ -1,19 +1,14 @@
 #[derive(Clone, PartialEq, Eq, Hash)]
+#[non_exhaustive]
 pub struct Commit<'c> {
     pub raw_subject: &'c str,
     pub body: Option<&'c str>,
-    #[doc(hidden)]
-    __do_not_match_exhaustively: (),
 }
 
 impl<'c> Commit<'c> {
     pub fn parse(commit: &'c str) -> Result<Self, anyhow::Error> {
         let (raw_subject, body) = split_parts(commit);
-        let c = Commit {
-            raw_subject,
-            body,
-            __do_not_match_exhaustively: (),
-        };
+        let c = Commit { raw_subject, body };
 
         Ok(c)
     }

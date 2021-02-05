@@ -19,7 +19,7 @@ schedules:
     include:
     - master
 variables:
-  minrust: 1.40.0
+  minrust: 1.49.0
   codecov_token: $(CODECOV_TOKEN_SECRET)
   windows_vm: vs2017-win2016
   mac_vm: macos-10.14
@@ -78,7 +78,7 @@ stages:
           imageName: ${{ variables.linux_vm }}
           target: 'x86_64-unknown-linux-gnu'
           channel: nightly
-    continueOnError: $[ne(variables.rust, 'stable')]
+    continueOnError: $[ne(variables.channel, 'stable')]
     pool:
       vmImage: $(imageName)
     steps:

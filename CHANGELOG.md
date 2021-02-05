@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.1.13] - 2021-02-04
+
 #### Features
 
 * New `--dump-config` flag to make behavior clearer
@@ -74,5 +76,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.12...HEAD
+[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.13...HEAD
+[0.1.13]: https://github.com/assert-rs/predicates-rs/compare/v0.1.12...v0.1.13
 [0.1.12]: https://github.com/assert-rs/predicates-rs/compare/v0.1.11...v0.1.12

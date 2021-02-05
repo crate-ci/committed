@@ -93,7 +93,7 @@ impl Config {
     }
 
     pub fn ignore_author_re(&self) -> Option<&str> {
-        self.ignore_author_re.as_ref().map(|s| s.as_str())
+        self.ignore_author_re.as_deref()
     }
 
     pub fn subject_length(&self) -> usize {

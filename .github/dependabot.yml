@@ -1,0 +1,30 @@
+version: 2
+updates:
+- package-ecosystem: cargo
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "07:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: git2
+    versions:
+    - 0.13.17
+  - dependency-name: regex
+    versions:
+    - 1.4.3
+  - dependency-name: imperative
+    versions:
+    - 1.0.2
+  - dependency-name: anyhow
+    versions:
+    - 1.0.38
+  - dependency-name: serde
+    versions:
+    - 1.0.123
+  - dependency-name: log
+    versions:
+    - 0.4.14
+  - dependency-name: git-conventional
+    versions:
+    - 0.9.1

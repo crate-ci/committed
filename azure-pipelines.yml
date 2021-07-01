@@ -20,9 +20,9 @@ schedules:
     - master
 variables:
   codecov_token: $(CODECOV_TOKEN_SECRET)
-  windows_vm: vs2017-win2016
-  mac_vm: macos-10.14
-  linux_vm: ubuntu-16.04
+  windows_vm: windows-latest
+  mac_vm: macOS-latest
+  linux_vm: ubuntu-latest
 
 stages:
 - stage: style

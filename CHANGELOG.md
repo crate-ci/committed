@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Features
+
+- Inaugural Github Action
+
 ## [0.1.23] - 2021-07-02
 
 #### Bug Fixes

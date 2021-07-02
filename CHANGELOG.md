@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Bug Fixes
+
+- Flatten released tarball
+
 ## [0.1.21] - 2021-07-02
 
 Ignore, just testing Github Actions

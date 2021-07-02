@@ -101,11 +101,12 @@ jobs:
         cp {CHANGELOG.md,docs/*} "$staging/doc/"
         if [ "${{ matrix.os }}" = "windows-2019" ]; then
           cp "target/${{ matrix.target }}/release/${{ env.BIN_NAME }}.exe" "$staging/"
-          7z a "$staging.zip" "$staging"
+          cd "$staging"
+          7z a "../$staging.zip" .
           echo "ASSET=$staging.zip" >> $GITHUB_ENV
         else
           cp "target/${{ matrix.target }}/release/${{ env.BIN_NAME }}" "$staging/"
-          tar czf "$staging.tar.gz" "$staging"
+          tar -C "$staging" czf "$staging.tar.gz" .
           echo "ASSET=$staging.tar.gz" >> $GITHUB_ENV
         fi
     - name: Upload release archive

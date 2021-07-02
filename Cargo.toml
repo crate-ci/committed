@@ -12,7 +12,6 @@ license = "MIT"
 edition = "2018"
 
 [badges]
-azure-devops = { project = "crate-ci", pipeline = "committed" }
 codecov = { repository = "crate-ci/committed" }
 
 [dependencies]

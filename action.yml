@@ -1,0 +1,13 @@
+name: "committed-action"
+author: "Ed Page"
+description: "Run committed to check commit history"
+
+inputs: {}
+
+runs:
+  using: "docker"
+  image: "docker/Dockerfile"
+
+branding:
+  icon: "git-pull-request"
+  color: "blue"

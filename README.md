@@ -2,7 +2,6 @@
 
 > **Nitpicking commit history since `beabf39`**
 
-[![Build Status](https://dev.azure.com/crate-ci/crate-ci/_apis/build/status/committed?branchName=master)](https://dev.azure.com/crate-ci/crate-ci/_build/latest?definitionId=7&branchName=master)
 [![codecov](https://codecov.io/gh/crate-ci/committed/branch/master/graph/badge.svg)](https://codecov.io/gh/crate-ci/committed)
 [![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/committed.svg)

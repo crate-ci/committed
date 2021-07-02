@@ -1,0 +1,14 @@
+name: Test GitHub Action
+on: [pull_request]
+
+jobs:
+  run:
+    name: Run Committed
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Actions Repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Run Committed
+      uses: ./

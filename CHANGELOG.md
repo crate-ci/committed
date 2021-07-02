@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.1.25] - 2021-07-02
+
 #### Bug Fixes
 
 - Be less noisy in Github Action
@@ -126,7 +128,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.24...HEAD
+[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.25...HEAD
+[0.1.25]: https://github.com/assert-rs/predicates-rs/compare/v0.1.24...v0.1.25
 [0.1.24]: https://github.com/assert-rs/predicates-rs/compare/v0.1.23...v0.1.24
 [0.1.23]: https://github.com/assert-rs/predicates-rs/compare/v0.1.22...v0.1.23
 [0.1.22]: https://github.com/assert-rs/predicates-rs/compare/v0.1.21...v0.1.22

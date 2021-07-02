@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.1.21] - 2021-07-02
+
 Ignore, just testing Github Actions
 
 ## [0.1.20] - 2021-07-02
@@ -102,7 +104,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.20...HEAD
+[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.21...HEAD
+[0.1.21]: https://github.com/assert-rs/predicates-rs/compare/v0.1.20...v0.1.21
 [0.1.20]: https://github.com/assert-rs/predicates-rs/compare/v0.1.19...v0.1.20
 [0.1.19]: https://github.com/assert-rs/predicates-rs/compare/v0.1.18...v0.1.19
 [0.1.18]: https://github.com/assert-rs/predicates-rs/compare/v0.1.17...v0.1.18

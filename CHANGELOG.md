@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+Ignore, just testing Github Actions
+
 ## [0.1.18] - 2021-07-02
 
 Ignore, just testing Github Actions

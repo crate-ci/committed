@@ -1,6 +1,6 @@
 [package]
 name = "committed"
-version = "0.1.21"
+version = "0.1.22"
 authors = ["Ed Page <eopage@gmail.com>"]
 description = "Nitpicking commit history since beabf39"
 repository = "https://github.com/crate-ci/committed"

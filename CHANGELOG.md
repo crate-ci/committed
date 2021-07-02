@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Bug Fixes
+
+- Be less noisy in Github Action
+
 ## [0.1.24] - 2021-07-02
 
 #### Features

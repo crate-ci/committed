@@ -23,4 +23,4 @@ echo ""
 echo "If this fails, don't sweat it. We're trying to encourage clear communication and not hinder contributions."
 echo "If it is a reasonable issue and you lack time or feel uncomfortable fixing it yourself,"
 echo "let us know and we can mentor or fix it."
-${COMMAND} HEAD~..HEAD^2 --no-merge-commit -vvvv
+${COMMAND} HEAD~..HEAD^2 --no-merge-commit -vv

@@ -128,18 +128,18 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/assert-rs/predicates-rs/compare/v0.1.25...HEAD
-[0.1.25]: https://github.com/assert-rs/predicates-rs/compare/v0.1.24...v0.1.25
-[0.1.24]: https://github.com/assert-rs/predicates-rs/compare/v0.1.23...v0.1.24
-[0.1.23]: https://github.com/assert-rs/predicates-rs/compare/v0.1.22...v0.1.23
-[0.1.22]: https://github.com/assert-rs/predicates-rs/compare/v0.1.21...v0.1.22
-[0.1.21]: https://github.com/assert-rs/predicates-rs/compare/v0.1.20...v0.1.21
-[0.1.20]: https://github.com/assert-rs/predicates-rs/compare/v0.1.19...v0.1.20
-[0.1.19]: https://github.com/assert-rs/predicates-rs/compare/v0.1.18...v0.1.19
-[0.1.18]: https://github.com/assert-rs/predicates-rs/compare/v0.1.17...v0.1.18
-[0.1.17]: https://github.com/assert-rs/predicates-rs/compare/v0.1.16...v0.1.17
-[0.1.16]: https://github.com/assert-rs/predicates-rs/compare/v0.1.15...v0.1.16
-[0.1.15]: https://github.com/assert-rs/predicates-rs/compare/v0.1.14...v0.1.15
-[0.1.14]: https://github.com/assert-rs/predicates-rs/compare/v0.1.13...v0.1.14
-[0.1.13]: https://github.com/assert-rs/predicates-rs/compare/v0.1.12...v0.1.13
-[0.1.12]: https://github.com/assert-rs/predicates-rs/compare/v0.1.11...v0.1.12
+[Unreleased]: https://github.com/crate-ci/committed/compare/v0.1.25...HEAD
+[0.1.25]: https://github.com/crate-ci/committed/compare/v0.1.24...v0.1.25
+[0.1.24]: https://github.com/crate-ci/committed/compare/v0.1.23...v0.1.24
+[0.1.23]: https://github.com/crate-ci/committed/compare/v0.1.22...v0.1.23
+[0.1.22]: https://github.com/crate-ci/committed/compare/v0.1.21...v0.1.22
+[0.1.21]: https://github.com/crate-ci/committed/compare/v0.1.20...v0.1.21
+[0.1.20]: https://github.com/crate-ci/committed/compare/v0.1.19...v0.1.20
+[0.1.19]: https://github.com/crate-ci/committed/compare/v0.1.18...v0.1.19
+[0.1.18]: https://github.com/crate-ci/committed/compare/v0.1.17...v0.1.18
+[0.1.17]: https://github.com/crate-ci/committed/compare/v0.1.16...v0.1.17
+[0.1.16]: https://github.com/crate-ci/committed/compare/v0.1.15...v0.1.16
+[0.1.15]: https://github.com/crate-ci/committed/compare/v0.1.14...v0.1.15
+[0.1.14]: https://github.com/crate-ci/committed/compare/v0.1.13...v0.1.14
+[0.1.13]: https://github.com/crate-ci/committed/compare/v0.1.12...v0.1.13
+[0.1.12]: https://github.com/crate-ci/committed/compare/v0.1.11...v0.1.12

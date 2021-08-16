@@ -1,18 +1,29 @@
 [package]
 name = "committed"
 version = "0.1.25"
-authors = ["Ed Page <eopage@gmail.com>"]
 description = "Nitpicking commit history since beabf39"
+authors = ["Ed Page <eopage@gmail.com>"]
+license = "MIT OR Apache-2.0"
 repository = "https://github.com/crate-ci/committed"
 documentation = "https://docs.rs/committed"
 readme = "README.md"
 categories = ["development-tools", "text-processing"]
 keywords = ["development"]
-license = "MIT"
 edition = "2018"
 
 [badges]
 codecov = { repository = "crate-ci/committed" }
+
+[package.metadata.release]
+pre-release-replacements = [
+  {file="CHANGELOG.md", search="Unreleased", replace="{{version}}", min=1},
+  {file="CHANGELOG.md", search="\\.\\.\\.HEAD", replace="...{{tag_name}}", exactly=1},
+  {file="CHANGELOG.md", search="ReleaseDate", replace="{{date}}", min=1},
+  {file="CHANGELOG.md", search="<!-- next-header -->", replace="<!-- next-header -->\n## [Unreleased] - ReleaseDate\n", exactly=1},
+  {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[Unreleased]: https://github.com/crate-ci/committed/compare/{{tag_name}}...HEAD", exactly=1},
+  {file="Dockerfile", search="ARG VERSION=.*", replace="ARG VERSION={{version}}", min=1},
+  {file="docker/Dockerfile", search="ARG VERSION=.*", replace="ARG VERSION={{version}}", min=1},
+]
 
 [dependencies]
 regex = "1.4"

@@ -1,3 +1,5 @@
+#![allow(clippy::unnecessary_wraps)]
+
 mod style;
 
 pub mod conventional;

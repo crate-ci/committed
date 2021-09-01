@@ -1,3 +1,5 @@
+#![allow(clippy::unnecessary_wraps)]
+
 // 2015-edition macros.
 #[macro_use]
 extern crate clap;

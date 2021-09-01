@@ -3,7 +3,7 @@ on: [pull_request]
 
 jobs:
   run:
-    name: Run Committed
+    name: Lint Commits
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Actions Repository

@@ -9,7 +9,7 @@ impl<'r> RevSpec<'r> {
         let commits = repo.revparse(revspec)?;
         let from = commits.from().unwrap().as_commit().unwrap().clone();
         let to = commits.to().map(|o| o.as_commit().unwrap().clone());
-        let from = if let Some(ref to) = to.as_ref() {
+        let from = if let Some(to) = to.as_ref() {
             let merged_from_id = repo.merge_base(from.id(), to.id())?;
             if merged_from_id != from.id() {
                 log::debug!(
@@ -26,7 +26,7 @@ impl<'r> RevSpec<'r> {
     }
 
     pub fn iter(&self) -> impl Iterator<Item = git2::Commit<'r>> {
-        if let Some(ref to) = self.to.as_ref() {
+        if let Some(to) = self.to.as_ref() {
             let range = format!("{}..{}", self.from.id(), to.id());
             let mut revwalk = self.repo.revwalk().unwrap();
             revwalk.push_range(&range).unwrap();

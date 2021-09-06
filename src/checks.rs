@@ -216,7 +216,7 @@ pub fn check_imperative_subject(
     let first_word = subject
         .split_whitespace()
         .next()
-        .expect("Subject should have at least one word");
+        .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
     if !imperative::Mood::new()
         .is_imperative(first_word)
         .unwrap_or(true)

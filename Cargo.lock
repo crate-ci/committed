@@ -110,6 +110,7 @@ dependencies = [
  "itertools",
  "log",
  "once_cell",
+ "proc-exit",
  "regex",
  "serde",
  "serde_json",
@@ -420,6 +421,12 @@ name = "pkg-config"
 version = "0.3.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3831453b3449ceb48b6d9c7ad7c96d5ea673e9b470a1dc578c2ce6521230884c"
+
+[[package]]
+name = "proc-exit"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d94a40d6d1c03eb98fdf7c983a6b550798e6e805afa46112c54aaaaeb48a276f"
 
 [[package]]
 name = "proc-macro-error"

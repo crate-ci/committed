@@ -8,6 +8,7 @@ use std::fs;
 use std::io::Read;
 use std::io::Write;
 
+use proc_exit::WithCodeResultExt;
 use structopt::StructOpt;
 
 mod checks;
@@ -123,23 +124,27 @@ pub fn init_logging(level: Option<log::Level>) {
     }
 }
 
-fn run() -> Result<i32, anyhow::Error> {
+fn run() -> proc_exit::ExitResult {
     let options = Options::from_args();
 
     init_logging(options.verbose.log_level());
 
-    let repo = options.work_tree.canonicalize()?;
+    let repo = options
+        .work_tree
+        .canonicalize()
+        .with_code(proc_exit::Code::USAGE_ERR)?;
 
-    let repo = git2::Repository::discover(repo)?;
+    let repo = git2::Repository::discover(repo).with_code(proc_exit::Code::USAGE_ERR)?;
     let mut config = if let Some(config_path) = options.config.as_ref() {
-        load_toml(config_path)?
+        load_toml(config_path).with_code(proc_exit::Code::CONFIG_ERR)?
     } else {
         let config_path = repo
             .workdir()
-            .ok_or_else(|| anyhow::anyhow!("Cannot work on bare repo"))?
+            .ok_or_else(|| anyhow::anyhow!("Cannot work on bare repo"))
+            .with_code(proc_exit::Code::USAGE_ERR)?
             .join("committed.toml");
         if config_path.is_file() {
-            load_toml(&config_path)?
+            load_toml(&config_path).with_code(proc_exit::Code::CONFIG_ERR)?
         } else {
             config::Config::default()
         }
@@ -156,7 +161,8 @@ fn run() -> Result<i32, anyhow::Error> {
     let ignore_author_re = config
         .ignore_author_re()
         .map(|re| regex::Regex::new(re))
-        .transpose()?;
+        .transpose()
+        .with_code(proc_exit::Code::CONFIG_ERR)?;
     let ignore_commit = |commit: &git2::Commit| {
         let author = commit.author().to_string();
         if let Some(re) = ignore_author_re.as_ref() {
@@ -172,7 +178,8 @@ fn run() -> Result<i32, anyhow::Error> {
         let mut defaulted_config = config::Config::from_defaults();
         defaulted_config.update(config);
 
-        let output = toml::to_string_pretty(&defaulted_config)?;
+        let output =
+            toml::to_string_pretty(&defaulted_config).with_code(proc_exit::Code::FAILURE)?;
         if output_path == std::path::Path::new("-") {
             std::io::stdout().write_all(output.as_bytes())?;
         } else {
@@ -186,44 +193,58 @@ fn run() -> Result<i32, anyhow::Error> {
             let mut f = fs::File::open(path)?;
             f.read_to_string(&mut text)?;
         }
-        failed |= checks::check_message(path.as_path().into(), &text, &config, report)?;
+        failed |= checks::check_message(path.as_path().into(), &text, &config, report)
+            .with_code(proc_exit::Code::UNKNOWN)?;
     } else if let Some(commits) = options.commits.as_ref() {
-        let revspec = git::RevSpec::parse(&repo, commits)?;
+        let revspec = git::RevSpec::parse(&repo, commits).with_code(proc_exit::Code::USAGE_ERR)?;
         for commit in revspec.iter() {
             if ignore_commit(&commit) {
                 log::trace!("Ignoring {}", commit.id());
             } else {
                 log::trace!("Processing {}", commit.id());
                 let message = commit.message().unwrap();
-                failed |= checks::check_message(commit.id().into(), message, &config, report)?;
+                failed |= checks::check_message(commit.id().into(), message, &config, report)
+                    .with_code(proc_exit::Code::UNKNOWN)?;
                 if !config.merge_commit() {
-                    failed |= checks::check_merge_commit(commit.id().into(), &commit, report)?;
+                    failed |= checks::check_merge_commit(commit.id().into(), &commit, report)
+                        .with_code(proc_exit::Code::UNKNOWN)?;
                 }
             }
         }
     } else if grep_cli::is_readable_stdin() {
         let mut text = String::new();
         std::io::stdin().read_to_string(&mut text)?;
-        failed |= checks::check_message(std::path::Path::new("-").into(), &text, &config, report)?;
+        failed |= checks::check_message(std::path::Path::new("-").into(), &text, &config, report)
+            .with_code(proc_exit::Code::UNKNOWN)?;
     } else {
         debug_assert_eq!(options.commits, None);
-        let commit = repo.head()?.peel_to_commit()?;
+        let commit = repo
+            .head()
+            .with_code(proc_exit::Code::USAGE_ERR)?
+            .peel_to_commit()
+            .with_code(proc_exit::Code::USAGE_ERR)?;
         if ignore_commit(&commit) {
             log::trace!("Ignoring {}", commit.id());
         } else {
             log::trace!("Processing {}", commit.id());
             let message = commit.message().unwrap();
-            failed |= checks::check_message(commit.id().into(), message, &config, report)?;
+            failed |= checks::check_message(commit.id().into(), message, &config, report)
+                .with_code(proc_exit::Code::UNKNOWN)?;
             if !config.merge_commit() {
-                failed |= checks::check_merge_commit(commit.id().into(), &commit, report)?;
+                failed |= checks::check_merge_commit(commit.id().into(), &commit, report)
+                    .with_code(proc_exit::Code::UNKNOWN)?;
             }
         }
     }
 
-    Ok(if failed { 1 } else { 0 })
+    if failed {
+        proc_exit::Code::FAILURE.ok()
+    } else {
+        proc_exit::Code::SUCCESS.ok()
+    }
 }
 
 fn main() {
-    let code = run().unwrap();
-    std::process::exit(code);
+    let result = run();
+    proc_exit::exit(result);
 }

@@ -193,7 +193,8 @@ fn run() -> proc_exit::ExitResult {
             let mut f = fs::File::open(path)?;
             f.read_to_string(&mut text)?;
         }
-        failed |= checks::check_message(path.as_path().into(), &text, &config, report)
+        let text = trim_commit_file(&text);
+        failed |= checks::check_message(path.as_path().into(), text, &config, report)
             .with_code(proc_exit::Code::UNKNOWN)?;
     } else if let Some(commits) = options.commits.as_ref() {
         let revspec = git::RevSpec::parse(&repo, commits).with_code(proc_exit::Code::USAGE_ERR)?;
@@ -214,7 +215,8 @@ fn run() -> proc_exit::ExitResult {
     } else if grep_cli::is_readable_stdin() {
         let mut text = String::new();
         std::io::stdin().read_to_string(&mut text)?;
-        failed |= checks::check_message(std::path::Path::new("-").into(), &text, &config, report)
+        let text = trim_commit_file(&text);
+        failed |= checks::check_message(std::path::Path::new("-").into(), text, &config, report)
             .with_code(proc_exit::Code::UNKNOWN)?;
     } else {
         debug_assert_eq!(options.commits, None);
@@ -244,8 +246,112 @@ fn run() -> proc_exit::ExitResult {
     }
 }
 
+fn trim_commit_file(message: &str) -> &str {
+    let message = message.trim();
+    if message.is_empty() {
+        return "";
+    }
+
+    let all_comment_re = regex::RegexBuilder::new(r#"^(#[^\n]*\n*)+$"#)
+        .dot_matches_new_line(true)
+        .build()
+        .expect("test ensured regex compiles");
+    if all_comment_re.is_match(message) {
+        return "";
+    }
+
+    let trailing_comment_re = regex::RegexBuilder::new(r#"^(.*?)(\n+#[^\n]*)*$"#)
+        .dot_matches_new_line(true)
+        .build()
+        .expect("test ensured regex compiles");
+    let captures = trailing_comment_re.captures(message).unwrap();
+    captures.get(1).unwrap().as_str()
+}
+
 fn main() {
     human_panic::setup_panic!();
     let result = run();
     proc_exit::exit(result);
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn empty() {
+        let input = "";
+        let expected = "";
+        let actual = trim_commit_file(input);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn user_message() {
+        let input = "feat: Hello
+
+Let's do it!
+
+Fixes #10";
+        let expected = input;
+        let actual = trim_commit_file(input);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn default_message() {
+        let input = "
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Your branch is up to date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   custom-file.el
+#	modified:   init.el
+#
+# Untracked files:
+#	lisp/ob-maven.el
+#	url/
+#
+";
+        let expected = "";
+        let actual = trim_commit_file(input);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn user_with_default_message() {
+        let input = "feat: Hello
+
+Let's do it!
+
+Fixes #10
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch master
+# Your branch is up to date with 'origin/master'.
+#
+# Changes to be committed:
+#	modified:   custom-file.el
+#	modified:   init.el
+#
+# Untracked files:
+#	lisp/ob-maven.el
+#	url/
+#
+";
+        let expected = "feat: Hello
+
+Let's do it!
+
+Fixes #10";
+        let actual = trim_commit_file(input);
+        assert_eq!(actual, expected);
+    }
 }

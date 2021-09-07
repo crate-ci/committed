@@ -1,5 +1,6 @@
 #[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub struct Message<'s> {
     pub source: Source<'s>,
     pub severity: Severity,
@@ -23,6 +24,7 @@ impl<'s> Message<'s> {
 #[derive(Copy, Clone, Debug, serde::Serialize, derive_more::From, derive_more::Display)]
 #[serde(rename_all = "snake_case")]
 #[serde(untagged)]
+#[non_exhaustive]
 pub enum Source<'s> {
     #[serde(serialize_with = "serialize_oid")]
     Oid(git2::Oid),
@@ -40,6 +42,7 @@ where
 
 #[derive(Copy, Clone, Debug, serde::Serialize, derive_more::Display)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub enum Severity {
     #[display(fmt = "error")]
     Error,
@@ -48,6 +51,7 @@ pub enum Severity {
 #[derive(Debug, serde::Serialize, derive_more::From, derive_more::Display)]
 #[serde(rename_all = "snake_case")]
 #[serde(tag = "type")]
+#[non_exhaustive]
 pub enum Content<'s> {
     EmpyCommit,
     SubjectTooLong(SubjectTooLong),

@@ -8,13 +8,18 @@ pub fn check_message(
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
     let mut failed = false;
+
+    failed |= check_has_message(source, message, report)?;
+    if failed {
+        return Ok(failed);
+    }
+
     if config.no_wip() {
         failed |= check_wip(source, message, report)?;
     }
     if config.no_fixup() {
         failed |= check_fixup(source, message, report)?;
     }
-
     // Bail out due to above checks
     if failed {
         return Ok(failed);
@@ -82,6 +87,19 @@ pub fn check_message(
     }
 
     Ok(failed)
+}
+
+fn check_has_message(
+    source: report::Source,
+    message: &str,
+    report: report::Report,
+) -> Result<bool, anyhow::Error> {
+    if message.trim().is_empty() {
+        report(report::Message::error(source, report::EmptyCommit {}));
+        Ok(true)
+    } else {
+        Ok(false)
+    }
 }
 
 pub fn check_subject_length(

@@ -53,7 +53,7 @@ pub enum Severity {
 #[serde(tag = "type")]
 #[non_exhaustive]
 pub enum Content<'s> {
-    EmpyCommit,
+    EmpyCommit(EmpyCommit),
     SubjectTooLong(SubjectTooLong),
     LineTooLong(LineTooLong),
     CapitalizeSubject(CapitalizeSubject<'s>),
@@ -166,6 +166,12 @@ pub struct DisallowedCommitType {
 #[derive(derive_more::Display)]
 #[display(fmt = "Merge commits are disallowed")]
 pub struct MergeCommitDisallowed {}
+
+#[derive(Clone, Debug, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+#[derive(derive_more::Display)]
+#[display(fmt = "Empty commits are disallowed")]
+pub struct EmpyCommit {}
 
 pub type Report = fn(msg: Message);
 

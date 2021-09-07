@@ -59,6 +59,13 @@ struct Options {
 }
 
 impl Options {
+    fn to_config(&self) -> config::Config {
+        config::Config {
+            merge_commit: self.merge_commit(),
+            ..Default::default()
+        }
+    }
+
     fn merge_commit(&self) -> Option<bool> {
         match (self.no_merge_commit, self.merge_commit) {
             (true, false) => Some(false),
@@ -149,7 +156,7 @@ fn run() -> proc_exit::ExitResult {
             config::Config::default()
         }
     };
-    config.update_merge_commit(options.merge_commit());
+    config.update(options.to_config());
     let config = config;
 
     let report = if options.verbose.is_silent() {

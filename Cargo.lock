@@ -132,7 +132,7 @@ dependencies = [
 
 [[package]]
 name = "committed"
-version = "0.1.26"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "clap",

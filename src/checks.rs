@@ -95,7 +95,7 @@ fn check_has_message(
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
     if message.trim().is_empty() {
-        report(report::Message::error(source, report::EmpyCommit {}));
+        report(report::Message::error(source, report::EmptyCommit {}));
         Ok(true)
     } else {
         Ok(false)

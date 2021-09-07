@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.2.1] - 2021-09-07
+
 #### Bug Fixes
 
 - Show empty-commit errors as messages for draft commits
@@ -140,7 +142,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/crate-ci/committed/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/crate-ci/committed/compare/v0.1.26...v0.2.0
 [0.1.26]: https://github.com/crate-ci/committed/compare/v0.1.25...v0.1.26
 [0.1.25]: https://github.com/crate-ci/committed/compare/v0.1.24...v0.1.25

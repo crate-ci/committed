@@ -13,19 +13,20 @@ pub enum Style {
 
 #[derive(Clone, Default, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "snake_case")]
+#[non_exhaustive]
 pub struct Config {
-    ignore_author_re: Option<String>,
-    subject_length: Option<usize>,
-    subject_capitalized: Option<bool>,
-    subject_not_punctuated: Option<bool>,
-    imperative_subject: Option<bool>,
-    no_fixup: Option<bool>,
-    no_wip: Option<bool>,
-    hard_line_length: Option<usize>,
-    line_length: Option<usize>,
-    style: Option<Style>,
-    allowed_types: Option<Vec<String>>,
-    merge_commit: Option<bool>,
+    pub ignore_author_re: Option<String>,
+    pub subject_length: Option<usize>,
+    pub subject_capitalized: Option<bool>,
+    pub subject_not_punctuated: Option<bool>,
+    pub imperative_subject: Option<bool>,
+    pub no_fixup: Option<bool>,
+    pub no_wip: Option<bool>,
+    pub hard_line_length: Option<usize>,
+    pub line_length: Option<usize>,
+    pub style: Option<Style>,
+    pub allowed_types: Option<Vec<String>>,
+    pub merge_commit: Option<bool>,
 }
 
 impl Config {
@@ -83,12 +84,6 @@ impl Config {
         }
         if let Some(source) = source.merge_commit {
             self.merge_commit = Some(source);
-        }
-    }
-
-    pub fn update_merge_commit(&mut self, merge_commit: Option<bool>) {
-        if merge_commit.is_some() {
-            self.merge_commit = merge_commit;
         }
     }
 

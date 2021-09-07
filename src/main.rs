@@ -46,6 +46,16 @@ struct Options {
     #[structopt(long, overrides_with("no-merge-commit"), hidden(true))]
     merge_commit: bool,
 
+    #[structopt(long, overrides_with("merge-commit"))]
+    no_wip: bool,
+    #[structopt(long, overrides_with("no-merge-commit"), hidden(true))]
+    wip: bool,
+
+    #[structopt(long, overrides_with("merge-commit"))]
+    no_fixup: bool,
+    #[structopt(long, overrides_with("no-merge-commit"), hidden(true))]
+    fixup: bool,
+
     #[structopt(
         long = "format",
         possible_values(&Format::variants()),
@@ -59,13 +69,34 @@ struct Options {
 }
 
 impl Options {
-    fn merge_commit(&self) -> Option<bool> {
-        match (self.no_merge_commit, self.merge_commit) {
-            (true, false) => Some(false),
-            (false, true) => Some(true),
-            (false, false) => None,
-            (true, true) => unreachable!("Structopt should make this impossible"),
+    fn to_config(&self) -> config::Config {
+        config::Config {
+            merge_commit: self.merge_commit(),
+            no_wip: self.wip().map(|b| !b),
+            no_fixup: self.fixup().map(|b| !b),
+            ..Default::default()
         }
+    }
+
+    fn merge_commit(&self) -> Option<bool> {
+        resolve_bool_arg(self.merge_commit, self.no_merge_commit)
+    }
+
+    fn wip(&self) -> Option<bool> {
+        resolve_bool_arg(self.wip, self.no_wip)
+    }
+
+    fn fixup(&self) -> Option<bool> {
+        resolve_bool_arg(self.fixup, self.no_fixup)
+    }
+}
+
+fn resolve_bool_arg(yes: bool, no: bool) -> Option<bool> {
+    match (yes, no) {
+        (true, false) => Some(true),
+        (false, true) => Some(false),
+        (false, false) => None,
+        (_, _) => unreachable!("StructOpt should make this impossible"),
     }
 }
 
@@ -149,7 +180,7 @@ fn run() -> proc_exit::ExitResult {
             config::Config::default()
         }
     };
-    config.update_merge_commit(options.merge_commit());
+    config.update(options.to_config());
     let config = config;
 
     let report = if options.verbose.is_silent() {

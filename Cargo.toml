@@ -1,6 +1,6 @@
 [package]
 name = "committed"
-version = "0.2.2"
+version = "0.2.3"
 description = "Nitpicking commit history since beabf39"
 authors = ["Ed Page <eopage@gmail.com>"]
 license = "MIT OR Apache-2.0"

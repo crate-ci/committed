@@ -49,6 +49,7 @@ pub enum Severity {
 #[serde(rename_all = "snake_case")]
 #[serde(tag = "type")]
 pub enum Content<'s> {
+    EmpyCommit,
     SubjectTooLong(SubjectTooLong),
     LineTooLong(LineTooLong),
     CapitalizeSubject(CapitalizeSubject<'s>),

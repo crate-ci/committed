@@ -1,0 +1,15 @@
+- id: committed
+  name: committed
+  description: Nitpicking commit history since beabf39
+  language: python
+  entry: committed
+  args: [--fixup, --wip, --commit-file]
+  stages: [commit-msg]
+
+- id: committed-src
+  name: committed
+  description: Nitpicking commit history since beabf39
+  language: rust
+  entry: committed
+  args: [--fixup, --wip, --commit-file]
+  stages: [commit-msg]

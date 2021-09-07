@@ -22,6 +22,28 @@ Or use rust to install:
 cargo install committed
 ```
 
+### pre-commit
+
+To use `committed` with [`pre-commit`](https://pre-commit.com), point its
+config at this repository:
+
+```yaml
+repos:
+  - repo: https://github.com/crate-ci/committed
+    rev: v0.2.1
+    hooks:
+      - id: typos
+```
+
+The `committed` id installs a prebuilt executable from GitHub releases. If
+one does not exist for the target platform, or if one built from
+sources is preferred, use `committed-src` as the hook id instead.
+
+Be sure to change `rev` to use the desired `committed` git tag or
+revision.
+
+The hook, by default, will verify your commit message.
+
 ## Basic Usage
 
 Verify your latest commit

@@ -137,8 +137,6 @@ dependencies = [
  "anyhow",
  "clap",
  "clap-verbosity-flag",
- "concolor-clap",
- "concolor-control",
  "derive_more",
  "env_logger",
  "git-conventional",
@@ -157,35 +155,7 @@ dependencies = [
  "toml",
  "unicase",
  "unicode-segmentation",
- "yansi",
 ]
-
-[[package]]
-name = "concolor-clap"
-version = "0.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4eb23c99e877c098e60ba3e84410153bfc311ac91b6ac7eabc0da0414ffa12e4"
-dependencies = [
- "concolor-control",
- "structopt",
-]
-
-[[package]]
-name = "concolor-control"
-version = "0.0.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7104119c2f80d887239879d0c50e033cd40eac9a3f3561e0684ba7d5d654f4da"
-dependencies = [
- "atty",
- "bitflags",
- "concolor-query",
-]
-
-[[package]]
-name = "concolor-query"
-version = "0.0.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad159cc964ac8f9d407cbc0aa44b02436c054b541f2b4b5f06972e1efdc54bc7"
 
 [[package]]
 name = "convert_case"
@@ -921,9 +891,3 @@ name = "winapi-x86_64-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
-
-[[package]]
-name = "yansi"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9fc79f4a1e39857fc00c3f662cbf2651c771f00e9c15fe2abc341806bd46bd71"

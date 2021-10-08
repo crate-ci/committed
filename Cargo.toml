@@ -43,9 +43,6 @@ unicode-segmentation = "1.8.0"
 log = "0.4"
 env_logger = "0.9"
 clap-verbosity-flag = "0.3"
-yansi = "0.5.0"
-concolor-control = { version = "0.0.7" }
-concolor-clap = { version = "0.0.6", features = ["api_unstable"] }
 grep-cli = "0.1"
 imperative = "1.0"
 derive_more = "0.99.16"

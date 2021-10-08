@@ -12,6 +12,7 @@ use proc_exit::WithCodeResultExt;
 use structopt::StructOpt;
 
 mod checks;
+mod color;
 mod config;
 mod git;
 mod report;
@@ -20,7 +21,8 @@ mod report;
 #[structopt(
     setting = structopt::clap::AppSettings::UnifiedHelpMessage,
     setting = structopt::clap::AppSettings::DeriveDisplayOrder,
-    setting = structopt::clap::AppSettings::DontCollapseArgsInUsage
+    setting = structopt::clap::AppSettings::DontCollapseArgsInUsage,
+    setting = concolor_clap::color_choice(),
 )]
 #[structopt(group = structopt::clap::ArgGroup::with_name("mode").multiple(false))]
 struct Options {
@@ -63,6 +65,9 @@ struct Options {
         default_value("brief")
     )]
     format: Format,
+
+    #[structopt(flatten)]
+    color: concolor_clap::Color,
 
     #[structopt(flatten)]
     verbose: clap_verbosity_flag::Verbosity,
@@ -132,9 +137,16 @@ fn load_toml(path: &std::path::Path) -> Result<config::Config, anyhow::Error> {
     toml::from_str(&text).map_err(|e| e.into())
 }
 
-pub fn init_logging(level: Option<log::Level>) {
+fn init_logging(level: Option<log::Level>) {
     if let Some(level) = level {
         let mut builder = env_logger::Builder::new();
+
+        let colored = concolor_control::get(concolor_control::Stream::Stderr).ansi_color();
+        builder.write_style(if colored {
+            env_logger::WriteStyle::Always
+        } else {
+            env_logger::WriteStyle::Never
+        });
 
         builder.filter(None, level.to_level_filter());
 
@@ -157,6 +169,8 @@ pub fn init_logging(level: Option<log::Level>) {
 
 fn run() -> proc_exit::ExitResult {
     let options = Options::from_args();
+
+    options.color.apply();
 
     init_logging(options.verbose.log_level());
 

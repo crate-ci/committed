@@ -178,7 +178,16 @@ pub type Report = fn(msg: Message);
 pub fn print_silent(_: Message) {}
 
 pub fn print_brief(msg: Message) {
-    println!("{}: {} {}", msg.source, msg.severity, msg.content)
+    let palette = crate::color::Palette::current();
+    let severity_style = match msg.severity {
+        Severity::Error => palette.error,
+    };
+    println!(
+        "{}: {} {}",
+        palette.source.paint(msg.source),
+        severity_style.paint(msg.severity),
+        palette.content.paint(msg.content)
+    )
 }
 
 pub fn print_json(msg: Message) {

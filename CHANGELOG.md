@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Features
+
+- Color output support
+
 ## [0.2.3] - 2021-09-07
 
 ## [0.2.2] - 2021-09-07

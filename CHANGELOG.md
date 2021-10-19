@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Fixes
+
+- Loosened requirements for parsing Conventional Commits
+
 ## [0.2.4] - 2021-10-08
 
 #### Features

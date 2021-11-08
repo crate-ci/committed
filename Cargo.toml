@@ -10,9 +10,13 @@ readme = "README.md"
 categories = ["development-tools", "text-processing"]
 keywords = ["development"]
 edition = "2018"
-
-[badges]
-codecov = { repository = "crate-ci/committed" }
+include = [
+  "src/**/*",
+  "Cargo.toml",
+  "LICENSE*",
+  "README.md",
+  "examples/**/*"
+]
 
 [package.metadata.release]
 pre-release-replacements = [

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Fixes
+
+- Clarified error messages to help guide people to conventional style
+- Enabled color in github action so its easier to see the message
+
 ## [0.2.5] - 2021-10-19
 
 #### Fixes

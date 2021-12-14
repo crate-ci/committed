@@ -2,6 +2,8 @@
 
 set -eu
 
+export CLICOLOR_FORCE=1
+
 log() {
     echo -e "$1" >&2
 }

@@ -35,6 +35,7 @@ pub fn check_message(
                         source,
                         report::InvalidCommitFormat {
                             error: anyhow::Error::new(error),
+                            style: config.style(),
                         },
                     ));
                     failed = true;
@@ -49,7 +50,10 @@ pub fn check_message(
                 Err(error) => {
                     report(report::Message::error(
                         source,
-                        report::InvalidCommitFormat { error },
+                        report::InvalidCommitFormat {
+                            error,
+                            style: config.style(),
+                        },
                     ));
                     failed = true;
                     None

@@ -134,10 +134,11 @@ pub struct Fixup {}
 #[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Invalid commit format {}", error)]
+#[display(fmt = "Commit is not in {} format: {}", style, error)]
 pub struct InvalidCommitFormat {
     #[serde(serialize_with = "serialize_error")]
     pub error: anyhow::Error,
+    pub style: crate::config::Style,
 }
 
 fn serialize_error<S>(error: &anyhow::Error, s: S) -> Result<S::Ok, S::Error>

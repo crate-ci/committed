@@ -2,7 +2,9 @@ static DEFAULT_TYPES: &[&str] = &[
     "fix", "feat", "chore", "docs", "style", "refactor", "perf", "test",
 ];
 
-#[derive(Copy, Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+#[derive(
+    Copy, Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize, derive_more::Display,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum Style {
     #[serde(alias = "Conventional")]

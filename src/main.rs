@@ -244,15 +244,21 @@ fn run() -> proc_exit::ExitResult {
     } else if let Some(commits) = options.commits.as_ref() {
         let revspec = git::RevSpec::parse(&repo, commits).with_code(proc_exit::Code::USAGE_ERR)?;
         for commit in revspec.iter() {
+            let abbrev_id = commit.as_object().short_id().ok();
+            let source = abbrev_id
+                .as_ref()
+                .and_then(|id| id.as_str())
+                .map(report::Source::from)
+                .unwrap_or_else(|| commit.id().into());
             if ignore_commit(&commit) {
-                log::trace!("Ignoring {}", commit.id());
+                log::trace!("Ignoring {}", source);
             } else {
-                log::trace!("Processing {}", commit.id());
+                log::trace!("Processing {}", source);
                 let message = commit.message().unwrap();
-                failed |= checks::check_message(commit.id().into(), message, &config, report)
+                failed |= checks::check_message(source, message, &config, report)
                     .with_code(proc_exit::Code::UNKNOWN)?;
                 if !config.merge_commit() {
-                    failed |= checks::check_merge_commit(commit.id().into(), &commit, report)
+                    failed |= checks::check_merge_commit(source, &commit, report)
                         .with_code(proc_exit::Code::UNKNOWN)?;
                 }
             }
@@ -270,15 +276,21 @@ fn run() -> proc_exit::ExitResult {
             .with_code(proc_exit::Code::USAGE_ERR)?
             .peel_to_commit()
             .with_code(proc_exit::Code::USAGE_ERR)?;
+        let abbrev_id = commit.as_object().short_id().ok();
+        let source = abbrev_id
+            .as_ref()
+            .and_then(|id| id.as_str())
+            .map(report::Source::from)
+            .unwrap_or_else(|| commit.id().into());
         if ignore_commit(&commit) {
-            log::trace!("Ignoring {}", commit.id());
+            log::trace!("Ignoring {}", source);
         } else {
-            log::trace!("Processing {}", commit.id());
+            log::trace!("Processing {}", source);
             let message = commit.message().unwrap();
-            failed |= checks::check_message(commit.id().into(), message, &config, report)
+            failed |= checks::check_message(source, message, &config, report)
                 .with_code(proc_exit::Code::UNKNOWN)?;
             if !config.merge_commit() {
-                failed |= checks::check_merge_commit(commit.id().into(), &commit, report)
+                failed |= checks::check_merge_commit(source, &commit, report)
                     .with_code(proc_exit::Code::UNKNOWN)?;
             }
         }

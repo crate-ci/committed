@@ -28,6 +28,7 @@ impl<'s> Message<'s> {
 pub enum Source<'s> {
     #[serde(serialize_with = "serialize_oid")]
     Oid(git2::Oid),
+    ShortId(&'s str),
     #[display(fmt = "{}", "_0.display()")]
     Path(&'s std::path::Path),
 }

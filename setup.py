@@ -16,7 +16,7 @@ from setuptools import setup
 from setuptools.command.install import install as orig_install
 
 BIN = "committed"
-VERSION = '0.2.6'
+VERSION = '0.2.7'
 POSTFIX_SHA256 = {
     'linux': (
         'x86_64-unknown-linux-musl.tar.gz',

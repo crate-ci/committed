@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Fixes
+
+- Cleaned up output by showing short ids for commits
+
 ## [0.2.6] - 2021-12-14
 
 #### Fixes

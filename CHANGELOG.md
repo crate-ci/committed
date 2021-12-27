@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+#### Fixes
+
+- Clean up Github Action's output
+
 ## [0.2.7] - 2021-12-14
 
 #### Fixes

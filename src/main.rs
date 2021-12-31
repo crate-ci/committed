@@ -1,15 +1,11 @@
 #![allow(clippy::unnecessary_wraps)]
 
-// 2015-edition macros.
-#[macro_use]
-extern crate clap;
-
 use std::fs;
 use std::io::Read;
 use std::io::Write;
 
+use clap::Parser;
 use proc_exit::WithCodeResultExt;
-use structopt::StructOpt;
 
 mod checks;
 mod color;
@@ -17,59 +13,55 @@ mod config;
 mod git;
 mod report;
 
-#[derive(Debug, StructOpt)]
-#[structopt(
-    setting = structopt::clap::AppSettings::UnifiedHelpMessage,
-    setting = structopt::clap::AppSettings::DeriveDisplayOrder,
-    setting = structopt::clap::AppSettings::DontCollapseArgsInUsage,
-    setting = concolor_clap::color_choice(),
+#[derive(Debug, Parser)]
+#[clap(
+    about,
+    version,
+    setting = clap::AppSettings::DeriveDisplayOrder,
+    setting = clap::AppSettings::DontCollapseArgsInUsage,
+    color = concolor_clap::color_choice(),
 )]
-#[structopt(group = structopt::clap::ArgGroup::with_name("mode").multiple(false))]
+#[clap(group = clap::ArgGroup::new("mode").multiple(false))]
 struct Options {
-    #[structopt(group = "mode")]
+    #[clap(group = "mode")]
     commits: Option<String>,
 
-    #[structopt(long, parse(from_os_str), group = "mode")]
+    #[clap(long, parse(from_os_str), group = "mode")]
     /// Check a message in a file with `-` for stdin
     commit_file: Option<std::path::PathBuf>,
 
-    #[structopt(long, parse(from_os_str), default_value = ".")]
+    #[clap(long, parse(from_os_str), default_value = ".")]
     work_tree: std::path::PathBuf,
 
-    #[structopt(long, parse(from_os_str))]
+    #[clap(long, parse(from_os_str))]
     config: Option<std::path::PathBuf>,
 
-    #[structopt(long, group = "mode")]
+    #[clap(long, parse(from_os_str), group = "mode")]
     /// Write the current configuration to file with `-` for stdout
     dump_config: Option<std::path::PathBuf>,
 
-    #[structopt(long, overrides_with("merge-commit"))]
+    #[clap(long, overrides_with("merge-commit"))]
     no_merge_commit: bool,
-    #[structopt(long, overrides_with("no-merge-commit"), hidden(true))]
+    #[clap(long, overrides_with("no-merge-commit"), hide(true))]
     merge_commit: bool,
 
-    #[structopt(long, overrides_with("merge-commit"))]
+    #[clap(long, overrides_with("merge-commit"))]
     no_wip: bool,
-    #[structopt(long, overrides_with("no-merge-commit"), hidden(true))]
+    #[clap(long, overrides_with("no-merge-commit"), hide(true))]
     wip: bool,
 
-    #[structopt(long, overrides_with("merge-commit"))]
+    #[clap(long, overrides_with("merge-commit"))]
     no_fixup: bool,
-    #[structopt(long, overrides_with("no-merge-commit"), hidden(true))]
+    #[clap(long, overrides_with("no-merge-commit"), hide(true))]
     fixup: bool,
 
-    #[structopt(
-        long = "format",
-        possible_values(&Format::variants()),
-        case_insensitive(true),
-        default_value("brief")
-    )]
+    #[clap(long = "format", arg_enum, ignore_case(true), default_value = "brief")]
     format: Format,
 
-    #[structopt(flatten)]
+    #[clap(flatten)]
     color: concolor_clap::Color,
 
-    #[structopt(flatten)]
+    #[clap(flatten)]
     verbose: clap_verbosity_flag::Verbosity,
 }
 
@@ -105,13 +97,11 @@ fn resolve_bool_arg(yes: bool, no: bool) -> Option<bool> {
     }
 }
 
-arg_enum! {
-    #[derive(Debug, Copy, Clone, PartialEq, Eq)]
-    enum Format {
-        Silent,
-        Brief,
-        Json,
-    }
+#[derive(Debug, Copy, Clone, PartialEq, Eq, clap::ArgEnum)]
+enum Format {
+    Silent,
+    Brief,
+    Json,
 }
 
 impl Format {
@@ -168,7 +158,7 @@ fn init_logging(level: Option<log::Level>) {
 }
 
 fn run() -> proc_exit::ExitResult {
-    let options = Options::from_args();
+    let options = Options::parse();
 
     options.color.apply();
 
@@ -336,6 +326,12 @@ mod test {
     use super::*;
 
     #[test]
+    fn verify_app() {
+        use clap::IntoApp;
+        Options::into_app().debug_assert()
+    }
+
+    #[test]
     fn empty() {
         let input = "";
         let expected = "";
@@ -411,4 +407,10 @@ Fixes #10";
         let actual = trim_commit_file(input);
         assert_eq!(actual, expected);
     }
+}
+
+#[test]
+fn verify_app() {
+    use clap::IntoApp;
+    Options::into_app().debug_assert()
 }

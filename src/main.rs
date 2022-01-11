@@ -131,7 +131,7 @@ fn init_logging(level: Option<log::Level>) {
     if let Some(level) = level {
         let mut builder = env_logger::Builder::new();
 
-        let colored = concolor_control::get(concolor_control::Stream::Stderr).ansi_color();
+        let colored = concolor::get(concolor::Stream::Stderr).ansi_color();
         builder.write_style(if colored {
             env_logger::WriteStyle::Always
         } else {

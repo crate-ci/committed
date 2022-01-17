@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.0.0] - 2022-01-17
+
 Decided it was well past time to bless this as a 1.0.
 
 ### Fixes
@@ -189,7 +191,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v0.2.9...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/crate-ci/committed/compare/v0.2.9...v1.0.0
 [0.2.9]: https://github.com/crate-ci/committed/compare/v0.2.8...v0.2.9
 [0.2.8]: https://github.com/crate-ci/committed/compare/v0.2.7...v0.2.8
 [0.2.7]: https://github.com/crate-ci/committed/compare/v0.2.6...v0.2.7

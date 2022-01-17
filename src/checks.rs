@@ -195,11 +195,7 @@ pub fn check_capitalized_subject(
         .split_whitespace()
         .next()
         .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
-    let first = first_word
-        .chars()
-        .next()
-        .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
-    if !first.is_uppercase() {
+    if !is_capitalized(first_word)? {
         report(report::Message::error(
             source,
             report::CapitalizeSubject { first_word },
@@ -208,6 +204,29 @@ pub fn check_capitalized_subject(
     } else {
         Ok(false)
     }
+}
+
+fn is_capitalized(word: &str) -> Result<bool, anyhow::Error> {
+    let first = word
+        .chars()
+        .next()
+        .ok_or_else(|| anyhow::anyhow!("Subject cannot be empty"))?;
+    Ok(!first.is_lowercase())
+}
+
+#[test]
+fn lower_isnt_capitalized() {
+    assert!(!is_capitalized("lower").unwrap());
+}
+
+#[test]
+fn upper_is_capitalized() {
+    assert!(is_capitalized("Upper").unwrap());
+}
+
+#[test]
+fn caseless_is_capitalized() {
+    assert!(is_capitalized("あ").unwrap());
 }
 
 pub fn check_subject_not_punctuated(

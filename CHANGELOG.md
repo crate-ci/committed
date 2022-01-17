@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+Decided it was well past time to bless this as a 1.0.
+
+### Fixes
+
+- Gracefully handle caseless letters.
+
 ## [0.2.9] - 2022-01-11
 
 ## [0.2.8] - 2021-12-27

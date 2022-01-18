@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+Conventional Parsing
+- When a body and footer have extra newlines between them, don't put them at the end of the body
+- Handle windows newlines (was missing footers with them)
+
 ## [1.0.0] - 2022-01-17
 
 Decided it was well past time to bless this as a 1.0.

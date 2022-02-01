@@ -48,7 +48,7 @@ env_logger = "0.9"
 clap-verbosity-flag = "0.4"
 yansi = "0.5.0"
 concolor = { version = "0.0.8" }
-concolor-clap = { version = "0.0.8", features = ["api_unstable"] }
+concolor-clap = { version = "0.0.9", features = ["api_unstable"] }
 grep-cli = "0.1"
 imperative = "1.0"
 derive_more = "0.99.17"

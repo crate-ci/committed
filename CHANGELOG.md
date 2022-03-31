@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.0.2] - 2022-03-31
+
 ### Fixes
 
 - Have `--commit-file`  compatible with `commit.verbose`
@@ -203,7 +205,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/crate-ci/committed/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/crate-ci/committed/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/crate-ci/committed/compare/v0.2.9...v1.0.0
 [0.2.9]: https://github.com/crate-ci/committed/compare/v0.2.8...v0.2.9

@@ -32,7 +32,7 @@ repos:
   - repo: https://github.com/crate-ci/committed
     rev: v1.0.1
     hooks:
-      - id: typos
+      - id: committed
 ```
 
 The `committed` id installs a prebuilt executable from GitHub releases. If

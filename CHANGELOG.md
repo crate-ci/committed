@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Have `--commit-file`  compatible with `commit.verbose`
+
 ## [1.0.1] - 2022-01-18
 
 ### Fixes

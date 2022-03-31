@@ -307,6 +307,13 @@ fn trim_commit_file(message: &str) -> &str {
         return "";
     }
 
+    let message =
+        if let Some(idx) = message.find("# ------------------------ >8 ------------------------") {
+            &message[..idx].trim()
+        } else {
+            message
+        };
+
     let trailing_comment_re = regex::RegexBuilder::new(r#"^(.*?)(\n+#[^\n]*)*$"#)
         .dot_matches_new_line(true)
         .build()
@@ -402,6 +409,48 @@ Fixes #10
         let expected = "feat: Hello
 
 Let's do it!
+
+Fixes #10";
+        let actual = trim_commit_file(input);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn user_with_verbose_commit() {
+        let input = "docs: Add Code of Conduct
+
+Fixes #10
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch chore/repository-setup
+# Changes to be committed:
+# new file:   docs/CODE_OF_CONDUCT.md
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/docs/CODE_OF_CONDUCT.md b/docs/CODE_OF_CONDUCT.md
+new file mode 100644
+index 0000000000000000..a366d6b2f3755024
+--- /dev/null
++++ b/docs/CODE_OF_CONDUCT.md
+@@ -0,0 +1,134 @@
++# Contributor Covenant Code of Conduct
++
++## Our Pledge
++
++We as members, contributors, and leaders pledge to make participation in our
++community a harassment-free experience for everyone, regardless of age, body
++size, visible or invisible disability, ethnicity, sex characteristics, gender
++identity and expression, level of experience, education, socio-economic status,
++nationality, personal appearance, race, caste, color, religion, or sexual
++identity and orientation.
++
++ ...
+";
+        let expected = "docs: Add Code of Conduct
 
 Fixes #10";
         let actual = trim_commit_file(input);

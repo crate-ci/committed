@@ -18,7 +18,7 @@ mod report;
     about,
     version,
     setting = clap::AppSettings::DeriveDisplayOrder,
-    setting = clap::AppSettings::DontCollapseArgsInUsage,
+    dont_collapse_args_in_usage = true,
     color = concolor_clap::color_choice(),
 )]
 #[clap(group = clap::ArgGroup::new("mode").multiple(false))]
@@ -195,7 +195,7 @@ fn run() -> proc_exit::ExitResult {
 
     let ignore_author_re = config
         .ignore_author_re()
-        .map(|re| regex::Regex::new(re))
+        .map(regex::Regex::new)
         .transpose()
         .with_code(proc_exit::Code::CONFIG_ERR)?;
     let ignore_commit = |commit: &git2::Commit| {
@@ -309,7 +309,7 @@ fn trim_commit_file(message: &str) -> &str {
 
     let message =
         if let Some(idx) = message.find("# ------------------------ >8 ------------------------") {
-            &message[..idx].trim()
+            message[..idx].trim()
         } else {
             message
         };
@@ -334,8 +334,8 @@ mod test {
 
     #[test]
     fn verify_app() {
-        use clap::IntoApp;
-        Options::into_app().debug_assert()
+        use clap::CommandFactory;
+        Options::command().debug_assert()
     }
 
     #[test]
@@ -456,10 +456,4 @@ Fixes #10";
         let actual = trim_commit_file(input);
         assert_eq!(actual, expected);
     }
-}
-
-#[test]
-fn verify_app() {
-    use clap::IntoApp;
-    Options::into_app().debug_assert()
 }

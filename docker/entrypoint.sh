@@ -9,7 +9,7 @@ log() {
 CMD_NAME="committed"
 
 if [[ -z $(which ${CMD_NAME} 2>/dev/null) ]]; then
-    log "ERROR: 'typos' not found"
+    log "ERROR: '${CMD_NAME}' not found"
     exit 1
 fi
 

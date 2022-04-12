@@ -16,10 +16,10 @@ fi
 COMMAND="${CMD_NAME}"
 
 echo "Linting commits:"
-git -c safe.directory=. log --color=always --graph --oneline HEAD~..HEAD^2
+git -c safe.directory=. log --color=always --graph --oneline HEAD~..HEAD^2 || true
 echo ""
 echo "Against 'committed.toml':"
-${COMMAND} --dump-config -
+${COMMAND} --dump-config - || true
 echo ""
 echo "If this fails, don't sweat it. We're trying to encourage clear communication and not hinder contributions."
 echo "If it is a reasonable issue and you lack time or feel uncomfortable fixing it yourself,"

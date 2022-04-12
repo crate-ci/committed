@@ -16,7 +16,7 @@ fi
 COMMAND="${CMD_NAME}"
 
 echo "Linting commits:"
-git log --color=always --graph --oneline HEAD~..HEAD^2
+git -c safe.directory=. log --color=always --graph --oneline HEAD~..HEAD^2
 echo ""
 echo "Against 'committed.toml':"
 ${COMMAND} --dump-config -

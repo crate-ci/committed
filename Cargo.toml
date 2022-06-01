@@ -9,7 +9,7 @@ documentation = "https://docs.rs/committed"
 readme = "README.md"
 categories = ["development-tools", "text-processing"]
 keywords = ["development"]
-edition = "2018"
+edition = "2021"
 rust-version = "1.60.0"  # MSRV
 include = [
   "src/**/*",

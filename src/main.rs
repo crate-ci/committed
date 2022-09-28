@@ -14,54 +14,57 @@ mod git;
 mod report;
 
 #[derive(Debug, Parser)]
-#[clap(
+#[command(
     about,
     version,
-    setting = clap::AppSettings::DeriveDisplayOrder,
-    dont_collapse_args_in_usage = true,
     color = concolor_clap::color_choice(),
 )]
-#[clap(group = clap::ArgGroup::new("mode").multiple(false))]
+#[command(group = clap::ArgGroup::new("mode").multiple(false))]
 struct Options {
-    #[clap(group = "mode")]
+    #[arg(group = "mode")]
     commits: Option<String>,
 
-    #[clap(long, parse(from_os_str), group = "mode")]
+    #[arg(long, group = "mode")]
     /// Check a message in a file with `-` for stdin
     commit_file: Option<std::path::PathBuf>,
 
-    #[clap(long, parse(from_os_str), default_value = ".")]
+    #[arg(long, default_value = ".")]
     work_tree: std::path::PathBuf,
 
-    #[clap(long, parse(from_os_str))]
+    #[arg(long)]
     config: Option<std::path::PathBuf>,
 
-    #[clap(long, parse(from_os_str), group = "mode")]
+    #[arg(long, group = "mode")]
     /// Write the current configuration to file with `-` for stdout
     dump_config: Option<std::path::PathBuf>,
 
-    #[clap(long, overrides_with("merge-commit"))]
+    #[arg(long, overrides_with("merge_commit"))]
     no_merge_commit: bool,
-    #[clap(long, overrides_with("no-merge-commit"), hide(true))]
+    #[arg(long, overrides_with("no_merge_commit"), hide(true))]
     merge_commit: bool,
 
-    #[clap(long, overrides_with("merge-commit"))]
+    #[arg(long, overrides_with("wip"))]
     no_wip: bool,
-    #[clap(long, overrides_with("no-merge-commit"), hide(true))]
+    #[arg(long, overrides_with("no_wip"), hide(true))]
     wip: bool,
 
-    #[clap(long, overrides_with("merge-commit"))]
+    #[arg(long, overrides_with("fixup"))]
     no_fixup: bool,
-    #[clap(long, overrides_with("no-merge-commit"), hide(true))]
+    #[arg(long, overrides_with("no_fixup"), hide(true))]
     fixup: bool,
 
-    #[clap(long = "format", arg_enum, ignore_case(true), default_value = "brief")]
+    #[arg(
+        long = "format",
+        value_enum,
+        ignore_case(true),
+        default_value = "brief"
+    )]
     format: Format,
 
-    #[clap(flatten)]
+    #[command(flatten)]
     color: concolor_clap::Color,
 
-    #[clap(flatten)]
+    #[command(flatten)]
     verbose: clap_verbosity_flag::Verbosity,
 }
 
@@ -97,7 +100,7 @@ fn resolve_bool_arg(yes: bool, no: bool) -> Option<bool> {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, clap::ArgEnum)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, clap::ValueEnum)]
 enum Format {
     Silent,
     Brief,

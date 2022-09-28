@@ -40,17 +40,17 @@ git-conventional = "0.12"
 unicase = "2.6.0"
 anyhow = "1.0"
 git2 = { version = "0.15", default-features = false }
-clap = { version = "3.2", features = ["derive"] }
+clap = { version = "4.0", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 toml = "0.5"
 unicode-segmentation = "1.9.0"
 log = "0.4"
 env_logger = "0.9"
-clap-verbosity-flag = "1.0"
+clap-verbosity-flag = "2.0"
 yansi = "0.5.1"
 concolor = { version = "0.0.8" }
-concolor-clap = { version = "0.0.10", features = ["api_unstable"] }
+concolor-clap = { version = "0.0.11", features = ["api_unstable"] }
 grep-cli = "0.1"
 imperative = "1.0"
 derive_more = "0.99.17"

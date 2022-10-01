@@ -54,6 +54,6 @@ concolor-clap = { version = "0.0.11", features = ["api_unstable"] }
 grep-cli = "0.1"
 imperative = "1.0"
 derive_more = "0.99.17"
-itertools = "0.10.3"
+itertools = "0.10.5"
 proc-exit = "1.0"
 human-panic = "1.0.3"

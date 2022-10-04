@@ -5,13 +5,15 @@ use std::io::Read;
 use std::io::Write;
 
 use clap::Parser;
-use proc_exit::WithCodeResultExt;
+use proc_exit::prelude::*;
 
 mod checks;
 mod color;
 mod config;
 mod git;
 mod report;
+
+const UNKNOWN_ERR: proc_exit::Code = proc_exit::Code::new(2);
 
 #[derive(Debug, Parser)]
 #[command(
@@ -170,19 +172,19 @@ fn run() -> proc_exit::ExitResult {
     let repo = options
         .work_tree
         .canonicalize()
-        .with_code(proc_exit::Code::USAGE_ERR)?;
+        .with_code(proc_exit::sysexits::USAGE_ERR)?;
 
-    let repo = git2::Repository::discover(repo).with_code(proc_exit::Code::USAGE_ERR)?;
+    let repo = git2::Repository::discover(repo).with_code(proc_exit::sysexits::USAGE_ERR)?;
     let mut config = if let Some(config_path) = options.config.as_ref() {
-        load_toml(config_path).with_code(proc_exit::Code::CONFIG_ERR)?
+        load_toml(config_path).with_code(proc_exit::sysexits::CONFIG_ERR)?
     } else {
         let config_path = repo
             .workdir()
             .ok_or_else(|| anyhow::anyhow!("Cannot work on bare repo"))
-            .with_code(proc_exit::Code::USAGE_ERR)?
+            .with_code(proc_exit::sysexits::USAGE_ERR)?
             .join("committed.toml");
         if config_path.is_file() {
-            load_toml(&config_path).with_code(proc_exit::Code::CONFIG_ERR)?
+            load_toml(&config_path).with_code(proc_exit::sysexits::CONFIG_ERR)?
         } else {
             config::Config::default()
         }
@@ -200,7 +202,7 @@ fn run() -> proc_exit::ExitResult {
         .ignore_author_re()
         .map(regex::Regex::new)
         .transpose()
-        .with_code(proc_exit::Code::CONFIG_ERR)?;
+        .with_code(proc_exit::sysexits::CONFIG_ERR)?;
     let ignore_commit = |commit: &git2::Commit| {
         let author = commit.author().to_string();
         if let Some(re) = ignore_author_re.as_ref() {
@@ -219,23 +221,26 @@ fn run() -> proc_exit::ExitResult {
         let output =
             toml::to_string_pretty(&defaulted_config).with_code(proc_exit::Code::FAILURE)?;
         if output_path == std::path::Path::new("-") {
-            std::io::stdout().write_all(output.as_bytes())?;
+            std::io::stdout()
+                .write_all(output.as_bytes())
+                .to_sysexits()?;
         } else {
-            std::fs::write(output_path, &output)?;
+            std::fs::write(output_path, &output).to_sysexits()?;
         }
     } else if let Some(path) = options.commit_file.as_ref() {
         let mut text = String::new();
         if path == std::path::Path::new("-") {
-            std::io::stdin().read_to_string(&mut text)?;
+            std::io::stdin().read_to_string(&mut text).to_sysexits()?;
         } else {
-            let mut f = fs::File::open(path)?;
-            f.read_to_string(&mut text)?;
+            let mut f = fs::File::open(path).to_sysexits()?;
+            f.read_to_string(&mut text).to_sysexits()?;
         }
         let text = trim_commit_file(&text);
         failed |= checks::check_message(path.as_path().into(), text, &config, report)
-            .with_code(proc_exit::Code::UNKNOWN)?;
+            .with_code(UNKNOWN_ERR)?;
     } else if let Some(commits) = options.commits.as_ref() {
-        let revspec = git::RevSpec::parse(&repo, commits).with_code(proc_exit::Code::USAGE_ERR)?;
+        let revspec =
+            git::RevSpec::parse(&repo, commits).with_code(proc_exit::sysexits::USAGE_ERR)?;
         for commit in revspec.iter() {
             let abbrev_id = commit.as_object().short_id().ok();
             let source = abbrev_id
@@ -249,26 +254,26 @@ fn run() -> proc_exit::ExitResult {
                 log::trace!("Processing {}", source);
                 let message = commit.message().unwrap();
                 failed |= checks::check_message(source, message, &config, report)
-                    .with_code(proc_exit::Code::UNKNOWN)?;
+                    .with_code(UNKNOWN_ERR)?;
                 if !config.merge_commit() {
                     failed |= checks::check_merge_commit(source, &commit, report)
-                        .with_code(proc_exit::Code::UNKNOWN)?;
+                        .with_code(UNKNOWN_ERR)?;
                 }
             }
         }
     } else if grep_cli::is_readable_stdin() {
         let mut text = String::new();
-        std::io::stdin().read_to_string(&mut text)?;
+        std::io::stdin().read_to_string(&mut text).to_sysexits()?;
         let text = trim_commit_file(&text);
         failed |= checks::check_message(std::path::Path::new("-").into(), text, &config, report)
-            .with_code(proc_exit::Code::UNKNOWN)?;
+            .with_code(UNKNOWN_ERR)?;
     } else {
         debug_assert_eq!(options.commits, None);
         let commit = repo
             .head()
-            .with_code(proc_exit::Code::USAGE_ERR)?
+            .with_code(proc_exit::sysexits::USAGE_ERR)?
             .peel_to_commit()
-            .with_code(proc_exit::Code::USAGE_ERR)?;
+            .with_code(proc_exit::sysexits::USAGE_ERR)?;
         let abbrev_id = commit.as_object().short_id().ok();
         let source = abbrev_id
             .as_ref()
@@ -280,11 +285,11 @@ fn run() -> proc_exit::ExitResult {
         } else {
             log::trace!("Processing {}", source);
             let message = commit.message().unwrap();
-            failed |= checks::check_message(source, message, &config, report)
-                .with_code(proc_exit::Code::UNKNOWN)?;
+            failed |=
+                checks::check_message(source, message, &config, report).with_code(UNKNOWN_ERR)?;
             if !config.merge_commit() {
-                failed |= checks::check_merge_commit(source, &commit, report)
-                    .with_code(proc_exit::Code::UNKNOWN)?;
+                failed |=
+                    checks::check_merge_commit(source, &commit, report).with_code(UNKNOWN_ERR)?;
             }
         }
     }

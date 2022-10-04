@@ -10,7 +10,7 @@ readme = "README.md"
 categories = ["development-tools", "text-processing"]
 keywords = ["development"]
 edition = "2021"
-rust-version = "1.60.0"  # MSRV
+rust-version = "1.64.0"  # MSRV
 include = [
   "src/**/*",
   "Cargo.toml",
@@ -55,5 +55,5 @@ grep-cli = "0.1"
 imperative = "1.0"
 derive_more = "0.99.17"
 itertools = "0.10.5"
-proc-exit = "1.0"
+proc-exit = "2.0"
 human-panic = "1.0.3"

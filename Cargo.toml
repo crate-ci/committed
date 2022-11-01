@@ -1,14 +1,6 @@
-[package]
-name = "committed"
-version = "1.0.5"
-description = "Nitpicking commit history since beabf39"
-authors = ["Ed Page <eopage@gmail.com>"]
+[workspace.package]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/crate-ci/committed"
-documentation = "https://docs.rs/committed"
-readme = "README.md"
-categories = ["development-tools", "text-processing"]
-keywords = ["development"]
 edition = "2021"
 rust-version = "1.64.0"  # MSRV
 include = [
@@ -19,6 +11,20 @@ include = [
   "README.md",
   "examples/**/*"
 ]
+
+[package]
+name = "committed"
+version = "1.0.5"
+description = "Nitpicking commit history since beabf39"
+documentation = "https://docs.rs/committed"
+readme = "README.md"
+categories = ["development-tools", "text-processing"]
+keywords = ["development"]
+license.workspace = true
+repository.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+include.workspace = true
 
 [package.metadata.release]
 pre-release-replacements = [

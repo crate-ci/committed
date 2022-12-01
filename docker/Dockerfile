@@ -1,5 +1,5 @@
 FROM ubuntu:22.04
-ARG VERSION=1.0.5
+ARG VERSION=1.0.6
 ENV VERSION=${VERSION}
 RUN apt-get update && apt-get install -y wget git
 RUN wget https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz && \

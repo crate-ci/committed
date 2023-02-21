@@ -2,11 +2,17 @@ name: "committed-action"
 author: "Ed Page"
 description: "Run committed to check commit history"
 
-inputs: {}
+inputs:
+  commits:
+    description: "commit range to check"
+    required: false
+    default: "HEAD~..HEAD^2"
 
 runs:
   using: "docker"
   image: "docker/Dockerfile"
+  args:
+    - ${{ inputs.commits }}
 
 branding:
   icon: "git-pull-request"

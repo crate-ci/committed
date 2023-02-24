@@ -6,7 +6,7 @@ inputs:
   args:
     description: "arguments for committed"
     required: false
-    default: ""
+    default: "-vv --no-merge-commit"
   commits:
     description: "commit range to check"
     required: false

@@ -25,4 +25,5 @@ jobs:
     - name: Run Committed
       uses: ./
       with:
+        args: "-vv --no-merge-commit"
         commits: "HEAD~..HEAD^2"

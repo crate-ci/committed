@@ -7,6 +7,7 @@ log() {
 }
 
 CMD_NAME="committed"
+args=$(echo "${@:1:$#-1}" | xargs)
 commits="${@: -1}"
 
 if [[ -z $(which ${CMD_NAME} 2>/dev/null) ]]; then
@@ -26,4 +27,4 @@ echo ""
 echo "If this fails, don't sweat it. We're trying to encourage clear communication and not hinder contributions."
 echo "If it is a reasonable issue and you lack time or feel uncomfortable fixing it yourself,"
 echo "let us know and we can mentor or fix it."
-${COMMAND} --color=always -vv "${commits}"
+${COMMAND} --color=always $args "${commits}"

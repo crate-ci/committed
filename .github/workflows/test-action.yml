@@ -1,9 +1,22 @@
 name: Test GitHub Action
-on: [pull_request]
+on: [push, pull_request]
 
 jobs:
   run:
     name: Lint Commits
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Actions Repository
+      uses: actions/checkout@v3
+    - name: Run Committed
+      uses: ./
+      with:
+        args: "-vv"
+        commits: "HEAD"
+  run_pr:
+    name: Lint Commits (PR)
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Actions Repository

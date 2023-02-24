@@ -2,11 +2,22 @@ name: "committed-action"
 author: "Ed Page"
 description: "Run committed to check commit history"
 
-inputs: {}
+inputs:
+  args:
+    description: "arguments for committed"
+    required: false
+    default: "-vv --no-merge-commit"
+  commits:
+    description: "commit range to check"
+    required: false
+    default: "HEAD~..HEAD^2"
 
 runs:
   using: "docker"
   image: "docker/Dockerfile"
+  args:
+    - ${{ inputs.args }}
+    - ${{ inputs.commits }}
 
 branding:
   icon: "git-pull-request"

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.0.8] - 2023-02-24
+
 ### Features
 
 - *(action)* Make behavior more configurable
@@ -231,7 +233,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.7...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.8...HEAD
+[1.0.8]: https://github.com/crate-ci/committed/compare/v1.0.7...v1.0.8
 [1.0.7]: https://github.com/crate-ci/committed/compare/v1.0.6...v1.0.7
 [1.0.6]: https://github.com/crate-ci/committed/compare/v1.0.5...v1.0.6
 [1.0.5]: https://github.com/crate-ci/committed/compare/v1.0.4...v1.0.5

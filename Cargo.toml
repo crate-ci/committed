@@ -14,7 +14,7 @@ include = [
 
 [package]
 name = "committed"
-version = "1.0.8"
+version = "1.0.9"
 description = "Nitpicking commit history since beabf39"
 documentation = "https://docs.rs/committed"
 readme = "README.md"

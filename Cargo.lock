@@ -150,7 +150,7 @@ dependencies = [
  "anyhow",
  "clap",
  "clap-verbosity-flag",
- "concolor 0.0.11",
+ "concolor 0.0.12",
  "concolor-clap",
  "derive_more",
  "env_logger",
@@ -177,6 +177,11 @@ name = "concolor"
 version = "0.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "318d6c16e73b3a900eb212ad6a82fc7d298c5ab8184c7a9998646455bc474a16"
+dependencies = [
+ "bitflags",
+ "concolor-query",
+ "is-terminal",
+]
 
 [[package]]
 name = "concolor"
@@ -393,7 +398,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "87eb03e654582b31967d414b86711a7bbd7c6b28a6b7d32857b7d1d45c0926f9"
 dependencies = [
  "backtrace",
- "concolor",
+ "concolor 0.0.11",
  "os_info",
  "serde",
  "serde_derive",

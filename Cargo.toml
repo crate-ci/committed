@@ -54,12 +54,13 @@ unicode-segmentation = "1.10.1"
 log = "0.4"
 env_logger = "0.10"
 clap-verbosity-flag = "2.0"
-yansi = "0.5.1"
-concolor = { version = "0.0.12" }
-concolor-clap = { version = "0.0.14", features = ["api_unstable"] }
+concolor = { version = "0.1.1" }
+concolor-clap = { version = "0.1.0", features = ["api"] }
 grep-cli = "0.1"
 imperative = "1.0.4"
 derive_more = "0.99.17"
 itertools = "0.10.5"
 proc-exit = "2.0"
 human-panic = "1.1.1"
+anstyle-stream = "0.2.0"
+anstyle = "0.3.0"

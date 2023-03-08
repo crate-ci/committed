@@ -1,3 +1,5 @@
+use anstyle_stream::println;
+
 #[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
@@ -180,15 +182,15 @@ pub type Report = fn(msg: Message);
 pub fn print_silent(_: Message) {}
 
 pub fn print_brief(msg: Message) {
-    let palette = crate::color::Palette::current();
+    let palette = crate::color::Palette::new();
     let severity_style = match msg.severity {
         Severity::Error => palette.error,
     };
     println!(
-        "{}: {} {}",
-        palette.source.paint(msg.source),
-        severity_style.paint(msg.severity),
-        palette.content.paint(msg.content)
+        "{:#}: {:#} {:#}",
+        palette.source(msg.source),
+        crate::color::Styled::new(msg.severity, severity_style),
+        palette.content(msg.content)
     )
 }
 

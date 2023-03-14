@@ -1,8 +1,11 @@
-FROM ubuntu:22.04
-ARG VERSION=1.0.10
-ENV VERSION=${VERSION}
-RUN apt-get update && apt-get install -y wget
-RUN wget https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz && \
-    tar -xzvf committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz && \
-    mv committed /usr/local/bin
-ENTRYPOINT ["/usr/local/bin/committed"]
+ARG DEBIAN_DIST=bullseye
+
+FROM rust:${DEBIAN_DIST} as builder
+WORKDIR /usr/src/committed
+COPY . .
+RUN cargo install --path .
+
+FROM debian:${DEBIAN_DIST}-slim
+COPY --from=builder /usr/local/cargo/bin/committed /usr/local/bin/committed
+ENTRYPOINT ["committed"]
+CMD ["--help"]

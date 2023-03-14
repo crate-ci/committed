@@ -13,11 +13,14 @@ inputs:
     default: "HEAD~..HEAD^2"
 
 runs:
-  using: "docker"
-  image: "docker/Dockerfile"
-  args:
-    - ${{ inputs.args }}
-    - ${{ inputs.commits }}
+  using: "composite"
+  steps:
+    - id: committed
+      run: $GITHUB_ACTION_PATH/action/entrypoint.sh
+      shell: bash
+      env:
+        INPUT_ARGS: ${{ inputs.args }}
+        INPUT_COMMITS: ${{ inputs.commits }}
 
 branding:
   icon: "git-pull-request"

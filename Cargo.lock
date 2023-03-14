@@ -186,7 +186,7 @@ dependencies = [
 
 [[package]]
 name = "committed"
-version = "1.0.12"
+version = "1.0.13"
 dependencies = [
  "anstyle",
  "anstyle-stream",

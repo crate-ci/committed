@@ -1,6 +1,6 @@
 [package]
 name = "committed"
-version = "1.0.11"
+version = "1.0.12"
 description = "Nitpicking commit history since beabf39"
 documentation = "https://docs.rs/committed"
 readme = "../../README.md"

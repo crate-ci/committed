@@ -30,7 +30,7 @@ config at this repository:
 ```yaml
 repos:
   - repo: https://github.com/crate-ci/committed
-    rev: committed-v1.0.11
+    rev: v1.0.12
     hooks:
       - id: committed
 ```

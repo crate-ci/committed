@@ -1,31 +1,53 @@
 #[derive(Copy, Clone, Debug, Default)]
 pub(crate) struct Palette {
-    pub(crate) source: styled::Style,
-    pub(crate) error: styled::Style,
-    pub(crate) content: styled::Style,
+    pub(crate) source: anstyle::Style,
+    pub(crate) error: anstyle::Style,
+    pub(crate) content: anstyle::Style,
 }
 
 impl Palette {
-    pub(crate) fn current() -> Self {
-        if concolor::get(concolor::Stream::Either).ansi_color() {
-            Self {
-                source: styled::Style(yansi::Style::new(yansi::Color::Blue).bold()),
-                error: styled::Style(yansi::Style::new(yansi::Color::Red).bold()),
-                content: styled::Style::default(),
-            }
-        } else {
-            Self::default()
+    pub(crate) fn new() -> Self {
+        Self {
+            source: anstyle::AnsiColor::Blue | anstyle::Effects::BOLD,
+            error: anstyle::AnsiColor::Red | anstyle::Effects::BOLD,
+            content: anstyle::Style::default(),
         }
+    }
+
+    pub(crate) fn source<D: std::fmt::Display>(self, display: D) -> Styled<D> {
+        Styled::new(display, self.source)
+    }
+
+    pub(crate) fn content<D: std::fmt::Display>(self, display: D) -> Styled<D> {
+        Styled::new(display, self.content)
     }
 }
 
-mod styled {
-    #[derive(Copy, Clone, Debug, Default)]
-    pub(crate) struct Style(pub(crate) yansi::Style);
+#[derive(Debug)]
+pub(crate) struct Styled<D> {
+    display: D,
+    style: anstyle::Style,
+}
 
-    impl Style {
-        pub(crate) fn paint<T: std::fmt::Display>(self, item: T) -> impl std::fmt::Display {
-            self.0.paint(item)
+impl<D: std::fmt::Display> Styled<D> {
+    pub(crate) fn new(display: D, style: anstyle::Style) -> Self {
+        Self { display, style }
+    }
+}
+
+impl<D: std::fmt::Display> std::fmt::Display for Styled<D> {
+    #[inline]
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if f.alternate() {
+            write!(
+                f,
+                "{}{}{}",
+                self.style.render(),
+                self.display,
+                self.style.render_reset()
+            )
+        } else {
+            self.display.fmt(f)
         }
     }
 }

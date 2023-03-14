@@ -9,7 +9,7 @@ on:
       - master
     tags:
     - "v*.*.*"
-  pull_request:  # Only enabled for testing
+  # pull_request:  # Only enabled for testing
 
 permissions:
   contents: read

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Improve `CLICOLOR` support
+- Auto-enable colors for CI
+- *(pre-commit)* Use pre-built wheels for more reliability
+
+### Performance
+
+- *(action)* Avoid docker builds through composite actions
+
 ## [1.0.10] - 2023-03-08
 
 ### Internal

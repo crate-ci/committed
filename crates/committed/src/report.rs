@@ -1,4 +1,4 @@
-use anstyle_stream::println;
+use anstream::println;
 
 #[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]

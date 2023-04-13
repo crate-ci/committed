@@ -3,7 +3,7 @@ from __future__ import annotations
 from setuptools import setup
 
 
-COMMITTED_VERSION = '1.0.14'
+COMMITTED_VERSION = '1.0.15'
 
 
 setup(

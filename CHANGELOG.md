@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.0.15] - 2023-04-13
+
 ### Internal
 
 - Update dependency
@@ -267,7 +269,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.14...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.15...HEAD
+[1.0.15]: https://github.com/crate-ci/committed/compare/v1.0.14...v1.0.15
 [1.0.14]: https://github.com/crate-ci/committed/compare/v1.0.13...v1.0.14
 [1.0.13]: https://github.com/crate-ci/committed/compare/v1.0.12...v1.0.13
 [1.0.12]: https://github.com/crate-ci/committed/compare/committed-v1.0.11...v1.0.12

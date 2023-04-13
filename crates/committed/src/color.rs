@@ -8,8 +8,8 @@ pub(crate) struct Palette {
 impl Palette {
     pub(crate) fn new() -> Self {
         Self {
-            source: anstyle::AnsiColor::Blue | anstyle::Effects::BOLD,
-            error: anstyle::AnsiColor::Red | anstyle::Effects::BOLD,
+            source: anstyle::AnsiColor::Blue.on_default() | anstyle::Effects::BOLD,
+            error: anstyle::AnsiColor::Red.on_default() | anstyle::Effects::BOLD,
             content: anstyle::Style::default(),
         }
     }

@@ -16,11 +16,7 @@ mod report;
 const UNKNOWN_ERR: proc_exit::Code = proc_exit::Code::new(2);
 
 #[derive(Debug, Parser)]
-#[command(
-    about,
-    version,
-    color = concolor_clap::color_choice(),
-)]
+#[command(about, version)]
 #[command(group = clap::ArgGroup::new("mode").multiple(false))]
 struct Options {
     #[arg(group = "mode")]
@@ -64,7 +60,7 @@ struct Options {
     format: Format,
 
     #[command(flatten)]
-    color: concolor_clap::Color,
+    color: colorchoice_clap::Color,
 
     #[command(flatten)]
     verbose: clap_verbosity_flag::Verbosity,
@@ -136,11 +132,11 @@ fn init_logging(level: Option<log::Level>) {
     if let Some(level) = level {
         let mut builder = env_logger::Builder::new();
 
-        let colored = concolor::get(concolor::Stream::Stderr).ansi_color();
-        builder.write_style(if colored {
-            env_logger::WriteStyle::Always
-        } else {
+        let choice = anstream::AutoStream::choice(&std::io::stderr());
+        builder.write_style(if matches!(choice, anstream::ColorChoice::Never) {
             env_logger::WriteStyle::Never
+        } else {
+            env_logger::WriteStyle::Always
         });
 
         builder.filter(None, level.to_level_filter());
@@ -165,7 +161,7 @@ fn init_logging(level: Option<log::Level>) {
 fn run() -> proc_exit::ExitResult {
     let options = Options::parse();
 
-    options.color.apply();
+    options.color.write_global();
 
     init_logging(options.verbose.log_level());
 

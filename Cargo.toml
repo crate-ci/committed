@@ -2,6 +2,7 @@
 members = [
     "crates/*",
 ]
+default-members = ["crates/committed"]
 resolver = "2"
 
 [workspace.package]

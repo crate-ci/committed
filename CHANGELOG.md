@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.0.16] - 2023-04-19
+
 ### Fixes
 
 - *(pre-commit)* Ensure there is a default target to install for `committed-src`
@@ -273,7 +275,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.15...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.0.16...HEAD
+[1.0.16]: https://github.com/crate-ci/committed/compare/v1.0.15...v1.0.16
 [1.0.15]: https://github.com/crate-ci/committed/compare/v1.0.14...v1.0.15
 [1.0.14]: https://github.com/crate-ci/committed/compare/v1.0.13...v1.0.14
 [1.0.13]: https://github.com/crate-ci/committed/compare/v1.0.12...v1.0.13

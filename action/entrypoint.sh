@@ -9,7 +9,7 @@ log() {
 CMD_NAME="committed"
 
 if [[ -z $(which ${CMD_NAME} 2>/dev/null) ]]; then
-    VERSION=1.0.15
+    VERSION=1.0.16
     log "Downloading 'committed' v${VERSION}"
     wget https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
     sudo tar -xzvf committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz -C /usr/local/bin ./committed

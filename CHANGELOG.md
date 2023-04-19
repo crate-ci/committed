@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- *(pre-commit)* Ensure there is a default target to install for `committed-src`
+
 ## [1.0.15] - 2023-04-13
 
 ### Internal

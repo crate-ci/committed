@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- *(action)* Don't require `sudo`
+
 ## [1.0.17] - 2023-04-19
 
 ### Performance

@@ -19,7 +19,7 @@ fi
 if [[ ! -x ${COMMAND} ]]; then
     VERSION=1.0.17
     log "Downloading 'committed' v${VERSION}"
-    wget https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
+    wget --progress=dot:mega https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
     mkdir -p ${_INSTALL_DIR}
     tar -xzvf committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz -C ${_INSTALL_DIR} ./${CMD_NAME}
     rm committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz

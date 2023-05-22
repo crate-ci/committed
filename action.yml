@@ -19,6 +19,7 @@ runs:
       run: $GITHUB_ACTION_PATH/action/entrypoint.sh
       shell: bash
       env:
+        INSTALL_DIR: .
         INPUT_ARGS: ${{ inputs.args }}
         INPUT_COMMITS: ${{ inputs.commits }}
 

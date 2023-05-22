@@ -21,7 +21,7 @@ if [[ ! -x ${COMMAND} ]]; then
     log "Downloading 'committed' v${VERSION}"
     wget https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
     mkdir -p ${_INSTALL_DIR}
-    sudo tar -xzvf committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz -C ${_INSTALL_DIR} ./${CMD_NAME}
+    tar -xzvf committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz -C ${_INSTALL_DIR} ./${CMD_NAME}
     rm committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
 fi
 

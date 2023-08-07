@@ -99,8 +99,10 @@ fn resolve_bool_arg(yes: bool, no: bool) -> Option<bool> {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, clap::ValueEnum)]
+#[derive(Default)]
 enum Format {
     Silent,
+    #[default]
     Brief,
     Json,
 }
@@ -115,11 +117,7 @@ impl Format {
     }
 }
 
-impl Default for Format {
-    fn default() -> Self {
-        Format::Brief
-    }
-}
+
 
 fn load_toml(path: &std::path::Path) -> Result<config::Config, anyhow::Error> {
     let mut f = fs::File::open(path)?;

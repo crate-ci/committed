@@ -20,3 +20,10 @@ include = [
   "benches/**/*",
   "examples/**/*"
 ]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+codegen-units = 1

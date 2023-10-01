@@ -21,7 +21,7 @@ jobs:
       matrix:
         target: [x86_64, x86, aarch64]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -41,7 +41,7 @@ jobs:
       matrix:
         target: [x86_64, aarch64]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -61,7 +61,7 @@ jobs:
       matrix:
         target: [x64, x86]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -80,7 +80,7 @@ jobs:
       matrix:
         target: [x86_64, aarch64]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -96,7 +96,7 @@ jobs:
   sdist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Build sdist
         uses: PyO3/maturin-action@v1
         with:

@@ -254,7 +254,7 @@ dependencies = [
 name = "committed"
 version = "1.0.20"
 dependencies = [
- "anstream 0.5.0",
+ "anstream 0.6.4",
  "anstyle",
  "anyhow",
  "clap",

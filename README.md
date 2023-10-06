@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/crate-ci/committed/branch/master/graph/badge.svg)](https://codecov.io/gh/crate-ci/committed)
 [![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/committed.svg)
-[![Crates Status](https://img.shields.io/crates/v/committed.svg)](https://crates.io/crates/committed)
+[![Crates Status](https://img.shields.io/crates/v/committed.svg)][Crates.io]
 
 Enforce commit standards, whether for:
 - Readability, especially in logs
@@ -73,8 +73,8 @@ or look at `committed`s own [`azure-pipelines.yml`](azure-pipelines.yml),
 
 Licensed under either of
 
- * Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
- * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
+* Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0>)
+* MIT license ([LICENSE-MIT](LICENSE-MIT) or <http://opensource.org/licenses/MIT>)
 
 at your option.
 

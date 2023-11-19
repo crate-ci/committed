@@ -68,6 +68,7 @@ pub(crate) enum Content<'s> {
     DisallowedCommitType(DisallowedCommitType),
     DisallowedCommitScope(DisallowedCommitScope),
     MergeCommitDisallowed(MergeCommitDisallowed),
+    DisallowedAuthor(DisallowedAuthor<'s>),
 }
 
 #[derive(Clone, Debug, serde::Serialize)]
@@ -179,6 +180,19 @@ pub(crate) struct MergeCommitDisallowed {}
 #[derive(derive_more::Display)]
 #[display("Empty commits are disallowed")]
 pub(crate) struct EmptyCommit {}
+
+#[derive(Clone, Debug, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+#[derive(derive_more::Display)]
+#[display(
+    "Disallowed author `{}` used, please use one matching `{}`",
+    used,
+    allowed
+)]
+pub(crate) struct DisallowedAuthor<'s> {
+    pub(crate) used: String,
+    pub(crate) allowed: &'s str,
+}
 
 pub(crate) type Report = fn(msg: Message<'_>);
 

@@ -371,3 +371,24 @@ pub(crate) fn check_merge_commit(
         Ok(false)
     }
 }
+
+pub(crate) fn check_allowed_author(
+    source: report::Source<'_>,
+    commit: &git2::Commit<'_>,
+    re: &regex::Regex,
+    report: report::Report,
+) -> Result<bool, anyhow::Error> {
+    let author = commit.author().to_string();
+    if !re.is_match(&author) {
+        report(report::Message::error(
+            source,
+            report::DisallowedAuthor {
+                used: author,
+                allowed: re.as_str(),
+            },
+        ));
+        Ok(true)
+    } else {
+        Ok(false)
+    }
+}

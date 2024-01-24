@@ -298,7 +298,7 @@ fn trim_commit_file(message: &str) -> &str {
         return "";
     }
 
-    let all_comment_re = regex::RegexBuilder::new(r#"^(#[^\n]*\n*)+$"#)
+    let all_comment_re = regex::RegexBuilder::new(r"^(#[^\n]*\n*)+$")
         .dot_matches_new_line(true)
         .build()
         .expect("test ensured regex compiles");
@@ -313,7 +313,7 @@ fn trim_commit_file(message: &str) -> &str {
             message
         };
 
-    let trailing_comment_re = regex::RegexBuilder::new(r#"^(.*?)(\n+#[^\n]*)*$"#)
+    let trailing_comment_re = regex::RegexBuilder::new(r"^(.*?)(\n+#[^\n]*)*$")
         .dot_matches_new_line(true)
         .build()
         .expect("test ensured regex compiles");

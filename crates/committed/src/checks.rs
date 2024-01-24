@@ -297,7 +297,7 @@ fn check_allowed_types(
 
 // For Gitlab's rules, see https://docs.gitlab.com/ee/user/project/merge_requests/work_in_progress_merge_requests.html
 static WIP_RE: once_cell::sync::Lazy<regex::Regex> = once_cell::sync::Lazy::new(|| {
-    regex::Regex::new(r#"^(wip\b|WIP\b|\[WIP\]|Draft\b|\[Draft\]|\(Draft\))"#).unwrap()
+    regex::Regex::new(r"^(wip\b|WIP\b|\[WIP\]|Draft\b|\[Draft\]|\(Draft\))").unwrap()
 });
 
 pub fn check_wip(

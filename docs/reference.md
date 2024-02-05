@@ -43,7 +43,7 @@ Configuration is read from the following (in precedence order)
 - Command line arguments
 - Either
   - File specified via `--config PATH`
-  - `$GIT/committed.toml`
+  - `<git repo directory>/committed.toml`
 
 ### Config Fields
 

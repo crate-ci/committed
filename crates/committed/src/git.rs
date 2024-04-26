@@ -1,11 +1,11 @@
-pub struct RevSpec<'r> {
+pub(crate) struct RevSpec<'r> {
     repo: &'r git2::Repository,
     from: git2::Commit<'r>,
     to: Option<git2::Commit<'r>>,
 }
 
 impl<'r> RevSpec<'r> {
-    pub fn parse(repo: &'r git2::Repository, revspec: &str) -> Result<Self, anyhow::Error> {
+    pub(crate) fn parse(repo: &'r git2::Repository, revspec: &str) -> Result<Self, anyhow::Error> {
         let commits = repo.revparse(revspec)?;
         let from = commits.from().unwrap().as_commit().unwrap().clone();
         let to = commits.to().map(|o| o.as_commit().unwrap().clone());
@@ -25,7 +25,7 @@ impl<'r> RevSpec<'r> {
         Ok(Self { repo, from, to })
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = git2::Commit<'r>> {
+    pub(crate) fn iter(&self) -> impl Iterator<Item = git2::Commit<'r>> {
         if let Some(to) = self.to.as_ref() {
             let range = format!("{}..{}", self.from.id(), to.id());
             let mut revwalk = self.repo.revwalk().unwrap();

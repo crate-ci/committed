@@ -49,3 +49,6 @@ proc-exit = "2.0"
 human-panic = "1.2.3"
 anstream = "0.6.13"
 anstyle = "1.0.6"
+
+[lints]
+workspace = true

@@ -1,8 +1,8 @@
 use crate::report;
 use committed::Style;
 
-pub fn check_message(
-    source: report::Source,
+pub(crate) fn check_message(
+    source: report::Source<'_>,
     message: &str,
     config: &crate::config::Config,
     report: report::Report,
@@ -94,7 +94,7 @@ pub fn check_message(
 }
 
 fn check_has_message(
-    source: report::Source,
+    source: report::Source<'_>,
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -106,8 +106,8 @@ fn check_has_message(
     }
 }
 
-pub fn check_subject_length(
-    source: report::Source,
+pub(crate) fn check_subject_length(
+    source: report::Source<'_>,
     message: &str,
     max_length: usize,
     report: report::Report,
@@ -135,8 +135,8 @@ pub fn check_subject_length(
     }
 }
 
-pub fn check_line_length(
-    source: report::Source,
+pub(crate) fn check_line_length(
+    source: report::Source<'_>,
     message: &str,
     max_length: usize,
     report: report::Report,
@@ -162,8 +162,8 @@ pub fn check_line_length(
     Ok(failed)
 }
 
-pub fn check_hard_line_length(
-    source: report::Source,
+pub(crate) fn check_hard_line_length(
+    source: report::Source<'_>,
     message: &str,
     max_length: usize,
     report: report::Report,
@@ -186,8 +186,8 @@ pub fn check_hard_line_length(
     Ok(failed)
 }
 
-pub fn check_capitalized_subject(
-    source: report::Source,
+pub(crate) fn check_capitalized_subject(
+    source: report::Source<'_>,
     subject: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -229,8 +229,8 @@ fn caseless_is_capitalized() {
     assert!(is_capitalized("あ").unwrap());
 }
 
-pub fn check_subject_not_punctuated(
-    source: report::Source,
+pub(crate) fn check_subject_not_punctuated(
+    source: report::Source<'_>,
     subject: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -249,8 +249,8 @@ pub fn check_subject_not_punctuated(
     }
 }
 
-pub fn check_imperative_subject(
-    source: report::Source,
+pub(crate) fn check_imperative_subject(
+    source: report::Source<'_>,
     subject: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -273,7 +273,7 @@ pub fn check_imperative_subject(
 }
 
 fn check_allowed_types(
-    source: report::Source,
+    source: report::Source<'_>,
     parsed: unicase::UniCase<&str>,
     allowed_types: Vec<&str>,
     report: report::Report,
@@ -300,8 +300,8 @@ static WIP_RE: once_cell::sync::Lazy<regex::Regex> = once_cell::sync::Lazy::new(
     regex::Regex::new(r"^(wip\b|WIP\b|\[WIP\]|Draft\b|\[Draft\]|\(Draft\))").unwrap()
 });
 
-pub fn check_wip(
-    source: report::Source,
+pub(crate) fn check_wip(
+    source: report::Source<'_>,
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -313,8 +313,8 @@ pub fn check_wip(
     }
 }
 
-pub fn check_fixup(
-    source: report::Source,
+pub(crate) fn check_fixup(
+    source: report::Source<'_>,
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -326,9 +326,9 @@ pub fn check_fixup(
     }
 }
 
-pub fn check_merge_commit(
-    source: report::Source,
-    commit: &git2::Commit,
+pub(crate) fn check_merge_commit(
+    source: report::Source<'_>,
+    commit: &git2::Commit<'_>,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
     if 1 < commit.parent_count() {

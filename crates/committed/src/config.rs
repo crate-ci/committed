@@ -6,7 +6,7 @@ static DEFAULT_TYPES: &[&str] = &[
     Copy, Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize, derive_more::Display,
 )]
 #[serde(rename_all = "snake_case")]
-pub enum Style {
+pub(crate) enum Style {
     #[serde(alias = "Conventional")]
     Conventional,
     #[serde(alias = "None")]
@@ -16,23 +16,23 @@ pub enum Style {
 #[derive(Clone, Default, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
-pub struct Config {
-    pub ignore_author_re: Option<String>,
-    pub subject_length: Option<usize>,
-    pub subject_capitalized: Option<bool>,
-    pub subject_not_punctuated: Option<bool>,
-    pub imperative_subject: Option<bool>,
-    pub no_fixup: Option<bool>,
-    pub no_wip: Option<bool>,
-    pub hard_line_length: Option<usize>,
-    pub line_length: Option<usize>,
-    pub style: Option<Style>,
-    pub allowed_types: Option<Vec<String>>,
-    pub merge_commit: Option<bool>,
+pub(crate) struct Config {
+    pub(crate) ignore_author_re: Option<String>,
+    pub(crate) subject_length: Option<usize>,
+    pub(crate) subject_capitalized: Option<bool>,
+    pub(crate) subject_not_punctuated: Option<bool>,
+    pub(crate) imperative_subject: Option<bool>,
+    pub(crate) no_fixup: Option<bool>,
+    pub(crate) no_wip: Option<bool>,
+    pub(crate) hard_line_length: Option<usize>,
+    pub(crate) line_length: Option<usize>,
+    pub(crate) style: Option<Style>,
+    pub(crate) allowed_types: Option<Vec<String>>,
+    pub(crate) merge_commit: Option<bool>,
 }
 
 impl Config {
-    pub fn from_defaults() -> Self {
+    pub(crate) fn from_defaults() -> Self {
         let empty = Self::default();
         Self {
             ignore_author_re: empty.ignore_author_re().map(|s| s.to_owned()),
@@ -50,7 +50,7 @@ impl Config {
         }
     }
 
-    pub fn update(&mut self, source: Self) {
+    pub(crate) fn update(&mut self, source: Self) {
         if let Some(source) = source.ignore_author_re {
             self.ignore_author_re = Some(source);
         }
@@ -89,47 +89,47 @@ impl Config {
         }
     }
 
-    pub fn ignore_author_re(&self) -> Option<&str> {
+    pub(crate) fn ignore_author_re(&self) -> Option<&str> {
         self.ignore_author_re.as_deref()
     }
 
-    pub fn subject_length(&self) -> usize {
+    pub(crate) fn subject_length(&self) -> usize {
         self.subject_length.unwrap_or(50)
     }
 
-    pub fn subject_capitalized(&self) -> bool {
+    pub(crate) fn subject_capitalized(&self) -> bool {
         self.subject_capitalized.unwrap_or(true)
     }
 
-    pub fn subject_not_punctuated(&self) -> bool {
+    pub(crate) fn subject_not_punctuated(&self) -> bool {
         self.subject_not_punctuated.unwrap_or(true)
     }
 
-    pub fn imperative_subject(&self) -> bool {
+    pub(crate) fn imperative_subject(&self) -> bool {
         self.imperative_subject.unwrap_or(true)
     }
 
-    pub fn no_fixup(&self) -> bool {
+    pub(crate) fn no_fixup(&self) -> bool {
         self.no_fixup.unwrap_or(true)
     }
 
-    pub fn no_wip(&self) -> bool {
+    pub(crate) fn no_wip(&self) -> bool {
         self.no_wip.unwrap_or(true)
     }
 
-    pub fn line_length(&self) -> usize {
+    pub(crate) fn line_length(&self) -> usize {
         self.line_length.unwrap_or(72)
     }
 
-    pub fn hard_line_length(&self) -> usize {
+    pub(crate) fn hard_line_length(&self) -> usize {
         self.hard_line_length.unwrap_or(0)
     }
 
-    pub fn style(&self) -> Style {
+    pub(crate) fn style(&self) -> Style {
         self.style.unwrap_or(Style::None)
     }
 
-    pub fn allowed_types<'s>(&'s self) -> Box<dyn Iterator<Item = &str> + 's> {
+    pub(crate) fn allowed_types<'s>(&'s self) -> Box<dyn Iterator<Item = &str> + 's> {
         self.allowed_types
             .as_ref()
             .map(|v| {
@@ -139,7 +139,7 @@ impl Config {
             .unwrap_or_else(|| Box::new(DEFAULT_TYPES.iter().copied()))
     }
 
-    pub fn merge_commit(&self) -> bool {
+    pub(crate) fn merge_commit(&self) -> bool {
         self.merge_commit.unwrap_or(true)
     }
 }

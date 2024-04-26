@@ -1,6 +1,5 @@
 #![allow(clippy::unnecessary_wraps)]
 
-use std::fs;
 use std::io::Read;
 use std::io::Write;
 
@@ -117,9 +116,7 @@ impl Format {
 }
 
 fn load_toml(path: &std::path::Path) -> Result<config::Config, anyhow::Error> {
-    let mut f = fs::File::open(path)?;
-    let mut text = String::new();
-    f.read_to_string(&mut text)?;
+    let text = std::fs::read_to_string(path)?;
     toml::from_str(&text).map_err(|e| e.into())
 }
 
@@ -194,7 +191,7 @@ fn run() -> proc_exit::ExitResult {
         .map(regex::Regex::new)
         .transpose()
         .with_code(proc_exit::sysexits::CONFIG_ERR)?;
-    let ignore_commit = |commit: &git2::Commit| {
+    let ignore_commit = |commit: &git2::Commit<'_>| {
         let author = commit.author().to_string();
         if let Some(re) = ignore_author_re.as_ref() {
             if re.is_match(&author) {
@@ -219,13 +216,13 @@ fn run() -> proc_exit::ExitResult {
             std::fs::write(output_path, &output).to_sysexits()?;
         }
     } else if let Some(path) = options.commit_file.as_ref() {
-        let mut text = String::new();
-        if path == std::path::Path::new("-") {
+        let text = if path == std::path::Path::new("-") {
+            let mut text = String::new();
             std::io::stdin().read_to_string(&mut text).to_sysexits()?;
+            text
         } else {
-            let mut f = fs::File::open(path).to_sysexits()?;
-            f.read_to_string(&mut text).to_sysexits()?;
-        }
+            std::fs::read_to_string(path).to_sysexits()?
+        };
         let text = trim_commit_file(&text);
         failed |= checks::check_message(path.as_path().into(), text, &config, report)
             .with_code(UNKNOWN_ERR)?;
@@ -334,7 +331,7 @@ mod test {
     #[test]
     fn verify_app() {
         use clap::CommandFactory;
-        Options::command().debug_assert()
+        Options::command().debug_assert();
     }
 
     #[test]

@@ -46,7 +46,7 @@ imperative = "1.0.5"
 derive_more = "0.99.17"
 itertools = "0.12.1"
 proc-exit = "2.0"
-human-panic = "1.2.3"
+human-panic = "2.0.0"
 anstream = "0.6.13"
 anstyle = "1.0.6"
 

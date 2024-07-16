@@ -60,9 +60,9 @@ Have your CI verify your PR (assuming it does a no-ff merge into your `master`)
 ```bash
 committed HEAD~..HEAD^2 --no-merge-commit
 ```
-See [`imperative` for an Azure Pipeline
-example](https://github.com/crate-ci/imperative/blob/master/azure-pipelines.yml)
-or look at `committed`s own [`azure-pipelines.yml`](azure-pipelines.yml),
+See [`imperative` for a GitHub Actions
+example](https://github.com/crate-ci/imperative/blob/master/.github/workflows/committed.yml)
+or look at `committed`s own [GitHub Actions pipeline](.github/workflows/committed.yml),
 [`.travis.yml`](.travis.yml), or [`appveyor.yml`](appveyor.yml).
 
 ## [Reference](docs/reference.md)

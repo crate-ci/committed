@@ -31,7 +31,7 @@ pub(crate) enum Source<'s> {
     #[serde(serialize_with = "serialize_oid")]
     Oid(git2::Oid),
     ShortId(&'s str),
-    #[display(fmt = "{}", "_0.display()")]
+    #[display("{}", "_0.display()")]
     Path(&'s std::path::Path),
 }
 
@@ -47,7 +47,7 @@ where
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
 pub(crate) enum Severity {
-    #[display(fmt = "error")]
+    #[display("error")]
     Error,
 }
 
@@ -73,7 +73,7 @@ pub(crate) enum Content<'s> {
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
 #[display(
-    fmt = "Commit subject is too long, {} exceeds the max length of {}",
+    "Commit subject is too long, {} exceeds the max length of {}",
     actual_length,
     max_length
 )]
@@ -86,7 +86,7 @@ pub(crate) struct SubjectTooLong {
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
 #[display(
-    fmt = "Line is too long, {} exceeds the max length of {}",
+    "Line is too long, {} exceeds the max length of {}",
     actual_length,
     max_length
 )]
@@ -98,7 +98,7 @@ pub(crate) struct LineTooLong {
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Subject should be capitalized but found `{}`", first_word)]
+#[display("Subject should be capitalized but found `{}`", first_word)]
 pub(crate) struct CapitalizeSubject<'s> {
     pub(crate) first_word: &'s str,
 }
@@ -106,7 +106,7 @@ pub(crate) struct CapitalizeSubject<'s> {
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Subject should not be punctuated but found `{}`", punctuation)]
+#[display("Subject should not be punctuated but found `{}`", punctuation)]
 pub(crate) struct NoPunctuation {
     pub(crate) punctuation: char,
 }
@@ -114,10 +114,7 @@ pub(crate) struct NoPunctuation {
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(
-    fmt = "Subject should be in the imperative mood but found `{}`",
-    first_word
-)]
+#[display("Subject should be in the imperative mood but found `{}`", first_word)]
 pub(crate) struct Imperative<'s> {
     pub(crate) first_word: &'s str,
 }
@@ -125,19 +122,19 @@ pub(crate) struct Imperative<'s> {
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Work-in-progress commits must be cleaned up")]
+#[display("Work-in-progress commits must be cleaned up")]
 pub(crate) struct Wip {}
 
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Fixup commits must be squashed")]
+#[display("Fixup commits must be squashed")]
 pub(crate) struct Fixup {}
 
 #[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Commit is not in {} format: {}", style, error)]
+#[display("Commit is not in {} format: {}", style, error)]
 pub(crate) struct InvalidCommitFormat {
     #[serde(serialize_with = "serialize_error")]
     pub(crate) error: anyhow::Error,
@@ -155,11 +152,7 @@ where
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(
-    fmt = "Disallowed type `{}` used, please use one of {:?}",
-    used,
-    allowed
-)]
+#[display("Disallowed type `{}` used, please use one of {:?}", used, allowed)]
 pub(crate) struct DisallowedCommitType {
     pub(crate) used: String,
     pub(crate) allowed: Vec<String>,
@@ -168,13 +161,13 @@ pub(crate) struct DisallowedCommitType {
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Merge commits are disallowed")]
+#[display("Merge commits are disallowed")]
 pub(crate) struct MergeCommitDisallowed {}
 
 #[derive(Clone, Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
-#[display(fmt = "Empty commits are disallowed")]
+#[display("Empty commits are disallowed")]
 pub(crate) struct EmptyCommit {}
 
 pub(crate) type Report = fn(msg: Message<'_>);

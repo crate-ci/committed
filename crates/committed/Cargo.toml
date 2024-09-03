@@ -43,7 +43,7 @@ clap-verbosity-flag = "2.2"
 colorchoice-clap = "1.0.3"
 grep-cli = "0.1"
 imperative = "1.0.5"
-derive_more = "0.99.17"
+derive_more = { version = "1.0.0", features = ["from", "display"] }
 itertools = "0.13.0"
 proc-exit = "2.0"
 human-panic = "2.0.0"

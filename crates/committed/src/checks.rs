@@ -5,7 +5,7 @@ const AUTOSQUASH_PREFIXES: [&str; 3] = ["fixup! ", "squash! ", "amend! "];
 
 pub(crate) fn check_message(
     source: report::Source<'_>,
-    message: &str,
+    mut message: &str,
     config: &crate::config::Config,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -19,8 +19,14 @@ pub(crate) fn check_message(
     if config.no_wip() {
         failed |= check_wip(source, message, report)?;
     }
+    // If we are checking to autosquash, we update the failed flag. Otherwise,
+    // we update the message to skip the autosquash prefix for the remaining
+    // checks.
+    let (autosquash_result, idx) = check_autosquash(source, message, report)?;
     if config.no_autosquash() {
-        failed |= check_autosquash(source, message, report)?;
+        failed |= autosquash_result;
+    } else if let Some(idx) = idx {
+        message = &message[idx..];
     }
     // Bail out due to above checks
     if failed {
@@ -319,13 +325,14 @@ pub(crate) fn check_autosquash(
     source: report::Source<'_>,
     message: &str,
     report: report::Report,
-) -> Result<bool, anyhow::Error> {
-    if AUTOSQUASH_PREFIXES.iter().any(|prefix| message.starts_with(prefix)) {
-        report(report::Message::error(source, report::Autosquash {}));
-        Ok(true)
-    } else {
-        Ok(false)
+) -> Result<(bool, Option<usize>), anyhow::Error> {
+    for prefix in AUTOSQUASH_PREFIXES.iter() {
+        if message.starts_with(prefix) {
+            report(report::Message::error(source, report::Autosquash {}));
+            return Ok((true, Some(prefix.len())));
+        }
     }
+    Ok((false, None))
 }
 
 pub(crate) fn check_merge_commit(

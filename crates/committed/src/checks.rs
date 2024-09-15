@@ -1,6 +1,8 @@
 use crate::report;
 use committed::Style;
 
+const AUTOSQUASH_PREFIXES: [&str; 3] = ["fixup! ", "squash! ", "amend! "];
+
 pub(crate) fn check_message(
     source: report::Source<'_>,
     message: &str,
@@ -17,8 +19,8 @@ pub(crate) fn check_message(
     if config.no_wip() {
         failed |= check_wip(source, message, report)?;
     }
-    if config.no_fixup() {
-        failed |= check_fixup(source, message, report)?;
+    if config.no_autosquash() {
+        failed |= check_autosquash(source, message, report)?;
     }
     // Bail out due to above checks
     if failed {
@@ -313,13 +315,13 @@ pub(crate) fn check_wip(
     }
 }
 
-pub(crate) fn check_fixup(
+pub(crate) fn check_autosquash(
     source: report::Source<'_>,
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
-    if message.starts_with("fixup! ") {
-        report(report::Message::error(source, report::Fixup {}));
+    if AUTOSQUASH_PREFIXES.iter().any(|prefix| message.starts_with(prefix)) {
+        report(report::Message::error(source, report::Autosquash {}));
         Ok(true)
     } else {
         Ok(false)

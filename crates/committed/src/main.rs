@@ -45,10 +45,10 @@ struct Options {
     #[arg(long, overrides_with("no_wip"), hide(true))]
     wip: bool,
 
-    #[arg(long, overrides_with("fixup"))]
-    no_fixup: bool,
-    #[arg(long, overrides_with("no_fixup"), hide(true))]
-    fixup: bool,
+    #[arg(long, overrides_with("autosquash"), alias("no_fixup"))]
+    no_autosquash: bool,
+    #[arg(long, overrides_with("no_autosquash"), alias("fixup"), hide(true))]
+    autosquash: bool,
 
     #[arg(
         long = "format",
@@ -70,7 +70,7 @@ impl Options {
         config::Config {
             merge_commit: self.merge_commit(),
             no_wip: self.wip().map(|b| !b),
-            no_fixup: self.fixup().map(|b| !b),
+            no_autosquash: self.autosquash().map(|b| !b),
             ..Default::default()
         }
     }
@@ -83,8 +83,8 @@ impl Options {
         resolve_bool_arg(self.wip, self.no_wip)
     }
 
-    fn fixup(&self) -> Option<bool> {
-        resolve_bool_arg(self.fixup, self.no_fixup)
+    fn autosquash(&self) -> Option<bool> {
+        resolve_bool_arg(self.autosquash, self.no_autosquash)
     }
 }
 

@@ -3,7 +3,7 @@
   description: Nitpicking commit history since beabf39
   language: python
   entry: committed
-  args: [--fixup, --wip, --commit-file]
+  args: [--autosquash, --wip, --commit-file]
   stages: [commit-msg]
 
 - id: committed-src
@@ -11,5 +11,5 @@
   description: Nitpicking commit history since beabf39
   language: rust
   entry: committed
-  args: [--fixup, --wip, --commit-file]
+  args: [--autosquash, --wip, --commit-file]
   stages: [commit-msg]

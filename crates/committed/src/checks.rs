@@ -17,7 +17,7 @@ pub(crate) fn check_message(
     if config.no_wip() {
         failed |= check_wip(source, message, report)?;
     }
-    if config.no_fixup() {
+    if config.no_autosquash() {
         failed |= check_fixup(source, message, report)?;
     }
     // Bail out due to above checks
@@ -319,7 +319,7 @@ pub(crate) fn check_fixup(
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
     if message.starts_with("fixup! ") {
-        report(report::Message::error(source, report::Fixup {}));
+        report(report::Message::error(source, report::Autosquash {}));
         Ok(true)
     } else {
         Ok(false)

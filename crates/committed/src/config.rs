@@ -22,7 +22,8 @@ pub(crate) struct Config {
     pub(crate) subject_capitalized: Option<bool>,
     pub(crate) subject_not_punctuated: Option<bool>,
     pub(crate) imperative_subject: Option<bool>,
-    pub(crate) no_fixup: Option<bool>,
+    #[serde(alias = "no_fixup")]
+    pub(crate) no_autosquash: Option<bool>,
     pub(crate) no_wip: Option<bool>,
     pub(crate) hard_line_length: Option<usize>,
     pub(crate) line_length: Option<usize>,
@@ -40,7 +41,7 @@ impl Config {
             subject_capitalized: Some(empty.subject_capitalized()),
             subject_not_punctuated: Some(empty.subject_not_punctuated()),
             imperative_subject: Some(empty.imperative_subject()),
-            no_fixup: Some(empty.no_fixup()),
+            no_autosquash: Some(empty.no_autosquash()),
             no_wip: Some(empty.no_wip()),
             hard_line_length: Some(empty.hard_line_length()),
             line_length: Some(empty.line_length()),
@@ -66,8 +67,8 @@ impl Config {
         if let Some(source) = source.imperative_subject {
             self.imperative_subject = Some(source);
         }
-        if let Some(source) = source.no_fixup {
-            self.no_fixup = Some(source);
+        if let Some(source) = source.no_autosquash {
+            self.no_autosquash = Some(source);
         }
         if let Some(source) = source.no_wip {
             self.no_wip = Some(source);
@@ -109,8 +110,8 @@ impl Config {
         self.imperative_subject.unwrap_or(true)
     }
 
-    pub(crate) fn no_fixup(&self) -> bool {
-        self.no_fixup.unwrap_or(true)
+    pub(crate) fn no_autosquash(&self) -> bool {
+        self.no_autosquash.unwrap_or(true)
     }
 
     pub(crate) fn no_wip(&self) -> bool {

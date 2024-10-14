@@ -78,6 +78,13 @@ pub(crate) fn check_message(
                 failed |= check_allowed_types(source, used_type, allowed_types, report)?;
             }
         }
+
+        let allowed_scopes: Vec<_> = config.allowed_scopes().collect();
+        if !allowed_scopes.is_empty() {
+            if let Some(used_scope) = parsed.scope() {
+                failed |= check_allowed_scopes(source, used_scope, allowed_scopes, report)?;
+            }
+        }
     }
 
     if config.subject_length() != 0 {
@@ -290,6 +297,29 @@ fn check_allowed_types(
         report::DisallowedCommitType {
             used: parsed.as_ref().to_owned(),
             allowed: allowed_types.iter().map(|s| (*s).to_owned()).collect(),
+        },
+    ));
+    Ok(true)
+}
+
+fn check_allowed_scopes(
+    source: report::Source<'_>,
+    parsed: unicase::UniCase<&str>,
+    allowed_scopes: Vec<&str>,
+    report: report::Report,
+) -> Result<bool, anyhow::Error> {
+    for allowed_scope in allowed_scopes.iter() {
+        let allowed_scope = unicase::UniCase::new(allowed_scope);
+        if allowed_scope == parsed {
+            return Ok(false);
+        }
+    }
+
+    report(report::Message::error(
+        source,
+        report::DisallowedCommitScope {
+            used: parsed.as_ref().to_owned(),
+            allowed: allowed_scopes.iter().map(|s| (*s).to_owned()).collect(),
         },
     ));
     Ok(true)

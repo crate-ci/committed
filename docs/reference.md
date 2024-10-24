@@ -19,7 +19,7 @@ committed master..HEAD
 
 - The range excludes the start commit
 - This will Do The Right Thing even when `master` is ahead of when you
-  branched.  `committed` will look for the merge-base between the range end
+  branched. `committed` will look for the merge-base between the range end
   points.
 
 ### Commit Files and `stdin`
@@ -48,7 +48,7 @@ Configuration is read from the following (in precedence order)
 ### Config Fields
 
 | Field                  | Argument          | Format               | Default                                             | Description                                                                                                           |
-|------------------------|-------------------|----------------------|-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| ---------------------- | ----------------- | -------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | ignore_author_re       | \-                | regx                 | (none)                                              | Authors to ignore the commits for. Generally used with bots out of your control.                                      |
 | subject_length         | \-                | number               | 50                                                  | Number of columns the subject can occupy                                                                              |
 | line_length            | \-                | number               | 72                                                  | Number of columns any line with a break can occupy, including subject                                                 |
@@ -60,6 +60,7 @@ Configuration is read from the following (in precedence order)
 | no_wip                 | \-                | bool                 | true                                                | Disallow WIP commits                                                                                                  |
 | style                  | \-                | none, [conventional] | none                                                | Commit style convention                                                                                               |
 | allowed_types          | \-                | list of strings      | fix, feat, chore, docs, style, refactor, perf, test | _(Conventional)_ Accepted commit types                                                                                |
+| allowed_scopes         | \-                | list of strings      | none (all scopes allowed)                           | _(Conventional)_ Accepted commit scopes                                                                               |
 | merge_commit           | --no-merge-commit | \-                   | true                                                | Disallow merge commits. Argument is recommended over config file since there are times when merge-commits are wanted. |
 
 [conventional]: https://www.conventionalcommits.org/

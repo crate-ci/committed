@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Features
+
+- Allowed scopes support
+
 ## [1.0.20] - 2023-08-07
 
 ### Compatibility

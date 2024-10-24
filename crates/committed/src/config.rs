@@ -28,6 +28,7 @@ pub(crate) struct Config {
     pub(crate) line_length: Option<usize>,
     pub(crate) style: Option<Style>,
     pub(crate) allowed_types: Option<Vec<String>>,
+    pub(crate) allowed_scopes: Option<Vec<String>>,
     pub(crate) merge_commit: Option<bool>,
 }
 
@@ -46,6 +47,7 @@ impl Config {
             line_length: Some(empty.line_length()),
             style: Some(empty.style()),
             allowed_types: Some(empty.allowed_types().map(|s| s.to_owned()).collect()),
+            allowed_scopes: Some(empty.allowed_scopes().map(|s| s.to_owned()).collect()),
             merge_commit: Some(empty.merge_commit()),
         }
     }
@@ -83,6 +85,9 @@ impl Config {
         }
         if let Some(source) = source.allowed_types {
             self.allowed_types = Some(source);
+        }
+        if let Some(source) = source.allowed_scopes {
+            self.allowed_scopes = Some(source);
         }
         if let Some(source) = source.merge_commit {
             self.merge_commit = Some(source);
@@ -137,6 +142,16 @@ impl Config {
                 b
             })
             .unwrap_or_else(|| Box::new(DEFAULT_TYPES.iter().copied()))
+    }
+
+    pub(crate) fn allowed_scopes<'s>(&'s self) -> Box<dyn Iterator<Item = &str> + 's> {
+        self.allowed_scopes
+            .as_ref()
+            .map(|v| {
+                let b: Box<dyn Iterator<Item = &str>> = Box::new(v.iter().map(|s| s.as_str()));
+                b
+            })
+            .unwrap_or_else(|| Box::new([].iter().copied()))
     }
 
     pub(crate) fn merge_commit(&self) -> bool {

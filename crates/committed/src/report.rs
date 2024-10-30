@@ -66,6 +66,7 @@ pub(crate) enum Content<'s> {
     Fixup(Fixup),
     InvalidCommitFormat(InvalidCommitFormat),
     DisallowedCommitType(DisallowedCommitType),
+    DisallowedCommitScope(DisallowedCommitScope),
     MergeCommitDisallowed(MergeCommitDisallowed),
 }
 
@@ -154,6 +155,15 @@ where
 #[derive(derive_more::Display)]
 #[display("Disallowed type `{}` used, please use one of {:?}", used, allowed)]
 pub(crate) struct DisallowedCommitType {
+    pub(crate) used: String,
+    pub(crate) allowed: Vec<String>,
+}
+
+#[derive(Clone, Debug, serde::Serialize)]
+#[serde(rename_all = "snake_case")]
+#[derive(derive_more::Display)]
+#[display("Disallowed scope `{}` used, please use one of {:?}", used, allowed)]
+pub(crate) struct DisallowedCommitScope {
     pub(crate) used: String,
     pub(crate) allowed: Vec<String>,
 }

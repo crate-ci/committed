@@ -50,5 +50,8 @@ human-panic = "2.0.0"
 anstream = "0.6.13"
 anstyle = "1.0.6"
 
+[dev-dependencies]
+snapbox = { version = "0.6.19", features = ["cmd", "path"] }
+
 [lints]
 workspace = true

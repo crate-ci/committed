@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.1.1] - 2024-10-31
+
 ### Fixes
 
 - Regression in 1.1.0 where code, rather than a path, would be shown
@@ -309,7 +311,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/crate-ci/committed/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/crate-ci/committed/compare/v1.0.20...v1.1.0
 [1.0.20]: https://github.com/crate-ci/committed/compare/v1.0.19...v1.0.20
 [1.0.19]: https://github.com/crate-ci/committed/compare/v1.0.18...v1.0.19

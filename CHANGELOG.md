@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Regression in 1.1.0 where code, rather than a path, would be shown
+
 ## [1.1.0] - 2024-10-30
 
 ### Features

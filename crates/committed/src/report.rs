@@ -31,7 +31,7 @@ pub(crate) enum Source<'s> {
     #[serde(serialize_with = "serialize_oid")]
     Oid(git2::Oid),
     ShortId(&'s str),
-    #[display("{}", "_0.display()")]
+    #[display("{}", _0.display())]
     Path(&'s std::path::Path),
 }
 

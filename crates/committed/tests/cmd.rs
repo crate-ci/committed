@@ -16,7 +16,7 @@ fn wip() {
         .assert()
         .code(1)
         .stdout_eq(str![[r#"
-_0.display(): error Work-in-progress commits must be cleaned up
+-: error Work-in-progress commits must be cleaned up
 
 "#]])
         .stderr_eq(str![]);

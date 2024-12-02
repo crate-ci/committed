@@ -1,6 +1,6 @@
 pub use git_conventional::Commit;
 
-impl<'c> crate::style::Style for Commit<'c> {
+impl crate::style::Style for Commit<'_> {
     fn subject(&self) -> &str {
         self.description()
     }

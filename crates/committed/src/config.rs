@@ -134,7 +134,7 @@ impl Config {
         self.style.unwrap_or(Style::None)
     }
 
-    pub(crate) fn allowed_types<'s>(&'s self) -> Box<dyn Iterator<Item = &str> + 's> {
+    pub(crate) fn allowed_types<'s>(&'s self) -> Box<dyn Iterator<Item = &'s str> + 's> {
         self.allowed_types
             .as_ref()
             .map(|v| {
@@ -144,7 +144,7 @@ impl Config {
             .unwrap_or_else(|| Box::new(DEFAULT_TYPES.iter().copied()))
     }
 
-    pub(crate) fn allowed_scopes<'s>(&'s self) -> Box<dyn Iterator<Item = &str> + 's> {
+    pub(crate) fn allowed_scopes<'s>(&'s self) -> Box<dyn Iterator<Item = &'s str> + 's> {
         self.allowed_scopes
             .as_ref()
             .map(|v| {

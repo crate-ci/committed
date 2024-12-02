@@ -14,7 +14,7 @@ impl<'c> Commit<'c> {
     }
 }
 
-impl<'c> crate::style::Style for Commit<'c> {
+impl crate::style::Style for Commit<'_> {
     fn subject(&self) -> &str {
         self.raw_subject
     }

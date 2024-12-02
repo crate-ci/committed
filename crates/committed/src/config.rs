@@ -30,6 +30,7 @@ pub(crate) struct Config {
     pub(crate) allowed_types: Option<Vec<String>>,
     pub(crate) allowed_scopes: Option<Vec<String>>,
     pub(crate) merge_commit: Option<bool>,
+    pub(crate) allowed_author_re: Option<String>,
 }
 
 impl Config {
@@ -49,6 +50,7 @@ impl Config {
             allowed_types: Some(empty.allowed_types().map(|s| s.to_owned()).collect()),
             allowed_scopes: Some(empty.allowed_scopes().map(|s| s.to_owned()).collect()),
             merge_commit: Some(empty.merge_commit()),
+            allowed_author_re: empty.allowed_author_re().map(|s| s.to_owned()),
         }
     }
 
@@ -91,6 +93,9 @@ impl Config {
         }
         if let Some(source) = source.merge_commit {
             self.merge_commit = Some(source);
+        }
+        if let Some(source) = source.allowed_author_re {
+            self.allowed_author_re = Some(source);
         }
     }
 
@@ -156,5 +161,9 @@ impl Config {
 
     pub(crate) fn merge_commit(&self) -> bool {
         self.merge_commit.unwrap_or(true)
+    }
+
+    pub(crate) fn allowed_author_re(&self) -> Option<&str> {
+        self.allowed_author_re.as_deref()
     }
 }

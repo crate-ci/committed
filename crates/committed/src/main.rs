@@ -200,6 +200,11 @@ fn run() -> proc_exit::ExitResult {
         }
         false
     };
+    let allowed_author_re = config
+        .allowed_author_re()
+        .map(regex::Regex::new)
+        .transpose()
+        .with_code(proc_exit::sysexits::CONFIG_ERR)?;
 
     let mut failed = false;
     if let Some(output_path) = options.dump_config.as_ref() {
@@ -240,6 +245,10 @@ fn run() -> proc_exit::ExitResult {
                 log::trace!("Ignoring {}", source);
             } else {
                 log::trace!("Processing {}", source);
+                if let Some(re) = allowed_author_re.as_ref() {
+                    failed |= checks::check_allowed_author(source, &commit, re, report)
+                        .with_code(UNKNOWN_ERR)?;
+                }
                 let message = commit.message().unwrap();
                 failed |= checks::check_message(source, message, &config, report)
                     .with_code(UNKNOWN_ERR)?;
@@ -272,6 +281,10 @@ fn run() -> proc_exit::ExitResult {
             log::trace!("Ignoring {}", source);
         } else {
             log::trace!("Processing {}", source);
+            if let Some(re) = allowed_author_re.as_ref() {
+                failed |= checks::check_allowed_author(source, &commit, re, report)
+                    .with_code(UNKNOWN_ERR)?;
+            }
             let message = commit.message().unwrap();
             failed |=
                 checks::check_message(source, message, &config, report).with_code(UNKNOWN_ERR)?;

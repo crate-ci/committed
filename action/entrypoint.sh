@@ -17,7 +17,7 @@ if [[ -z ${INPUT_COMMITS:-} ]]; then
 fi
 
 if [[ ! -x ${COMMAND} ]]; then
-    VERSION=1.1.1
+    VERSION=1.1.2
     log "Downloading 'committed' v${VERSION}"
     wget --progress=dot:mega https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
     mkdir -p ${_INSTALL_DIR}

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+- Add `allowed_author_re`
+
 ## [1.1.1] - 2024-10-31
 
 ### Fixes

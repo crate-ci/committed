@@ -63,7 +63,7 @@ pub(crate) enum Content<'s> {
     NoPunctuation(NoPunctuation),
     Imperative(Imperative<'s>),
     Wip(Wip),
-    Fixup(Fixup),
+    Autosquash(Autosquash),
     InvalidCommitFormat(InvalidCommitFormat),
     DisallowedCommitType(DisallowedCommitType),
     DisallowedCommitScope(DisallowedCommitScope),
@@ -131,7 +131,7 @@ pub(crate) struct Wip {}
 #[serde(rename_all = "snake_case")]
 #[derive(derive_more::Display)]
 #[display("Fixup commits must be squashed")]
-pub(crate) struct Fixup {}
+pub(crate) struct Autosquash {}
 
 #[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "snake_case")]

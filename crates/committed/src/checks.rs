@@ -3,7 +3,7 @@ use committed::Style;
 
 pub(crate) fn check_message(
     source: report::Source<'_>,
-    message: &str,
+    mut message: &str,
     config: &crate::config::Config,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
@@ -19,6 +19,7 @@ pub(crate) fn check_message(
     }
     if config.no_fixup() {
         failed |= check_fixup(source, message, report)?;
+        message = strip_fixup(message);
     }
     // Bail out due to above checks
     if failed {
@@ -348,13 +349,23 @@ pub(crate) fn check_fixup(
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
-    if message.starts_with("fixup! ") {
+    if message.starts_with(FIXUP_PREFIX) {
         report(report::Message::error(source, report::Fixup {}));
         Ok(true)
     } else {
         Ok(false)
     }
 }
+
+pub(crate) fn strip_fixup(message: &str) -> &str {
+    if let Some(message) = message.strip_prefix(FIXUP_PREFIX) {
+        message
+    } else {
+        message
+    }
+}
+
+const FIXUP_PREFIX: &str = "fixup! ";
 
 pub(crate) fn check_merge_commit(
     source: report::Source<'_>,

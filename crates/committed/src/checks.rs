@@ -348,13 +348,15 @@ pub(crate) fn check_fixup(
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
-    if message.starts_with("fixup! ") {
+    if message.starts_with(FIXUP_PREFIX) {
         report(report::Message::error(source, report::Fixup {}));
         Ok(true)
     } else {
         Ok(false)
     }
 }
+
+const FIXUP_PREFIX: &str = "fixup! ";
 
 pub(crate) fn check_merge_commit(
     source: report::Source<'_>,

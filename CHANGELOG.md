@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- *(pre-commit)* Update for 4.0
+- *(pre-commit)* Set default hook types
+
 ## [1.1.3] - 2024-12-18
 
 ### Fixes

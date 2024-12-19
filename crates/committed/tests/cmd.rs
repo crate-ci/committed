@@ -44,6 +44,39 @@ fn wip_stops_checks() {
         .stderr_eq(str![]);
 }
 
+#[test]
+fn fixup_fails() {
+    run_committed("fixup! bad times ahead", "")
+        .code(1)
+        .stdout_eq(str![[r#"
+-: error Fixup commits must be squashed
+
+"#]])
+        .stderr_eq(str![]);
+}
+
+#[test]
+fn fixup_config_override() {
+    run_committed("fixup! bad times ahead", "no_fixup = false")
+        .code(1)
+        .stdout_eq(str![[r#"
+-: error Subject should be capitalized but found `fixup!`
+
+"#]])
+        .stderr_eq(str![]);
+}
+
+#[test]
+fn fixup_stops_checks() {
+    run_committed("fixup! bad times", "")
+        .code(1)
+        .stdout_eq(str![[r#"
+-: error Fixup commits must be squashed
+
+"#]])
+        .stderr_eq(str![]);
+}
+
 #[track_caller]
 fn run_committed(message: &str, config: &str) -> snapbox::cmd::OutputAssert {
     let root = snapbox::dir::DirRoot::mutable_temp().unwrap();

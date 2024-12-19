@@ -17,6 +17,7 @@ pub(crate) fn check_message(
     if config.no_wip() {
         failed |= check_wip(source, message, report)?;
     }
+    message = strip_wip(message);
     if config.no_fixup() {
         failed |= check_fixup(source, message, report)?;
     }
@@ -342,6 +343,15 @@ pub(crate) fn check_wip(
     } else {
         Ok(false)
     }
+}
+
+pub(crate) fn strip_wip(message: &str) -> &str {
+    let Some(c) = WIP_RE.captures(message) else {
+        return message;
+    };
+
+    let matched = c.get(0).unwrap();
+    message[matched.len()..].trim_start()
 }
 
 const FIXUP_PREFIXES: [&str; 3] = ["fixup! ", "squash! ", "amend! "];

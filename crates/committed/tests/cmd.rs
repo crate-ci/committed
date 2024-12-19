@@ -27,7 +27,7 @@ fn wip_config_override() {
     run_committed("wip bad times ahead", "no_wip = false")
         .code(1)
         .stdout_eq(str![[r#"
--: error Subject should be capitalized but found `wip`
+-: error Subject should be capitalized but found `bad`
 
 "#]])
         .stderr_eq(str![]);

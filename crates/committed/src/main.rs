@@ -157,16 +157,19 @@ fn run() -> proc_exit::ExitResult {
 
     init_logging(options.verbose.log_level());
 
-    let repo = options
-        .work_tree
-        .canonicalize()
-        .with_code(proc_exit::sysexits::USAGE_ERR)?;
+    let repo = || {
+        let repo = options
+            .work_tree
+            .canonicalize()
+            .with_code(proc_exit::sysexits::USAGE_ERR)?;
 
-    let repo = git2::Repository::discover(repo).with_code(proc_exit::sysexits::USAGE_ERR)?;
+        git2::Repository::discover(repo).with_code(proc_exit::sysexits::USAGE_ERR)
+    };
+
     let mut config = if let Some(config_path) = options.config.as_ref() {
         load_toml(config_path).with_code(proc_exit::sysexits::CONFIG_ERR)?
     } else {
-        let config_path = repo
+        let config_path = repo()?
             .workdir()
             .ok_or_else(|| anyhow::anyhow!("Cannot work on bare repo"))
             .with_code(proc_exit::sysexits::USAGE_ERR)?
@@ -232,6 +235,7 @@ fn run() -> proc_exit::ExitResult {
         failed |= checks::check_message(path.as_path().into(), text, &config, report)
             .with_code(UNKNOWN_ERR)?;
     } else if let Some(commits) = options.commits.as_ref() {
+        let repo = repo()?;
         let revspec =
             git::RevSpec::parse(&repo, commits).with_code(proc_exit::sysexits::USAGE_ERR)?;
         for commit in revspec.iter() {
@@ -266,6 +270,7 @@ fn run() -> proc_exit::ExitResult {
             .with_code(UNKNOWN_ERR)?;
     } else {
         debug_assert_eq!(options.commits, None);
+        let repo = repo()?;
         let commit = repo
             .head()
             .with_code(proc_exit::sysexits::USAGE_ERR)?

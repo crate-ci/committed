@@ -1,6 +1,17 @@
 use snapbox::str;
 
 #[test]
+fn has_message_fails() {
+    run_committed("", "")
+        .code(1)
+        .stdout_eq(str![[r#"
+-: error Empty commits are disallowed
+
+"#]])
+        .stderr_eq(str![]);
+}
+
+#[test]
 fn wip_fails() {
     run_committed("WIP: bad times ahead", "")
         .code(1)

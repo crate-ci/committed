@@ -4,7 +4,16 @@ use snapbox::str;
 fn wip() {
     let message = "WIP: bad times ahead";
     let config = "";
+    run_committed_repo(message, config)
+        .code(1)
+        .stdout_eq(str![[r#"
+[..]: error Work-in-progress commits must be cleaned up
 
+"#]])
+        .stderr_eq(str![]);
+}
+
+fn run_committed_repo(message: &str, config: &str) -> snapbox::cmd::OutputAssert {
     let root = snapbox::dir::DirRoot::mutable_temp().unwrap();
     let root_dir = root.path().unwrap();
     let config_filename = "committed.toml";
@@ -23,16 +32,12 @@ fn wip() {
     repo.commit(Some("HEAD"), &sig, &sig, message, &tree, &[])
         .unwrap();
 
-    snapbox::cmd::Command::new(snapbox::cmd::cargo_bin!("committed"))
+    let assert = snapbox::cmd::Command::new(snapbox::cmd::cargo_bin!("committed"))
         .arg("HEAD")
         .current_dir(root_dir)
-        .assert()
-        .code(1)
-        .stdout_eq(str![[r#"
-[..]: error Work-in-progress commits must be cleaned up
-
-"#]])
-        .stderr_eq(str![]);
+        .assert();
 
     root.close().unwrap();
+
+    assert
 }

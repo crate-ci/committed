@@ -1,10 +1,39 @@
 use snapbox::str;
 
 #[test]
-fn wip() {
-    let message = "WIP: bad times ahead";
-    let config = "";
-    run_committed_repo(message, config)
+fn wip_fails() {
+    run_committed("WIP: bad times ahead", "")
+        .code(1)
+        .stdout_eq(str![[r#"
+-: error Work-in-progress commits must be cleaned up
+
+"#]])
+        .stderr_eq(str![]);
+}
+
+#[track_caller]
+fn run_committed(message: &str, config: &str) -> snapbox::cmd::OutputAssert {
+    let root = snapbox::dir::DirRoot::mutable_temp().unwrap();
+    let root_dir = root.path().unwrap();
+    let config_path = root_dir.join("committed.toml");
+    std::fs::write(&config_path, config).unwrap();
+
+    let assert = snapbox::cmd::Command::new(snapbox::cmd::cargo_bin!("committed"))
+        .arg("--commit-file=-")
+        .arg("--config")
+        .arg(&config_path)
+        .current_dir(root_dir)
+        .stdin(message)
+        .assert();
+
+    root.close().unwrap();
+
+    assert
+}
+
+#[test]
+fn in_repo() {
+    run_committed_repo("WIP: bad times ahead", "")
         .code(1)
         .stdout_eq(str![[r#"
 [..]: error Work-in-progress commits must be cleaned up

@@ -19,8 +19,8 @@ pub(crate) fn check_message(
     }
     if config.no_fixup() {
         failed |= check_fixup(source, message, report)?;
-        message = strip_fixup(message);
     }
+    message = strip_fixup(message);
     // Bail out due to above checks
     if failed {
         return Ok(failed);

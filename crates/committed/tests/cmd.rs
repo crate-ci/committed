@@ -60,7 +60,7 @@ fn fixup_config_override() {
     run_committed("fixup! bad times ahead", "no_fixup = false")
         .code(1)
         .stdout_eq(str![[r#"
--: error Subject should be capitalized but found `fixup!`
+-: error Subject should be capitalized but found `bad`
 
 "#]])
         .stderr_eq(str![]);

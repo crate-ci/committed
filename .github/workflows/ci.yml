@@ -47,6 +47,10 @@ jobs:
         toolchain: ${{ matrix.rust }}
     - uses: Swatinem/rust-cache@v2
     - uses: taiki-e/install-action@cargo-hack
+    - name: Configure git
+      run: |
+        git config --global user.name "Test User"
+        git config --global user.email "test_user@example.com"
     - name: Build
       run: cargo test --workspace --no-run
     - name: Test
@@ -149,6 +153,10 @@ jobs:
       with:
         toolchain: stable
     - uses: Swatinem/rust-cache@v2
+    - name: Configure git
+      run: |
+        git config --global user.name "Test User"
+        git config --global user.email "test_user@example.com"
     - name: Install cargo-tarpaulin
       run: cargo install cargo-tarpaulin
     - name: Gather coverage

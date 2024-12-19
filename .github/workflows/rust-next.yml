@@ -36,6 +36,10 @@ jobs:
       with:
         toolchain: ${{ matrix.rust }}
     - uses: Swatinem/rust-cache@v2
+    - name: Configure git
+      run: |
+        git config --global user.name "Test User"
+        git config --global user.email "test_user@example.com"
     - uses: taiki-e/install-action@cargo-hack
     - name: Build
       run: cargo test --workspace --no-run
@@ -52,6 +56,10 @@ jobs:
       with:
         toolchain: stable
     - uses: Swatinem/rust-cache@v2
+    - name: Configure git
+      run: |
+        git config --global user.name "Test User"
+        git config --global user.email "test_user@example.com"
     - uses: taiki-e/install-action@cargo-hack
     - name: Update dependencies
       run: cargo update

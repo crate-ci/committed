@@ -344,12 +344,17 @@ pub(crate) fn check_wip(
     }
 }
 
+const FIXUP_PREFIXES: [&str; 3] = ["fixup! ", "squash! ", "amend! "];
+
 pub(crate) fn check_fixup(
     source: report::Source<'_>,
     message: &str,
     report: report::Report,
 ) -> Result<bool, anyhow::Error> {
-    if message.starts_with(FIXUP_PREFIX) {
+    if FIXUP_PREFIXES
+        .iter()
+        .any(|prefix| message.starts_with(prefix))
+    {
         report(report::Message::error(source, report::Fixup {}));
         Ok(true)
     } else {
@@ -358,14 +363,13 @@ pub(crate) fn check_fixup(
 }
 
 pub(crate) fn strip_fixup(message: &str) -> &str {
-    if let Some(message) = message.strip_prefix(FIXUP_PREFIX) {
-        message
-    } else {
-        message
+    for prefix in FIXUP_PREFIXES.iter() {
+        if let Some(message) = message.strip_prefix(prefix) {
+            return message;
+        }
     }
+    message
 }
-
-const FIXUP_PREFIX: &str = "fixup! ";
 
 pub(crate) fn check_merge_commit(
     source: report::Source<'_>,

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Don't cause spurious messages on allowed `fixup!` commits
+- Don't cause spurious messages on allowed `wip` commits
+- Add support for missing autosquash prefixes
+
 ## [1.1.4] - 2024-12-18
 
 ### Fixes
@@ -18,7 +24,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixes
 
-- Don't cause spurious messages on `fixup!` commits
+- ~~Don't cause spurious messages on `fixup!` commits~~
 
 ## [1.1.2] - 2024-12-02
 

@@ -1,5 +1,5 @@
 static DEFAULT_TYPES: &[&str] = &[
-    "fix", "feat", "chore", "docs", "style", "refactor", "perf", "test",
+    "fix", "feat", "chore", "docs", "style", "refactor", "perf", "test", "revert", "ci", "build",
 ];
 
 #[derive(

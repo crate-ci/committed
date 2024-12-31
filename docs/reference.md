@@ -60,7 +60,7 @@ Configuration is read from the following (in precedence order)
 | no_fixup               | \-                | bool                 | true                                                | Disallow fixup commits                                                                                                |
 | no_wip                 | \-                | bool                 | true                                                | Disallow WIP commits                                                                                                  |
 | style                  | \-                | none, [conventional] | none                                                | Commit style convention                                                                                               |
-| allowed_types          | \-                | list of strings      | fix, feat, chore, docs, style, refactor, perf, test | _(Conventional)_ Accepted commit types                                                                                |
+| allowed_types          | \-                | list of strings      | fix, feat, chore, docs, style, refactor, perf, test, revert, ci, build | _(Conventional)_ Accepted commit types                                                             |
 | allowed_scopes         | \-                | list of strings      | none (all scopes allowed)                           | _(Conventional)_ Accepted commit scopes                                                                               |
 | merge_commit           | --no-merge-commit | \-                   | true                                                | Disallow merge commits. Argument is recommended over config file since there are times when merge-commits are wanted. |
 

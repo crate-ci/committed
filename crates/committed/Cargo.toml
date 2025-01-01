@@ -48,7 +48,7 @@ colorchoice-clap = "1.0.3"
 grep-cli = "0.1"
 imperative = "1.0.5"
 derive_more = { version = "1.0.0", features = ["from", "display"] }
-itertools = "0.13.0"
+itertools = "0.14.0"
 proc-exit = "2.0"
 human-panic = "2.0.0"
 anstream = "0.6.13"

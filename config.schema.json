@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Config",
+  "type": "object",
+  "properties": {
+    "ignore_author_re": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subject_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "minimum": 0.0
+    },
+    "subject_capitalized": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "subject_not_punctuated": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "imperative_subject": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "no_fixup": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "no_wip": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hard_line_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "minimum": 0.0
+    },
+    "line_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "minimum": 0.0
+    },
+    "style": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/Style"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "allowed_types": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_scopes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "merge_commit": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allowed_author_re": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "definitions": {
+    "Style": {
+      "type": "string",
+      "enum": [
+        "conventional",
+        "none"
+      ]
+    }
+  }
+}

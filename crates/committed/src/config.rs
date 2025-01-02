@@ -6,6 +6,7 @@ static DEFAULT_TYPES: &[&str] = &[
     Copy, Clone, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize, derive_more::Display,
 )]
 #[serde(rename_all = "snake_case")]
+#[cfg_attr(feature = "unstable-schema", derive(schemars::JsonSchema))]
 pub(crate) enum Style {
     #[serde(alias = "Conventional")]
     Conventional,
@@ -16,6 +17,7 @@ pub(crate) enum Style {
 #[derive(Clone, Default, Debug, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "snake_case")]
 #[non_exhaustive]
+#[cfg_attr(feature = "unstable-schema", derive(schemars::JsonSchema))]
 pub(crate) struct Config {
     pub(crate) ignore_author_re: Option<String>,
     pub(crate) subject_length: Option<usize>,
@@ -166,4 +168,12 @@ impl Config {
     pub(crate) fn allowed_author_re(&self) -> Option<&str> {
         self.allowed_author_re.as_deref()
     }
+}
+
+#[cfg(feature = "unstable-schema")]
+#[test]
+fn dump_schema() {
+    let schema = schemars::schema_for!(Config);
+    let dump = serde_json::to_string_pretty(&schema).unwrap();
+    snapbox::assert_data_eq!(dump, snapbox::file!("../../../config.schema.json").raw());
 }

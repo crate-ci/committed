@@ -18,11 +18,32 @@ fi
 
 if [[ ! -x ${COMMAND} ]]; then
     VERSION=1.1.5
-    log "Downloading 'committed' v${VERSION}"
-    wget --progress=dot:mega https://github.com/crate-ci/committed/releases/download/v${VERSION}/committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
+    if [[ "$(uname -m)" == "arm64" || "$(uname -m)" == "aarch64" ]]; then
+        ARCH="aarch64"
+    else
+        ARCH="x86_64"
+    fi
+    UNAME=$(uname -s)
+    if [[ "$UNAME" == "Darwin" ]]; then
+        TARGET_FILE="${ARCH}-apple-darwin"
+        FILE_EXT="tar.gz"
+    elif [[ "$UNAME" == CYGWIN* || "$UNAME" == MINGW* || "$UNAME" == MSYS* ]] ; then
+        TARGET_FILE="${ARCH}-pc-windows-msvc"
+        FILE_EXT="zip"
+    else
+        TARGET_FILE="${ARCH}-unknown-linux-musl"
+        FILE_EXT="tar.gz"
+    fi
+    FILE_NAME="${CMD_NAME}-v${VERSION}-${TARGET_FILE}.${FILE_EXT}"
+    log "Downloading '${CMD_NAME}' v${VERSION}"
+    wget --progress=dot:mega "https://github.com/crate-ci/committed/releases/download/v${VERSION}/${FILE_NAME}"
     mkdir -p ${_INSTALL_DIR}
-    tar -xzvf committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz -C ${_INSTALL_DIR} ./${CMD_NAME}
-    rm committed-v${VERSION}-x86_64-unknown-linux-musl.tar.gz
+    if [[ "$FILE_EXT" == "zip" ]]; then
+        unzip -o "${FILE_NAME}" -d ${_INSTALL_DIR} ${CMD_NAME}.exe
+    else
+        tar -xzvf "${FILE_NAME}" -C ${_INSTALL_DIR} ./${CMD_NAME}
+    fi
+    rm "${FILE_NAME}"
 fi
 
 echo "Linting commits:"

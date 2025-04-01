@@ -13,9 +13,7 @@ impl<'r> RevSpec<'r> {
             let merged_from_id = repo.merge_base(from.id(), to.id())?;
             if merged_from_id != from.id() {
                 log::debug!(
-                    "from/to for revspec {} are on different branches, relying on common parent {}",
-                    revspec,
-                    merged_from_id
+                    "from/to for revspec {revspec} are on different branches, relying on common parent {merged_from_id}"
                 );
             }
             repo.find_commit(merged_from_id)?

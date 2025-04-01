@@ -246,9 +246,9 @@ fn run() -> proc_exit::ExitResult {
                 .map(report::Source::from)
                 .unwrap_or_else(|| commit.id().into());
             if ignore_commit(&commit) {
-                log::trace!("Ignoring {}", source);
+                log::trace!("Ignoring {source}");
             } else {
-                log::trace!("Processing {}", source);
+                log::trace!("Processing {source}");
                 if let Some(re) = allowed_author_re.as_ref() {
                     failed |= checks::check_allowed_author(source, &commit, re, report)
                         .with_code(UNKNOWN_ERR)?;
@@ -283,9 +283,9 @@ fn run() -> proc_exit::ExitResult {
             .map(report::Source::from)
             .unwrap_or_else(|| commit.id().into());
         if ignore_commit(&commit) {
-            log::trace!("Ignoring {}", source);
+            log::trace!("Ignoring {source}");
         } else {
-            log::trace!("Processing {}", source);
+            log::trace!("Processing {source}");
             if let Some(re) = allowed_author_re.as_ref() {
                 failed |= checks::check_allowed_author(source, &commit, re, report)
                     .with_code(UNKNOWN_ERR)?;

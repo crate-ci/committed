@@ -42,6 +42,17 @@ sources is preferred, use `committed-src` as the hook id instead.
 Be sure to change `rev` to use the desired `committed` git tag or
 revision.
 
+By default, the `pre-commit install` only installs hooks of the `pre-commit` type,
+so it may be necessary to list the `commit-msg` hook during installation
+
+```bash
+pre-commit install -t pre-commit -t commit-msg
+```
+
+or require it using the `default_install_hook_types` configuration setting.
+
+https://pre-commit.com/#top_level-default_install_hook_types
+
 The hook, by default, will verify your commit message.
 
 ## Basic Usage

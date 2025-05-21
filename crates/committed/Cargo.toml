@@ -34,7 +34,6 @@ unstable-schema = ["dep:schemars"]
 
 [dependencies]
 regex = "1.10"
-once_cell = "1.19.0"
 git-conventional = "0.12"
 unicase = "2.7.0"
 anyhow = "1.0"

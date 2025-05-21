@@ -32,8 +32,8 @@ impl crate::style::Style for Commit<'_> {
     }
 }
 
-static SECTION_RE: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new("\r?\n").unwrap());
+static SECTION_RE: std::sync::LazyLock<regex::Regex> =
+    std::sync::LazyLock::new(|| regex::Regex::new("\r?\n").unwrap());
 
 fn split_parts(commit: &str) -> (&str, Option<&str>) {
     let mut sections = SECTION_RE.splitn(commit, 2);

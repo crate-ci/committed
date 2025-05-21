@@ -328,7 +328,7 @@ fn check_allowed_scopes(
 }
 
 // For Gitlab's rules, see https://docs.gitlab.com/ee/user/project/merge_requests/work_in_progress_merge_requests.html
-static WIP_RE: once_cell::sync::Lazy<regex::Regex> = once_cell::sync::Lazy::new(|| {
+static WIP_RE: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
     regex::Regex::new(r"^(wip\b|WIP\b|\[WIP\]|Draft\b|\[Draft\]|\(Draft\))").unwrap()
 });
 

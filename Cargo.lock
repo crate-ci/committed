@@ -222,7 +222,6 @@ dependencies = [
  "imperative",
  "itertools",
  "log",
- "once_cell",
  "proc-exit",
  "regex",
  "schemars",

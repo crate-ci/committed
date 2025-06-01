@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Config",
   "type": "object",
   "properties": {
@@ -15,7 +15,7 @@
         "null"
       ],
       "format": "uint",
-      "minimum": 0.0
+      "minimum": 0
     },
     "subject_capitalized": {
       "type": [
@@ -53,7 +53,7 @@
         "null"
       ],
       "format": "uint",
-      "minimum": 0.0
+      "minimum": 0
     },
     "line_length": {
       "type": [
@@ -61,12 +61,12 @@
         "null"
       ],
       "format": "uint",
-      "minimum": 0.0
+      "minimum": 0
     },
     "style": {
       "anyOf": [
         {
-          "$ref": "#/definitions/Style"
+          "$ref": "#/$defs/Style"
         },
         {
           "type": "null"
@@ -104,7 +104,7 @@
       ]
     }
   },
-  "definitions": {
+  "$defs": {
     "Style": {
       "type": "string",
       "enum": [

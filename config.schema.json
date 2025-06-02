@@ -7,7 +7,8 @@
       "type": [
         "string",
         "null"
-      ]
+      ],
+      "format": "regex"
     },
     "subject_length": {
       "type": [
@@ -101,7 +102,8 @@
       "type": [
         "string",
         "null"
-      ]
+      ],
+      "format": "regex"
     }
   },
   "$defs": {

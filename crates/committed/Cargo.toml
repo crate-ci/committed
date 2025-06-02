@@ -2,12 +2,11 @@
 name = "committed"
 version = "1.1.7"
 description = "Nitpicking commit history since beabf39"
-documentation = "https://docs.rs/committed"
 readme = "../../README.md"
 categories = ["development-tools", "text-processing"]
 keywords = ["development"]
-license.workspace = true
 repository.workspace = true
+license.workspace = true
 edition.workspace = true
 rust-version.workspace = true
 include.workspace = true

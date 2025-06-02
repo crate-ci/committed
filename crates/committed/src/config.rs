@@ -19,6 +19,7 @@ pub(crate) enum Style {
 #[non_exhaustive]
 #[cfg_attr(feature = "unstable-schema", derive(schemars::JsonSchema))]
 pub(crate) struct Config {
+    #[cfg_attr(feature = "unstable-schema", schemars(extend("format" = "regex")))]
     pub(crate) ignore_author_re: Option<String>,
     pub(crate) subject_length: Option<usize>,
     pub(crate) subject_capitalized: Option<bool>,
@@ -32,6 +33,7 @@ pub(crate) struct Config {
     pub(crate) allowed_types: Option<Vec<String>>,
     pub(crate) allowed_scopes: Option<Vec<String>>,
     pub(crate) merge_commit: Option<bool>,
+    #[cfg_attr(feature = "unstable-schema", schemars(extend("format" = "regex")))]
     pub(crate) allowed_author_re: Option<String>,
 }
 

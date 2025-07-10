@@ -51,7 +51,7 @@ imperative = "1.0.5"
 derive_more = { version = "2.0.0", features = ["from", "display"] }
 itertools = "0.14.0"
 proc-exit = "2.0"
-human-panic = "2.0.0"
+human-panic = "2.0.3"
 anstream = "0.6.13"
 anstyle = "1.0.6"
 schemars = { version = "0.9.0", features = ["preserve_order"], optional = true }

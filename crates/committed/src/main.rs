@@ -232,7 +232,11 @@ fn run() -> proc_exit::ExitResult {
             std::fs::read_to_string(path).to_sysexits()?
         };
         let text = trim_commit_file(&text);
-        failed |= checks::check_message(path.as_path().into(), text, &config, report)
+        let text: String = text
+            .split('\n')
+            .filter(|line| !line.trim_start().starts_with('#'))
+            .collect();
+        failed |= checks::check_message(path.as_path().into(), &text, &config, report)
             .with_code(UNKNOWN_ERR)?;
     } else if let Some(commits) = options.commits.as_ref() {
         let repo = repo()?;

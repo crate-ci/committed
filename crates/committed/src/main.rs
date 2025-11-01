@@ -4,6 +4,7 @@ use std::io::Read;
 use std::io::Write;
 
 use clap::Parser;
+use itertools::Itertools;
 use proc_exit::prelude::*;
 
 mod checks;
@@ -13,6 +14,7 @@ mod git;
 mod report;
 
 const UNKNOWN_ERR: proc_exit::Code = proc_exit::Code::new(2);
+const GIT_VERBOSE_MARKER: &str = "# ------------------------ >8 ------------------------";
 
 #[derive(Debug, Parser)]
 #[command(about, version)]
@@ -231,8 +233,8 @@ fn run() -> proc_exit::ExitResult {
         } else {
             std::fs::read_to_string(path).to_sysexits()?
         };
-        let text = trim_commit_file(&text);
-        failed |= checks::check_message(path.as_path().into(), text, &config, report)
+        let text = strip_comments(&text);
+        failed |= checks::check_message(path.as_path().into(), &text, &config, report)
             .with_code(UNKNOWN_ERR)?;
     } else if let Some(commits) = options.commits.as_ref() {
         let repo = repo()?;
@@ -265,8 +267,8 @@ fn run() -> proc_exit::ExitResult {
     } else if grep_cli::is_readable_stdin() {
         let mut text = String::new();
         std::io::stdin().read_to_string(&mut text).to_sysexits()?;
-        let text = trim_commit_file(&text);
-        failed |= checks::check_message(std::path::Path::new("-").into(), text, &config, report)
+        let text = strip_comments(&text);
+        failed |= checks::check_message(std::path::Path::new("-").into(), &text, &config, report)
             .with_code(UNKNOWN_ERR)?;
     } else {
         debug_assert_eq!(options.commits, None);
@@ -307,33 +309,17 @@ fn run() -> proc_exit::ExitResult {
     }
 }
 
-fn trim_commit_file(message: &str) -> &str {
-    let message = message.trim();
-    if message.is_empty() {
-        return "";
-    }
-
-    let all_comment_re = regex::RegexBuilder::new(r"^(#[^\n]*\n*)+$")
-        .dot_matches_new_line(true)
-        .build()
-        .expect("test ensured regex compiles");
-    if all_comment_re.is_match(message) {
-        return "";
-    }
-
-    let message =
-        if let Some(idx) = message.find("# ------------------------ >8 ------------------------") {
-            message[..idx].trim()
-        } else {
-            message
-        };
-
-    let trailing_comment_re = regex::RegexBuilder::new(r"^(.*?)(\n+#[^\n]*)*$")
-        .dot_matches_new_line(true)
-        .build()
-        .expect("test ensured regex compiles");
-    let captures = trailing_comment_re.captures(message).unwrap();
-    captures.get(1).unwrap().as_str()
+fn strip_comments(message: &str) -> String {
+    Itertools::intersperse(
+        message
+            .lines()
+            .take_while(|line| *line != GIT_VERBOSE_MARKER)
+            .filter(|line| !line.trim_start().starts_with("#")),
+        "\n",
+    )
+    .collect::<String>()
+    .trim()
+    .to_owned()
 }
 
 fn main() {
@@ -356,7 +342,7 @@ mod test {
     fn empty() {
         let input = "";
         let expected = "";
-        let actual = trim_commit_file(input);
+        let actual = strip_comments(input);
         assert_eq!(actual, expected);
     }
 
@@ -368,7 +354,7 @@ Let's do it!
 
 Fixes #10";
         let expected = input;
-        let actual = trim_commit_file(input);
+        let actual = strip_comments(input);
         assert_eq!(actual, expected);
     }
 
@@ -393,7 +379,7 @@ Fixes #10";
 #
 ";
         let expected = "";
-        let actual = trim_commit_file(input);
+        let actual = strip_comments(input);
         assert_eq!(actual, expected);
     }
 
@@ -425,7 +411,7 @@ Fixes #10
 Let's do it!
 
 Fixes #10";
-        let actual = trim_commit_file(input);
+        let actual = strip_comments(input);
         assert_eq!(actual, expected);
     }
 
@@ -467,7 +453,24 @@ index 0000000000000000..a366d6b2f3755024
         let expected = "docs: Add Code of Conduct
 
 Fixes #10";
-        let actual = trim_commit_file(input);
+        let actual = strip_comments(input);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn leading_comments_ignored() {
+        let input = r"# This is a comment
+
+        # Put your message below
+
+chore: Ignore leading comments
+
+Fixes: #10
+";
+        let actual = strip_comments(input);
+        let expected = r"chore: Ignore leading comments
+
+Fixes: #10";
         assert_eq!(actual, expected);
     }
 }

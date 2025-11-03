@@ -75,17 +75,17 @@ pub(crate) fn check_message(
         }
 
         let allowed_types: Vec<_> = config.allowed_types().collect();
-        if !allowed_types.is_empty() {
-            if let Some(used_type) = parsed.type_() {
-                failed |= check_allowed_types(source, used_type, allowed_types, report)?;
-            }
+        if !allowed_types.is_empty()
+            && let Some(used_type) = parsed.type_()
+        {
+            failed |= check_allowed_types(source, used_type, allowed_types, report)?;
         }
 
         let allowed_scopes: Vec<_> = config.allowed_scopes().collect();
-        if !allowed_scopes.is_empty() {
-            if let Some(used_scope) = parsed.scope() {
-                failed |= check_allowed_scopes(source, used_scope, allowed_scopes, report)?;
-            }
+        if !allowed_scopes.is_empty()
+            && let Some(used_scope) = parsed.scope()
+        {
+            failed |= check_allowed_scopes(source, used_scope, allowed_scopes, report)?;
         }
     }
 

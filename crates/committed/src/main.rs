@@ -196,10 +196,10 @@ fn run() -> proc_exit::ExitResult {
         .with_code(proc_exit::sysexits::CONFIG_ERR)?;
     let ignore_commit = |commit: &git2::Commit<'_>| {
         let author = commit.author().to_string();
-        if let Some(re) = ignore_author_re.as_ref() {
-            if re.is_match(&author) {
-                return true;
-            }
+        if let Some(re) = ignore_author_re.as_ref()
+            && re.is_match(&author)
+        {
+            return true;
         }
         false
     };

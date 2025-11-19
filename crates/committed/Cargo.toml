@@ -1,6 +1,6 @@
 [package]
 name = "committed"
-version = "1.1.7"
+version = "1.1.8"
 description = "Nitpicking commit history since beabf39"
 readme = "../../README.md"
 categories = ["development-tools", "text-processing"]

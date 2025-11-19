@@ -17,7 +17,7 @@ if [[ -z ${INPUT_COMMITS:-} ]]; then
 fi
 
 if [[ ! -x ${COMMAND} ]]; then
-    VERSION=1.1.7
+    VERSION=1.1.8
     if [[ "$(uname -m)" == "arm64" || "$(uname -m)" == "aarch64" ]]; then
         ARCH="aarch64"
     else

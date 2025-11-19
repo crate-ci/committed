@@ -14,6 +14,8 @@ mod report;
 
 const UNKNOWN_ERR: proc_exit::Code = proc_exit::Code::new(2);
 
+const GIT_VERBOSE_MARKER: &str = "# ------------------------ >8 ------------------------";
+
 #[derive(Debug, Parser)]
 #[command(about, version)]
 #[command(group = clap::ArgGroup::new("mode").multiple(false))]
@@ -231,6 +233,7 @@ fn run() -> proc_exit::ExitResult {
         } else {
             std::fs::read_to_string(path).to_sysexits()?
         };
+        let text = replace_comments(&text);
         let text = trim_commit_file(&text);
         failed |= checks::check_message(path.as_path().into(), text, &config, report)
             .with_code(UNKNOWN_ERR)?;
@@ -307,6 +310,26 @@ fn run() -> proc_exit::ExitResult {
     }
 }
 
+/// Replace all comments with blank lines until the commit trailer is found.
+fn replace_comments(text: &str) -> String {
+    text.lines()
+        .scan(false, |state, line| {
+            if *state {
+                return Some(line);
+            }
+            if line.starts_with(GIT_VERBOSE_MARKER) {
+                *state = true;
+                return Some(line);
+            }
+            if line.starts_with('#') {
+                return Some("");
+            }
+            Some(line)
+        })
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
 fn trim_commit_file(message: &str) -> &str {
     let message = message.trim();
     if message.is_empty() {
@@ -321,12 +344,11 @@ fn trim_commit_file(message: &str) -> &str {
         return "";
     }
 
-    let message =
-        if let Some(idx) = message.find("# ------------------------ >8 ------------------------") {
-            message[..idx].trim()
-        } else {
-            message
-        };
+    let message = if let Some(idx) = message.find(GIT_VERBOSE_MARKER) {
+        message[..idx].trim()
+    } else {
+        message
+    };
 
     let trailing_comment_re = regex::RegexBuilder::new(r"^(.*?)(\n+#[^\n]*)*$")
         .dot_matches_new_line(true)
@@ -468,6 +490,54 @@ index 0000000000000000..a366d6b2f3755024
 
 Fixes #10";
         let actual = trim_commit_file(input);
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn commit_file_with_leading_comments() {
+        let input = "# This is a comment and should be ignored
+
+# This should also be ignored
+
+docs: Add Code of Conduct
+
+Fixes #10
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch chore/repository-setup
+# Changes to be committed:
+# new file:   docs/CODE_OF_CONDUCT.md
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git a/docs/CODE_OF_CONDUCT.md b/docs/CODE_OF_CONDUCT.md
+new file mode 100644
+index 0000000000000000..a366d6b2f3755024
+--- /dev/null
++++ b/docs/CODE_OF_CONDUCT.md
+@@ -0,0 +1,134 @@
++# Contributor Covenant Code of Conduct
++
++## Our Pledge
++
++We as members, contributors, and leaders pledge to make participation in our
++community a harassment-free experience for everyone, regardless of age, body
++size, visible or invisible disability, ethnicity, sex characteristics, gender
++identity and expression, level of experience, education, socio-economic status,
++nationality, personal appearance, race, caste, color, religion, or sexual
++identity and orientation.
++
++ ...
+";
+
+        let expected = "docs: Add Code of Conduct
+
+Fixes #10";
+        let input = replace_comments(input);
+        let actual = trim_commit_file(&input);
         assert_eq!(actual, expected);
     }
 }

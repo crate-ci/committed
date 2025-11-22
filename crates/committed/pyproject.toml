@@ -5,14 +5,24 @@ build-backend = "maturin"
 [project]
 name = "committed"
 requires-python = ">=3.7"
+description = "Nitpicking commit history since beabf39"
+license = "MIT OR Apache-2.0"
 classifiers = [
+    "Environment :: Console",
     "Intended Audience :: Developers",
-    "Topic :: Software Development",
-    "Programming Language :: Rust",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Rust",
+    "Topic :: Software Development",
 ]
 
+[project.urls]
+Repository = "https://github.com/crate-ci/committed"
+Documentation = "https://github.com/crate-ci/committed#committed"
+Changelog = "https://github.com/crate-ci/committed/blob/master/CHANGELOG.md"
+Releases = "https://github.com/crate-ci/committed/releases"
 
 [tool.maturin]
 bindings = "bin"

@@ -15,6 +15,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - run: echo "::add-matcher::${{ github.action_path }}/action/problem-matcher.json"
+      shell: bash
     - id: committed
       run: $GITHUB_ACTION_PATH/action/entrypoint.sh
       shell: bash

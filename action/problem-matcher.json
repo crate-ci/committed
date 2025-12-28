@@ -1,0 +1,15 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "committed-problem-matcher",
+      "pattern": [
+        {
+          "regexp": "^(.+): (\\w+) (.+)$",
+          "file": 1,
+          "severity": 2,
+          "message": 3
+        }
+      ]
+    }
+  ]
+}

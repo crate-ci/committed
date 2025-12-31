@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Allow `default` as a verb for imperative subject lines
+
 ## [1.1.8] - 2025-11-19
 
 ### Fixes

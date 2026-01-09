@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- Strip multiple `fixup!` prefixes, not just one
+
 ## [1.1.9] - 2025-12-31
 
 ### Fixes

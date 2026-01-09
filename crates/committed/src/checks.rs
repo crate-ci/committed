@@ -375,7 +375,7 @@ pub(crate) fn check_fixup(
 pub(crate) fn strip_fixup(message: &str) -> &str {
     for prefix in FIXUP_PREFIXES.iter() {
         if let Some(message) = message.strip_prefix(prefix) {
-            return message;
+            return strip_fixup(message);
         }
     }
     message

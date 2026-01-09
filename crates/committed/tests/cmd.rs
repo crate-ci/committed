@@ -77,6 +77,17 @@ fn fixup_stops_checks() {
         .stderr_eq(str![]);
 }
 
+#[test]
+fn fixup_multiple() {
+    run_committed("fixup! squash! fixup! bad times ahead", "no_fixup = false")
+        .code(1)
+        .stdout_eq(str![[r#"
+-: error Subject should be capitalized but found `bad`
+
+"#]])
+        .stderr_eq(str![]);
+}
+
 #[track_caller]
 fn run_committed(message: &str, config: &str) -> snapbox::cmd::OutputAssert {
     let root = snapbox::dir::DirRoot::mutable_temp().unwrap();

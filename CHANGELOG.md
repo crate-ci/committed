@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.1.10] - 2026-01-09
+
 ### Fixes
 
 - Strip multiple `fixup!` prefixes, not just one
@@ -360,7 +362,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v1.1.9...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.1.10...HEAD
+[1.1.10]: https://github.com/crate-ci/committed/compare/v1.1.9...v1.1.10
 [1.1.9]: https://github.com/crate-ci/committed/compare/v1.1.8...v1.1.9
 [1.1.8]: https://github.com/crate-ci/committed/compare/v1.1.7...v1.1.8
 [1.1.7]: https://github.com/crate-ci/committed/compare/v1.1.6...v1.1.7

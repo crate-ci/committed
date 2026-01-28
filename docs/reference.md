@@ -57,11 +57,11 @@ Configuration is read from the following (in precedence order)
 | subject_capitalized    | \-                | bool                 | true                                                | Whether the subject is required to be capitalized                                          |
 | subject_not_punctuated | \-                | bool                 | true                                                | Prevent the subject from ending in punctuation                                             |
 | imperative_subject     | \-                | bool                 | true                                                | Require the subject to start with an imperative verb                                       |
-| no_fixup               | \-                | bool                 | true                                                | Disallow fixup commits                                                                     |
-| no_wip                 | \-                | bool                 | true                                                | Disallow WIP commits                                                                       |
+| no_fixup               | --no-fixup        | bool                 | true                                                | Disallow fixup commits                                                                     |
+| no_wip                 | --no-wip          | bool                 | true                                                | Disallow WIP commits                                                                       |
 | style                  | \-                | none, [conventional] | none                                                | Commit style convention                                                                    |
 | allowed_types          | \-                | list of strings      | fix, feat, chore, docs, style, refactor, perf, test | _(Conventional)_ Accepted commit types                                                     |
 | allowed_scopes         | \-                | list of strings      | none (all scopes allowed)                           | _(Conventional)_ Accepted commit scopes                                                    |
-| merge_commit           | --no-merge-commit | \-                   | true                                                | Disallow merge commits. Recommended to use argument over config since merge-commits are sometimes wanted. |
+| merge_commit           | --no-merge-commit | bool                 | true                                                | Disallow merge commits. Recommended to use argument over config since merge-commits are sometimes wanted. |
 
 [conventional]: https://www.conventionalcommits.org/

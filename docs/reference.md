@@ -47,21 +47,21 @@ Configuration is read from the following (in precedence order)
 
 ### Config Fields
 
-| Field                  | Argument          | Format               | Default                                             | Description                                                                                                           |
-| ---------------------- | ----------------- | -------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| ignore_author_re       | \-                | regx                 | (none)                                              | Authors to ignore the commits for. Generally used with bots out of your control.                                      |
-| allowed_author_re      | \-                | regx                 | (none)                                              | Require commit author to match this regular expression                                                                |
-| subject_length         | \-                | number               | 50                                                  | Number of columns the subject can occupy                                                                              |
-| line_length            | \-                | number               | 72                                                  | Number of columns any line with a break can occupy, including subject                                                 |
-| hard_line_length       | \-                | number               | 0 (none)                                            | Max number of columns any line can occupy.                                                                            |
-| subject_capitalized    | \-                | bool                 | true                                                | Whether the subject is required to be capitalized                                                                     |
-| subject_not_punctuated | \-                | bool                 | true                                                | Prevent the subject from ending in punctuation                                                                        |
-| imperative_subject     | \-                | bool                 | true                                                | Require the subject to start with an imperative verb                                                                  |
-| no_fixup               | \-                | bool                 | true                                                | Disallow fixup commits                                                                                                |
-| no_wip                 | \-                | bool                 | true                                                | Disallow WIP commits                                                                                                  |
-| style                  | \-                | none, [conventional] | none                                                | Commit style convention                                                                                               |
-| allowed_types          | \-                | list of strings      | fix, feat, chore, docs, style, refactor, perf, test | _(Conventional)_ Accepted commit types                                                                                |
-| allowed_scopes         | \-                | list of strings      | none (all scopes allowed)                           | _(Conventional)_ Accepted commit scopes                                                                               |
-| merge_commit           | --no-merge-commit | \-                   | true                                                | Disallow merge commits. Argument is recommended over config file since there are times when merge-commits are wanted. |
+| Field                  | Argument          | Format               | Default                                             | Description                                                                                |
+| ---------------------- | ----------------- | -------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| ignore_author_re       | \-                | regex                | (none)                                              | Authors to ignore the commits for. Generally used with bots out of your control.           |
+| allowed_author_re      | \-                | regex                | (none)                                              | Require commit author to match this regular expression                                     |
+| subject_length         | \-                | number               | 50                                                  | Number of columns the subject can occupy                                                   |
+| line_length            | \-                | number               | 72                                                  | Number of columns any line with a break can occupy, including subject                      |
+| hard_line_length       | \-                | number               | 0 (none)                                            | Max number of columns any line can occupy                                                  |
+| subject_capitalized    | \-                | bool                 | true                                                | Whether the subject is required to be capitalized                                          |
+| subject_not_punctuated | \-                | bool                 | true                                                | Prevent the subject from ending in punctuation                                             |
+| imperative_subject     | \-                | bool                 | true                                                | Require the subject to start with an imperative verb                                       |
+| no_fixup               | --no-fixup        | bool                 | true                                                | Disallow fixup commits                                                                     |
+| no_wip                 | --no-wip          | bool                 | true                                                | Disallow WIP commits                                                                       |
+| style                  | \-                | none, [conventional] | none                                                | Commit style convention                                                                    |
+| allowed_types          | \-                | list of strings      | fix, feat, chore, docs, style, refactor, perf, test | _(Conventional)_ Accepted commit types                                                     |
+| allowed_scopes         | \-                | list of strings      | none (all scopes allowed)                           | _(Conventional)_ Accepted commit scopes                                                    |
+| merge_commit           | --no-merge-commit | bool                 | true                                                | Disallow merge commits. Recommended to use argument over config since merge-commits are sometimes wanted. |
 
 [conventional]: https://www.conventionalcommits.org/

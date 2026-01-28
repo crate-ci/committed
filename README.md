@@ -15,7 +15,7 @@ Enforce commit standards, whether for:
 ## Install
 
 [Download](https://github.com/crate-ci/committed/releases) a pre-built binary
-(installable via [gh-install](https://github.com/crate-ci/gh-install).
+(installable via [gh-install](https://github.com/crate-ci/gh-install)).
 
 Or use rust to install:
 ```bash
@@ -75,7 +75,7 @@ committed HEAD~..HEAD^2 --no-merge-commit
 ```
 See [`imperative` for a GitHub Actions
 example](https://github.com/crate-ci/imperative/blob/master/.github/workflows/committed.yml)
-or look at `committed`s own [GitHub Actions pipeline](.github/workflows/committed.yml),
+or look at `committed`'s own [GitHub Actions pipeline](.github/workflows/committed.yml),
 [`.travis.yml`](.travis.yml), or [`appveyor.yml`](appveyor.yml).
 
 ## [Reference](docs/reference.md)

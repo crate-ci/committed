@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Features
+
+- Add Linux aarch64 binaries
+
 ## [1.1.10] - 2026-01-09
 
 ### Fixes

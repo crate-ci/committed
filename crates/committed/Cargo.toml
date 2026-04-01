@@ -52,7 +52,7 @@ derive_more = { version = "2.1.1", features = ["from", "display"] }
 itertools = "0.14.0"
 proc-exit = "2.0"
 human-panic = "2.0.6"
-anstream = "0.6.21"
+anstream = "1.0.0"
 anstyle = "1.0.13"
 schemars = { version = "1.2.0", features = ["preserve_order"], optional = true }
 

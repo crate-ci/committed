@@ -33,7 +33,7 @@ unstable-schema = ["dep:schemars"]
 
 [dependencies]
 regex = "1.12"
-git-conventional = "0.12"
+git-conventional = "1.0"
 unicase = "2.8.1"
 anyhow = "1.0"
 git2 = { version = "0.20", default-features = false }

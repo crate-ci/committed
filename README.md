@@ -15,11 +15,20 @@ Enforce commit standards, whether for:
 ## Install
 
 [Download](https://github.com/crate-ci/committed/releases) a pre-built binary
-(installable via [gh-install](https://github.com/crate-ci/gh-install)).
+(Installable via [gh-install](https://github.com/crate-ci/gh-install)).
 
-Or use rust to install:
+You can also install using a package manager. We support both Cargo and Homebrew.
+
+### Cargo
+
 ```bash
 cargo install committed
+```
+
+### Homebrew
+
+```bash
+brew install committed
 ```
 
 ### pre-commit

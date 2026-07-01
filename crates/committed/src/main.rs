@@ -245,7 +245,7 @@ fn run() -> proc_exit::ExitResult {
             let abbrev_id = commit.as_object().short_id().ok();
             let source = abbrev_id
                 .as_ref()
-                .and_then(|id| id.as_str())
+                .and_then(|id| id.as_str().ok())
                 .map(report::Source::from)
                 .unwrap_or_else(|| commit.id().into());
             if ignore_commit(&commit) {
@@ -282,7 +282,7 @@ fn run() -> proc_exit::ExitResult {
         let abbrev_id = commit.as_object().short_id().ok();
         let source = abbrev_id
             .as_ref()
-            .and_then(|id| id.as_str())
+            .and_then(|id| id.as_str().ok())
             .map(report::Source::from)
             .unwrap_or_else(|| commit.id().into());
         if ignore_commit(&commit) {

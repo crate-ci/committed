@@ -1,4 +1,8 @@
 name: Test GitHub Action
+
+permissions:
+  contents: read
+
 on: [push, pull_request]
 
 jobs:
@@ -7,8 +11,10 @@ jobs:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Actions Repository
-      uses: actions/checkout@v6
+    - name: Checkout repository
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Run Committed
       uses: ./
       with:
@@ -19,9 +25,11 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Actions Repository
-      uses: actions/checkout@v6
+    - name: Checkout repository
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0
+        filter: "tree:0"
+        persist-credentials: false
     - name: Run Committed
       uses: ./

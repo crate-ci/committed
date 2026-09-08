@@ -1,5 +1,3 @@
-#![allow(clippy::unnecessary_wraps)]
-
 use std::io::Read;
 use std::io::Write;
 
@@ -110,9 +108,9 @@ enum Format {
 impl Format {
     fn report(self) -> report::Report {
         match self {
-            Format::Silent => report::print_silent,
-            Format::Brief => report::print_brief,
-            Format::Json => report::print_json,
+            Self::Silent => report::print_silent,
+            Self::Brief => report::print_brief,
+            Self::Json => report::print_json,
         }
     }
 }

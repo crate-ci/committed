@@ -14,11 +14,11 @@ committed HEAD
 ### Commit Ranges
 
 ```bash
-committed master..HEAD
+committed main..HEAD
 ```
 
 - The range excludes the start commit
-- This will Do The Right Thing even when `master` is ahead of when you
+- This will Do The Right Thing even when `main` is ahead of when you
   branched. `committed` will look for the merge-base between the range end
   points.
 

@@ -21,7 +21,7 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/crate-ci/committed"
 Documentation = "https://github.com/crate-ci/committed#committed"
-Changelog = "https://github.com/crate-ci/committed/blob/master/CHANGELOG.md"
+Changelog = "https://github.com/crate-ci/committed/blob/main/CHANGELOG.md"
 Releases = "https://github.com/crate-ci/committed/releases"
 
 [tool.maturin]

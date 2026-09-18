@@ -6,7 +6,7 @@
 on:
   push:
     branches:
-      - master
+      - main
     tags:
     - "v*.*.*"
   # pull_request:  # Only enabled for testing

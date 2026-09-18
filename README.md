@@ -2,8 +2,8 @@
 
 > **Nitpicking commit history since `beabf39`**
 
-[![codecov](https://codecov.io/gh/crate-ci/committed/branch/master/graph/badge.svg)](https://codecov.io/gh/crate-ci/committed)
-[![Documentation](https://img.shields.io/badge/docs-master-blue.svg)][Documentation]
+[![codecov](https://codecov.io/gh/crate-ci/committed/branch/main/graph/badge.svg)](https://codecov.io/gh/crate-ci/committed)
+[![Documentation](https://img.shields.io/badge/docs-main-blue.svg)][Documentation]
 ![License](https://img.shields.io/crates/l/committed.svg)
 [![Crates Status](https://img.shields.io/crates/v/committed.svg)][Crates.io]
 
@@ -66,15 +66,15 @@ committed HEAD
 
 Verify your branch
 ```bash
-committed master..HEAD --no-merge-commit
+committed main..HEAD --no-merge-commit
 ```
 
-Have your CI verify your PR (assuming it does a no-ff merge into your `master`)
+Have your CI verify your PR (assuming it does a no-ff merge into your `main`)
 ```bash
 committed HEAD~..HEAD^2 --no-merge-commit
 ```
 See [`imperative` for a GitHub Actions
-example](https://github.com/crate-ci/imperative/blob/master/.github/workflows/committed.yml)
+example](https://github.com/crate-ci/imperative/blob/main/.github/workflows/committed.yml)
 or look at `committed`'s own [GitHub Actions pipeline](.github/workflows/committed.yml),
 [`.travis.yml`](.travis.yml), or [`appveyor.yml`](appveyor.yml).
 

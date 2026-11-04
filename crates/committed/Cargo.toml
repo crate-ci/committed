@@ -32,32 +32,32 @@ pre-release-replacements = [
 unstable-schema = ["dep:schemars"]
 
 [dependencies]
-regex = "1.12"
-git-conventional = "1.0"
-unicase = "2.8.1"
+regex = "1.13"
+git-conventional = "1.1"
+unicase = "2.10.0"
 anyhow = "1.0"
 git2 = { version = "0.21.0", default-features = false }
-clap = { version = "4.5", features = ["derive"] }
+clap = { version = "4.6", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-toml = "0.9.10"
-unicode-segmentation = "1.12.0"
+toml = "0.9.12"
+unicode-segmentation = "1.13.3"
 log = "0.4"
-env_logger = "0.11.8"
+env_logger = "0.11.11"
 clap-verbosity-flag = "3.0"
-colorchoice-clap = "1.0.7"
+colorchoice-clap = "1.0.8"
 grep-cli = "0.1"
 imperative = "1.0.7"
 derive_more = { version = "2.1.1", features = ["from", "display"] }
 itertools = "0.15.0"
 proc-exit = "2.0"
-human-panic = "2.0.6"
+human-panic = "2.0.8"
 anstream = "1.0.0"
-anstyle = "1.0.13"
-schemars = { version = "1.2.0", features = ["preserve_order"], optional = true }
+anstyle = "1.0.14"
+schemars = { version = "1.2.3", features = ["preserve_order"], optional = true }
 
 [dev-dependencies]
-snapbox = { version = "0.6.23", features = ["cmd", "path"] }
+snapbox = { version = "0.6.24", features = ["cmd", "path"] }
 
 [lints]
 workspace = true

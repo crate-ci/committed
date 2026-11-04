@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [1.1.12] - 2026-11-04
+
 ### Fixes
 
 - *(action)* When dumping config, include the one passed in
@@ -372,7 +374,8 @@ Ignore, just testing Github Actions
 
 
 <!-- next-url -->
-[Unreleased]: https://github.com/crate-ci/committed/compare/v1.1.11...HEAD
+[Unreleased]: https://github.com/crate-ci/committed/compare/v1.1.12...HEAD
+[1.1.12]: https://github.com/crate-ci/committed/compare/v1.1.11...v1.1.12
 [1.1.11]: https://github.com/crate-ci/committed/compare/v1.1.10...v1.1.11
 [1.1.10]: https://github.com/crate-ci/committed/compare/v1.1.9...v1.1.10
 [1.1.9]: https://github.com/crate-ci/committed/compare/v1.1.8...v1.1.9

@@ -50,8 +50,8 @@ echo "Linting commits:"
 git config --global --add safe.directory "$PWD"
 git log --color=always --graph --oneline "${INPUT_COMMITS}" || true
 echo ""
-echo "Against 'committed.toml':"
-${COMMAND} --dump-config - || true
+echo "Against config:"
+${COMMAND} ${INPUT_ARGS:-} --dump-config - || true
 echo ""
 echo "If this fails, don't sweat it. We're trying to encourage clear communication and not hinder contributions."
 echo "If it is a reasonable issue and you lack time or feel uncomfortable fixing it yourself,"

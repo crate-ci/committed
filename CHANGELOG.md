@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+### Fixes
+
+- *(action)* When dumping config, include the one passed in
+
 ## [1.1.11] - 2026-02-24
 
 ### Features

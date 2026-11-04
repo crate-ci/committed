@@ -40,7 +40,7 @@ git2 = { version = "0.21.0", default-features = false }
 clap = { version = "4.6", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-toml = "0.9.12"
+toml = "1.2.0"
 unicode-segmentation = "1.13.3"
 log = "0.4"
 env_logger = "0.11.11"
@@ -57,7 +57,7 @@ anstyle = "1.0.14"
 schemars = { version = "1.2.3", features = ["preserve_order"], optional = true }
 
 [dev-dependencies]
-snapbox = { version = "0.6.24", features = ["cmd", "path"] }
+snapbox = { version = "1.2.2", features = ["cmd", "path"] }
 
 [lints]
 workspace = true

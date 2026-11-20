@@ -16,7 +16,7 @@ jobs:
       with:
         persist-credentials: false
     - name: Run Committed
-      uses: ./
+      uses: $/
       with:
         args: "-vv"
         commits: "HEAD"
@@ -32,4 +32,4 @@ jobs:
         filter: "tree:0"
         persist-credentials: false
     - name: Run Committed
-      uses: ./
+      uses: $/
